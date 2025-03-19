@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Lock, ArrowRight, Github, Chrome } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, Github, Chrome } from 'lucide-react';
 
-export function SignIn() {
+export function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle sign in logic here
-    console.log('Sign in attempt with:', { email, password });
+    // Handle sign up logic here
+    console.log({ name, email, password });
   };
 
   return (
@@ -18,8 +19,8 @@ export function SignIn() {
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
       
       {/* Glowing Orbs */}
-      <div className="absolute top-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 left-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
+      <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
 
       {/* Main Content */}
       <div className="relative w-full max-w-md mx-auto px-6">
@@ -27,16 +28,31 @@ export function SignIn() {
           {/* Card Glow Effect */}
           <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-25" />
           
-          {/* Sign In Card */}
+          {/* Sign Up Card */}
           <div className="relative bg-gray-900/80 backdrop-blur-xl p-8 rounded-2xl border border-gray-800">
             {/* Header */}
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
-              <p className="text-gray-400">Sign in to your account</p>
+              <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
+              <p className="text-gray-400">Join our community of tech experts</p>
             </div>
 
-            {/* Sign In Form */}
+            {/* Sign Up Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Name Input */}
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full bg-gray-800/50 border border-gray-700 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                  placeholder="Full Name"
+                  required
+                />
+              </div>
+
               {/* Email Input */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -67,32 +83,14 @@ export function SignIn() {
                 />
               </div>
 
-              {/* Remember Me and Forgot Password */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-700 bg-gray-800/50 text-purple-500 focus:ring-purple-500 focus:ring-offset-0"
-                  />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-400">
-                    Remember me
-                  </label>
-                </div>
-                <Link to="/forgot-password" className="text-sm font-medium text-purple-400 hover:text-purple-300">
-                  Forgot password?
-                </Link>
-              </div>
-
-              {/* Sign In Button */}
+              {/* Sign Up Button */}
               <button
                 type="submit"
                 className="relative w-full group"
               >
                 <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl blur opacity-60 group-hover:opacity-100 transition duration-200" />
                 <div className="relative w-full flex items-center justify-center bg-black rounded-xl px-6 py-3 text-white font-semibold">
-                  Sign In
+                  Create Account
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </div>
               </button>
@@ -120,11 +118,11 @@ export function SignIn() {
               </button>
             </div>
 
-            {/* Sign Up Link */}
+            {/* Sign In Link */}
             <p className="mt-8 text-center text-gray-400">
-              Don't have an account?{' '}
-              <Link to="/signup" className="text-purple-400 hover:text-purple-300 font-medium">
-                Sign up
+              Already have an account?{' '}
+              <Link to="/signin" className="text-purple-400 hover:text-purple-300 font-medium">
+                Sign in
               </Link>
             </p>
           </div>
@@ -132,4 +130,4 @@ export function SignIn() {
       </div>
     </div>
   );
-}
+} 
