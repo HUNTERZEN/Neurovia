@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Configuration - Replace these with your values
-REMOTE_USER="root"  # or your server username
-REMOTE_HOST="your_server_ip"  # your server IP address
-REMOTE_DIR="/opt/aeternex"
-APP_NAME="aeternex"
+REMOTE_USER="deploy"
+REMOTE_HOST="your.server.com"
+REMOTE_DIR="/opt/neurovia"
+APP_NAME="neurovia"
 
 # Colors for output
 GREEN='\033[0;32m'

@@ -86,9 +86,9 @@ export function CookiePolicy() {
               <h2 className="text-2xl font-semibold text-white mb-4">4. Contact Us</h2>
               <div className="bg-gray-900/50 rounded-lg p-6 backdrop-blur-sm border border-gray-800">
                 <p className="text-gray-300">
-                  If you have questions about our use of cookies, please contact us at:{' '}
-                  <a href="mailto:privacy@aeternex.com" className="text-purple-400 hover:text-purple-300">
-                    privacy@aeternex.com
+                  If you have any questions about our Cookie Policy, please contact us at{' '}
+                  <a href="mailto:privacy@neurovia.com" className="text-purple-400 hover:text-purple-300">
+                    privacy@neurovia.com
                   </a>
                 </p>
               </div>

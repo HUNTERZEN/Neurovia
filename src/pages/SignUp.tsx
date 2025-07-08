@@ -1,16 +1,88 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Lock, User, ArrowRight, Github, Chrome } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { User, Mail, Lock, ArrowRight, Github, Chrome, AlertCircle } from 'lucide-react';
+import type { User as UserType } from '../types/user';
 
 export function SignUp() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [error, setError] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+    setError('');
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle sign up logic here
-    console.log({ name, email, password });
+    
+    // Basic validation
+    if (!formData.fullName || !formData.email || !formData.username || !formData.password) {
+      setError('All fields are required');
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+
+    // Check if email or username already exists
+    const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
+    if (existingUsers.some((user: UserType) => user.email === formData.email)) {
+      setError('Email already registered');
+      return;
+    }
+    if (existingUsers.some((user: UserType) => user.username === formData.username)) {
+      setError('Username already taken');
+      return;
+    }
+
+    // Create new user
+    const newUser: UserType & { password: string } = {
+      id: crypto.randomUUID(),
+      email: formData.email,
+      username: formData.username,
+      fullName: formData.fullName,
+      createdAt: new Date().toISOString(),
+      role: 'user',
+      status: 'active',
+      password: formData.password // In a real app, this should be hashed
+    };
+
+    try {
+      // Save user to localStorage
+      localStorage.setItem('users', JSON.stringify([...existingUsers, newUser]));
+      
+      // Clear form and redirect to login page
+      setFormData({
+        fullName: '',
+        email: '',
+        username: '',
+        password: '',
+        confirmPassword: ''
+      });
+      
+      navigate('/signin');
+    } catch (err) {
+      console.error('Error saving user:', err);
+      setError('An error occurred while creating your account. Please try again.');
+    }
   };
 
   return (
@@ -19,8 +91,8 @@ export function SignUp() {
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
       
       {/* Glowing Orbs */}
-      <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
+      <div className="absolute top-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 left-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
 
       {/* Main Content */}
       <div className="relative w-full max-w-md mx-auto px-6">
@@ -33,23 +105,30 @@ export function SignUp() {
             {/* Header */}
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
-              <p className="text-gray-400">Join our community of tech experts</p>
+              <p className="text-gray-400">Join our community today</p>
             </div>
 
             {/* Sign Up Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Name Input */}
+              {error && (
+                <div className="flex items-center gap-2 text-red-400 bg-red-400/10 p-3 rounded-lg border border-red-400/20">
+                  <AlertCircle className="w-5 h-5" />
+                  <span className="text-sm">{error}</span>
+                </div>
+              )}
+
+              {/* Full Name Input */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <User className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleChange}
                   className="w-full bg-gray-800/50 border border-gray-700 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
                   placeholder="Full Name"
-                  required
                 />
               </div>
 
@@ -60,11 +139,26 @@ export function SignUp() {
                 </div>
                 <input
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   className="w-full bg-gray-800/50 border border-gray-700 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
                   placeholder="Email address"
-                  required
+                />
+              </div>
+
+              {/* Username Input */}
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  className="w-full bg-gray-800/50 border border-gray-700 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                  placeholder="Username"
                 />
               </div>
 
@@ -75,11 +169,26 @@ export function SignUp() {
                 </div>
                 <input
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   className="w-full bg-gray-800/50 border border-gray-700 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
                   placeholder="Password"
-                  required
+                />
+              </div>
+
+              {/* Confirm Password Input */}
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className="w-full bg-gray-800/50 border border-gray-700 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                  placeholder="Confirm Password"
                 />
               </div>
 
@@ -106,7 +215,7 @@ export function SignUp() {
               </div>
             </div>
 
-            {/* Social Login Buttons */}
+            {/* Social Sign Up Buttons */}
             <div className="grid grid-cols-2 gap-4">
               <button className="flex items-center justify-center gap-2 bg-gray-800/50 hover:bg-gray-800 text-white rounded-xl px-6 py-3 font-medium transition-colors">
                 <Chrome className="w-5 h-5" />

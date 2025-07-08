@@ -31,7 +31,7 @@ export function TermsOfService() {
               <h2 className="text-2xl font-semibold text-white mb-4">1. Agreement to Terms</h2>
               <div className="bg-gray-900/50 rounded-lg p-6 backdrop-blur-sm border border-gray-800">
                 <p className="text-gray-300">
-                  By accessing or using Aeternex's services, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing our services.
+                  By accessing or using Neurovia's services, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing our services.
                 </p>
               </div>
             </section>
@@ -85,7 +85,7 @@ export function TermsOfService() {
               <h2 className="text-2xl font-semibold text-white mb-4">5. Limitation of Liability</h2>
               <div className="bg-gray-900/50 rounded-lg p-6 backdrop-blur-sm border border-gray-800">
                 <p className="text-gray-300">
-                  Aeternex shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of our services.
+                  Neurovia shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of our services.
                 </p>
               </div>
             </section>
@@ -94,9 +94,9 @@ export function TermsOfService() {
               <h2 className="text-2xl font-semibold text-white mb-4">6. Contact Information</h2>
               <div className="bg-gray-900/50 rounded-lg p-6 backdrop-blur-sm border border-gray-800">
                 <p className="text-gray-300">
-                  Questions about the Terms of Service should be sent to us at:{' '}
-                  <a href="mailto:legal@aeternex.com" className="text-purple-400 hover:text-purple-300">
-                    legal@aeternex.com
+                  If you have any questions about these Terms of Service, please contact us at{' '}
+                  <a href="mailto:legal@neurovia.com" className="text-purple-400 hover:text-purple-300">
+                    legal@neurovia.com
                   </a>
                 </p>
               </div>

@@ -20,144 +20,91 @@ export function Hero() {
   const orbOpacity = useSpring(useTransform(scrollY, [0, 300], [0.3, 0]), springConfig);
 
   return (
-    <section className="relative min-h-screen bg-black overflow-hidden">
-      {/* Gradient Background */}
-      <motion.div 
-        className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20"
-        style={{ opacity }}
-      />
-      
-      {/* Glowing Orbs */}
-      <motion.div 
-        className="absolute top-20 left-10 w-72 h-72 bg-purple-500/30 rounded-full blur-3xl"
-        style={{ 
-          x: leftOrbX,
-          opacity: orbOpacity,
-        }}
-      />
-      <motion.div 
-        className="absolute top-40 right-10 w-72 h-72 bg-blue-500/30 rounded-full blur-3xl"
-        style={{ 
-          x: rightOrbX,
-          opacity: orbOpacity,
-        }}
-      />
-      
-      {/* Main Content Container */}
-      <div className="relative min-h-screen flex flex-col">
-        {/* Content */}
-        <div className="flex-1 pt-20">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex flex-col lg:flex-row items-center gap-12 pt-12">
-              {/* Left Content */}
-              <motion.div 
-                className="flex-1 text-center lg:text-left"
-                style={{ y, opacity }}
-              >
-                <motion.h1 
-                  className="text-4xl md:text-6xl font-bold text-white mb-6"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
+    <section className="relative min-h-screen pt-20 overflow-hidden">
+      <div className="relative">
+        {/* Background Effects */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-gray-950" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent" />
+        </div>
+
+        {/* Animated Orbs */}
+        <motion.div
+          className="absolute left-1/4 top-1/4 w-64 h-64 rounded-full bg-purple-500/30 blur-3xl"
+          style={{ x: leftOrbX, opacity: orbOpacity }}
+        />
+        <motion.div
+          className="absolute right-1/4 top-1/3 w-64 h-64 rounded-full bg-blue-500/30 blur-3xl"
+          style={{ x: rightOrbX, opacity: orbOpacity }}
+        />
+
+        <div className="relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="pt-10 pb-16 sm:pt-16 lg:pt-20 lg:pb-24">
+              {/* Content Grid */}
+              <div className="lg:grid lg:grid-cols-2 lg:gap-12 items-center">
+                {/* Left Content - Hero Text */}
+                <motion.div
+                  className="text-center lg:text-left mb-12 lg:mb-0"
+                  style={{ y, opacity, scale }}
                 >
-                  Expert Tech Support
-                  <motion.span 
-                    className="block mt-2 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent"
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+                    <span className="block bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-2">
+                      Expert Tech Support
+                    </span>
+                    <span className="block bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                      At Your Fingertips
+                    </span>
+                  </h1>
+
+                  <p className="mt-6 text-base sm:text-lg text-gray-400 max-w-2xl mx-auto lg:mx-0">
+                    Get instant help from verified tech experts or find trusted local repair shops. 
+                    Professional support for all your device issues, available 24/7.
+                  </p>
+
+                  <motion.div 
+                    className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-8 sm:mt-10"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.4 }}
+                    transition={{ duration: 0.6, delay: 0.8 }}
                   >
-                    At Your Fingertips
-                  </motion.span>
-                </motion.h1>
-                <motion.p 
-                  className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto lg:mx-0"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.6 }}
-                >
-                  Connect with verified tech experts for remote assistance or find trusted repair shops near you. Get your devices fixed quickly and reliably.
-                </motion.p>
-                <motion.div 
-                  className="flex flex-wrap gap-4 justify-center lg:justify-start"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.8 }}
-                >
-                  <Link to="/remote-help" className="relative group">
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-200" />
-                    <button className="relative px-6 py-3 bg-black rounded-lg text-white font-semibold">
-                      Get Remote Help
-                      <ArrowRight className="inline-block ml-2 w-5 h-5" />
-                    </button>
-                  </Link>
-                  <Link to="/repair-shops" className="px-6 py-3 border border-gray-700 hover:border-gray-600 rounded-lg text-gray-300 hover:text-white font-semibold transition-colors">
-                    Find Repair Shops
-                  </Link>
-                </motion.div>
-                
-                {/* Stats */}
-                <motion.div 
-                  className="mt-12 flex items-center gap-8 justify-center lg:justify-start"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 1 }}
-                >
-                  <div>
-                    <h3 className="text-3xl font-bold text-white">500+</h3>
-                    <p className="text-gray-400">verified experts</p>
-                  </div>
-                  <div className="w-px h-12 bg-gray-800" />
-                  <div>
-                    <h3 className="text-3xl font-bold text-white">24/7</h3>
-                    <p className="text-gray-400">support</p>
-                  </div>
-                </motion.div>
-              </motion.div>
-
-              {/* Right Content - Service Card */}
-              <motion.div 
-                className="flex-1 w-full max-w-xl"
-                style={{ y: rightContentY }}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                <div className="relative">
-                  {/* Card Glow */}
-                  <motion.div 
-                    className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-50"
-                    animate={{ 
-                      opacity: [0.5, 0.7, 0.5],
-                      scale: [1, 1.02, 1],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  />
+                    <Link to="/remote-help" className="relative group">
+                      <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-200" />
+                      <button className="relative w-full px-6 py-3 bg-black rounded-lg text-white font-semibold">
+                        Get Remote Help
+                        <ArrowRight className="inline-block ml-2 w-5 h-5" />
+                      </button>
+                    </Link>
+                    <Link to="/repair-shops" className="w-full sm:w-auto px-6 py-3 border border-gray-700 hover:border-gray-600 rounded-lg text-gray-300 hover:text-white font-semibold transition-colors text-center">
+                      Find Repair Shops
+                    </Link>
+                  </motion.div>
                   
-                  {/* Main Card */}
-                  <div className="relative bg-gray-900 rounded-2xl p-6 border border-gray-800">
-                    <div className="flex justify-between items-center mb-6">
-                      <h2 className="text-xl font-semibold text-white">Available Services</h2>
-                      <motion.span 
-                        className="px-4 py-2 bg-gray-800 rounded-lg text-sm text-green-400"
-                        animate={{ 
-                          opacity: [1, 0.7, 1],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                      >
-                        Online
-                      </motion.span>
+                  {/* Stats */}
+                  <motion.div 
+                    className="mt-12 flex flex-col sm:flex-row items-center gap-8 justify-center lg:justify-start"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 1 }}
+                  >
+                    <div className="text-center sm:text-left">
+                      <h3 className="text-3xl font-bold text-white">500+</h3>
+                      <p className="text-gray-400">verified experts</p>
                     </div>
+                    <div className="hidden sm:block w-px h-12 bg-gray-800" />
+                    <div className="text-center sm:text-left">
+                      <h3 className="text-3xl font-bold text-white">24/7</h3>
+                      <p className="text-gray-400">support</p>
+                    </div>
+                  </motion.div>
+                </motion.div>
 
-                    {/* Services List */}
+                {/* Right Content - Service Card */}
+                <motion.div
+                  className="relative lg:ml-auto"
+                  style={{ y: rightContentY }}
+                >
+                  <div className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-800">
                     <div className="space-y-4 mb-6">
                       <motion.div 
                         className="relative group p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl border border-gray-700"
@@ -193,9 +140,9 @@ export function Hero() {
                     </div>
 
                     {/* Features */}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <motion.div 
-                        className="flex items-center gap-2 p-4 bg-gray-800 rounded-xl text-white"
+                        className="flex items-center justify-center gap-2 p-4 bg-gray-800 rounded-xl text-white"
                         whileHover={{ scale: 1.05 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
@@ -203,7 +150,7 @@ export function Hero() {
                         <span>Verified Experts</span>
                       </motion.div>
                       <motion.div 
-                        className="flex items-center gap-2 p-4 bg-gray-800 rounded-xl text-white"
+                        className="flex items-center justify-center gap-2 p-4 bg-gray-800 rounded-xl text-white"
                         whileHover={{ scale: 1.05 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
@@ -212,8 +159,8 @@ export function Hero() {
                       </motion.div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              </div>
             </div>
           </div>
         </div>

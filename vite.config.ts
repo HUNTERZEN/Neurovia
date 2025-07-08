@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Aeternex',
-        short_name: 'Aeternex',
+        name: 'Neurovia',
+        short_name: 'Neurovia',
         description: 'Expert Tech Support Platform',
         theme_color: '#000000',
         background_color: '#000000',

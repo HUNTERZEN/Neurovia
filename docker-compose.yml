@@ -12,8 +12,8 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - aeternex-network
+      - neurovia-network
 
 networks:
-  aeternex-network:
+  neurovia-network:
     driver: bridge 

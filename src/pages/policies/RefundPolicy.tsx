@@ -90,12 +90,19 @@ export function RefundPolicy() {
               <div className="bg-gray-900/50 rounded-lg p-6 backdrop-blur-sm border border-gray-800">
                 <p className="text-gray-300">
                   For refund requests or questions, please contact us at:{' '}
-                  <a href="mailto:support@aeternex.com" className="text-purple-400 hover:text-purple-300">
-                    support@aeternex.com
+                  <a href="mailto:support@neurovia.com" className="text-purple-400 hover:text-purple-300">
+                    support@neurovia.com
                   </a>
                 </p>
               </div>
             </section>
+
+            <p className="mt-8 text-gray-300">
+              If you have any questions about our Refund Policy, please contact us at{' '}
+              <a href="mailto:support@neurovia.com" className="text-purple-400 hover:text-purple-300">
+                support@neurovia.com
+              </a>
+            </p>
           </div>
         </div>
       </div>

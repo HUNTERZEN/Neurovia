@@ -39,7 +39,7 @@ export function About() {
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                About Aeternex
+                About Neurovia
               </span>
             </h1>
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
@@ -63,7 +63,7 @@ export function About() {
               </h2>
               <div className="space-y-4 text-gray-300">
                 <p>
-                  Founded in 2024, Aeternex emerged from a simple yet powerful idea: making expert tech support accessible to everyone. Our founders, experienced in various aspects of technology and customer service, recognized the growing need for reliable, on-demand tech assistance.
+                  Founded in 2024, Neurovia emerged from a simple yet powerful idea: making expert tech support accessible to everyone. Our founders, experienced in various aspects of technology and customer service, recognized the growing gap between increasingly complex technology and the support available to everyday users.
                 </p>
                 <p>
                   What started as a small team of passionate tech experts has grown into a comprehensive platform connecting users with verified professionals and trusted repair shops worldwide.
@@ -122,7 +122,7 @@ export function About() {
                 >
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-200" />
                   <button className="relative px-6 py-3 bg-black rounded-lg text-white font-semibold">
-                    Join Aeternex
+                    Join Neurovia
                   </button>
                 </Link>
                 <Link

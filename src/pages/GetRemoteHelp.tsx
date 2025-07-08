@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Video, Mic, MessageSquare, Star, Monitor, Clock, Shield } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const supportTypes = [
   {
@@ -63,108 +64,158 @@ export function GetRemoteHelp() {
   const [selectedExpert, setSelectedExpert] = useState<number | null>(null);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-white mb-4">Get Remote Technical Support</h1>
-        <p className="text-xl text-gray-400">Connect with expert technicians instantly</p>
+    <div className="min-h-screen bg-black">
+      {/* Background Effects */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
       </div>
+      
+      {/* Content */}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <motion.div 
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent sm:text-5xl mb-4">
+            Get Remote Technical Support
+          </h1>
+          <p className="text-xl text-gray-400">Connect with expert technicians instantly</p>
+        </motion.div>
 
-      {/* Support Types */}
-      <div className="grid md:grid-cols-3 gap-8 mb-16">
-        {supportTypes.map((type, index) => (
-          <div
-            key={index}
-            onClick={() => setSelectedType(index)}
-            className={`
-              bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 cursor-pointer
-              transition-all duration-200 hover:bg-gray-800
-              ${selectedType === index ? 'ring-2 ring-purple-500' : ''}
-            `}
-          >
-            <div className="flex items-center mb-4">
-              <div className="p-3 bg-purple-500/20 rounded-lg text-purple-500">
-                {type.icon}
+        {/* Support Types */}
+        <motion.div 
+          className="grid md:grid-cols-3 gap-8 mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          {supportTypes.map((type, index) => (
+            <motion.div
+              key={index}
+              layout
+              onClick={() => setSelectedType(index)}
+              className="relative"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className={`
+                relative bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 cursor-pointer border border-gray-800
+                ${selectedType === index ? 'border-purple-500' : 'hover:border-purple-500/30'}
+              `}>
+                <div className="flex items-center mb-4">
+                  <div className="p-3 bg-purple-500/20 rounded-lg text-purple-400">
+                    {type.icon}
+                  </div>
+                  <h3 className="ml-3 text-xl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                    {type.title}
+                  </h3>
+                </div>
+                <p className="text-gray-400 mb-4">{type.description}</p>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <span className="text-purple-400 font-semibold">${type.price}</span>
+                    <span className="text-gray-400">/{type.duration}min</span>
+                  </div>
+                  <motion.button 
+                    className={`
+                      px-4 py-2 rounded-lg font-medium bg-black text-white border
+                      ${selectedType === index ? 'border-purple-500' : 'border-gray-800 hover:border-purple-500/30'}
+                    `}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Select
+                  </motion.button>
+                </div>
               </div>
-              <h3 className="ml-3 text-xl font-semibold text-white">{type.title}</h3>
-            </div>
-            <p className="text-gray-400 mb-4">{type.description}</p>
-            <div className="flex justify-between items-center">
-              <div>
-                <span className="text-purple-500 font-semibold">${type.price}</span>
-                <span className="text-gray-400">/{type.duration}min</span>
-              </div>
-              <button 
-                className={`
-                  px-4 py-2 rounded-lg font-medium transition-colors
-                  ${selectedType === index 
-                    ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                    : 'bg-gray-700 hover:bg-gray-600 text-gray-300'}
-                `}
-              >
-                Select
-              </button>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Available Experts */}
+        <motion.div 
+          className="relative"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <div className="relative bg-gray-900/50 backdrop-blur-sm rounded-xl p-8 border border-gray-800">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-6">
+              Available Experts
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <AnimatePresence>
+                {experts.map((expert) => (
+                  <motion.div
+                    key={expert.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    onClick={() => setSelectedExpert(expert.id)}
+                    className="relative"
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className={`
+                      relative bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 cursor-pointer border border-gray-800
+                      ${selectedExpert === expert.id ? 'border-purple-500' : 'hover:border-purple-500/30'}
+                    `}>
+                      <div className="flex items-center mb-4">
+                        <img
+                          src={expert.image}
+                          alt={expert.name}
+                          className="w-12 h-12 rounded-full object-cover border border-gray-800"
+                        />
+                        <div className="ml-3">
+                          <h3 className="font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                            {expert.name}
+                          </h3>
+                          <div className="flex items-center">
+                            <Star className="w-4 h-4 text-yellow-400" />
+                            <span className="ml-1 text-yellow-400">{expert.rating}</span>
+                            <span className="text-gray-400 ml-1">({expert.reviews} reviews)</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center text-sm text-gray-400">
+                          <Monitor className="w-4 h-4 mr-2 text-purple-400" />
+                          <span>{expert.specialties.join(', ')}</span>
+                        </div>
+                        <div className="flex items-center text-sm text-gray-400">
+                          <Clock className="w-4 h-4 mr-2 text-purple-400" />
+                          <span>{expert.availability}</span>
+                        </div>
+                        <div className="flex items-center text-sm text-gray-400">
+                          <Shield className="w-4 h-4 mr-2 text-purple-400" />
+                          <span>Verified Expert</span>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-between items-center pt-4 border-t border-gray-800">
+                        <div>
+                          <span className="text-sm text-gray-400">Starting from</span>
+                          <p className="text-xl font-semibold text-purple-400">${expert.price}/30min</p>
+                        </div>
+                        <motion.button 
+                          className="px-6 py-2 rounded-lg font-medium bg-black text-white border border-gray-800 hover:border-purple-500/30"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          Book Now
+                        </motion.button>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
           </div>
-        ))}
-      </div>
-
-      {/* Available Experts */}
-      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-white mb-6">Available Experts</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {experts.map((expert) => (
-            <div
-              key={expert.id}
-              onClick={() => setSelectedExpert(expert.id)}
-              className={`
-                bg-gray-800 rounded-xl p-6 cursor-pointer
-                transition-all duration-200 hover:bg-gray-700
-                ${selectedExpert === expert.id ? 'ring-2 ring-purple-500' : ''}
-              `}
-            >
-              <div className="flex items-center mb-4">
-                <img
-                  src={expert.image}
-                  alt={expert.name}
-                  className="w-12 h-12 rounded-full"
-                />
-                <div className="ml-3">
-                  <h3 className="font-semibold text-white">{expert.name}</h3>
-                  <div className="flex items-center">
-                    <Star className="w-4 h-4 text-yellow-400" />
-                    <span className="ml-1 text-yellow-400">{expert.rating}</span>
-                    <span className="text-gray-400 ml-1">({expert.reviews} reviews)</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center text-sm text-gray-400">
-                  <Monitor className="w-4 h-4 mr-2" />
-                  <span>{expert.specialties.join(', ')}</span>
-                </div>
-                <div className="flex items-center text-sm text-gray-400">
-                  <Clock className="w-4 h-4 mr-2" />
-                  <span>{expert.availability}</span>
-                </div>
-                <div className="flex items-center text-sm text-gray-400">
-                  <Shield className="w-4 h-4 mr-2" />
-                  <span>Verified Expert</span>
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center pt-4 border-t border-gray-700">
-                <div>
-                  <span className="text-sm text-gray-400">Starting from</span>
-                  <p className="text-xl font-semibold text-purple-500">${expert.price}/30min</p>
-                </div>
-                <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition-colors">
-                  Book Now
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -1,15 +1,64 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Lock, ArrowRight, Github, Chrome } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, ArrowRight, Github, Chrome, AlertCircle } from 'lucide-react';
+import type { User } from '../types/user';
 
 export function SignIn() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle sign in logic here
-    console.log('Sign in attempt with:', { email, password });
+    
+    // Basic validation
+    if (!email || !password) {
+      setError('All fields are required');
+      return;
+    }
+
+    try {
+      // Get users from localStorage
+      const users = JSON.parse(localStorage.getItem('users') || '[]') as (User & { password: string })[];
+      const user = users.find(u => u.email === email);
+
+      if (!user) {
+        setError('Invalid email or password');
+        return;
+      }
+
+      // Check password
+      if (password !== user.password) {
+        setError('Invalid email or password');
+        return;
+      }
+
+      // Update last login
+      const updatedUsers = users.map(u => {
+        if (u.id === user.id) {
+          return {
+            ...u,
+            lastLogin: new Date().toISOString()
+          };
+        }
+        return u;
+      });
+      localStorage.setItem('users', JSON.stringify(updatedUsers));
+
+      // Store authentication state
+      const { password: _, ...userWithoutPassword } = user;
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
+
+      // Clear form and redirect to home page
+      setEmail('');
+      setPassword('');
+      navigate('/');
+    } catch (err) {
+      console.error('Error during sign in:', err);
+      setError('An error occurred while signing in. Please try again.');
+    }
   };
 
   return (
@@ -37,6 +86,13 @@ export function SignIn() {
 
             {/* Sign In Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <div className="flex items-center gap-2 text-red-400 bg-red-400/10 p-3 rounded-lg border border-red-400/20">
+                  <AlertCircle className="w-5 h-5" />
+                  <span className="text-sm">{error}</span>
+                </div>
+              )}
+
               {/* Email Input */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
