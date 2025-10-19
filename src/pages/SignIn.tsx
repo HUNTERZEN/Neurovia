@@ -1,63 +1,66 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowRight, Github, Chrome, AlertCircle } from 'lucide-react';
-import type { User } from '../types/user';
+import { useAuth } from '../App'; // Import useAuth
 
 export function SignIn() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const { login } = useAuth(); // Get login function from context
+  const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Basic validation
-    if (!email || !password) {
+
+    if (!usernameOrEmail || !password) {
       setError('All fields are required');
       return;
     }
 
+    setLoading(true);
+    setError('');
+
     try {
-      // Get users from localStorage
-      const users = JSON.parse(localStorage.getItem('users') || '[]') as (User & { password: string })[];
-      const user = users.find(u => u.email === email);
-
-      if (!user) {
-        setError('Invalid email or password');
-        return;
-      }
-
-      // Check password
-      if (password !== user.password) {
-        setError('Invalid email or password');
-        return;
-      }
-
-      // Update last login
-      const updatedUsers = users.map(u => {
-        if (u.id === user.id) {
-          return {
-            ...u,
-            lastLogin: new Date().toISOString()
-          };
-        }
-        return u;
+      const response = await fetch(`${API_URL}/api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ login: usernameOrEmail, password }),
       });
-      localStorage.setItem('users', JSON.stringify(updatedUsers));
 
-      // Store authentication state
-      const { password: _, ...userWithoutPassword } = user;
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
+      const result = await response.json();
 
-      // Clear form and redirect to home page
-      setEmail('');
-      setPassword('');
-      navigate('/');
+      if (response.ok) {
+        // ✅ UPDATED: Use the auth context login function
+        if (result.token) {
+          // Create user object from the response
+          const userData = {
+            id: result.user?.id || 0,
+            username: result.user?.username || usernameOrEmail,
+            email: result.user?.email || usernameOrEmail
+          };
+          
+          console.log('Login successful, setting auth state:', { token: result.token, userData }); // Debug
+          
+          // Use context login function to set auth state
+          login(result.token, userData);
+        }
+        
+        setUsernameOrEmail('');
+        setPassword('');
+        navigate('/'); // Redirect to homepage
+      } else {
+        setError(result.error || 'Invalid username or password');
+      }
     } catch (err) {
-      console.error('Error during sign in:', err);
       setError('An error occurred while signing in. Please try again.');
+      console.error('Sign-in error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,7 +68,7 @@ export function SignIn() {
     <div className="relative min-h-screen bg-black flex items-center justify-center py-20 overflow-hidden">
       {/* Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
-      
+
       {/* Glowing Orbs */}
       <div className="absolute top-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
       <div className="absolute bottom-20 left-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
@@ -75,8 +78,7 @@ export function SignIn() {
         <div className="relative">
           {/* Card Glow Effect */}
           <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-25" />
-          
-          {/* Sign In Card */}
+
           <div className="relative bg-gray-900/80 backdrop-blur-xl p-8 rounded-2xl border border-gray-800">
             {/* Header */}
             <div className="text-center mb-8">
@@ -84,31 +86,36 @@ export function SignIn() {
               <p className="text-gray-400">Sign in to your account</p>
             </div>
 
-            {/* Sign In Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
               {error && (
-                <div className="flex items-center gap-2 text-red-400 bg-red-400/10 p-3 rounded-lg border border-red-400/20">
+                <div
+                  className="flex items-center gap-2 text-red-400 bg-red-400/10 p-3 rounded-lg border border-red-400/20"
+                  role="alert"
+                >
                   <AlertCircle className="w-5 h-5" />
                   <span className="text-sm">{error}</span>
                 </div>
               )}
 
-              {/* Email Input */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <Mail className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  value={usernameOrEmail}
+                  onChange={(e) => {
+                    setUsernameOrEmail(e.target.value);
+                    setError('');
+                  }}
                   className="w-full bg-gray-800/50 border border-gray-700 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
-                  placeholder="Email address"
+                  placeholder="Username or Email"
+                  disabled={loading}
                   required
+                  autoComplete="username"
                 />
               </div>
 
-              {/* Password Input */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <Lock className="h-5 w-5 text-gray-400" />
@@ -116,14 +123,18 @@ export function SignIn() {
                 <input
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError('');
+                  }}
                   className="w-full bg-gray-800/50 border border-gray-700 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
                   placeholder="Password"
+                  disabled={loading}
                   required
+                  autoComplete="current-password"
                 />
               </div>
 
-              {/* Remember Me and Forgot Password */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <input
@@ -136,19 +147,22 @@ export function SignIn() {
                     Remember me
                   </label>
                 </div>
-                <Link to="/forgot-password" className="text-sm font-medium text-purple-400 hover:text-purple-300">
+                <Link
+                  to="/forgot-password"
+                  className="text-sm font-medium text-purple-400 hover:text-purple-300"
+                >
                   Forgot password?
                 </Link>
               </div>
 
-              {/* Sign In Button */}
               <button
                 type="submit"
-                className="relative w-full group"
+                disabled={loading}
+                className="relative w-full group disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl blur opacity-60 group-hover:opacity-100 transition duration-200" />
                 <div className="relative w-full flex items-center justify-center bg-black rounded-xl px-6 py-3 text-white font-semibold">
-                  Sign In
+                  {loading ? 'Signing In...' : 'Sign In'}
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </div>
               </button>
@@ -166,17 +180,27 @@ export function SignIn() {
 
             {/* Social Login Buttons */}
             <div className="grid grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-2 bg-gray-800/50 hover:bg-gray-800 text-white rounded-xl px-6 py-3 font-medium transition-colors">
+              <button
+                type="button"
+                className="flex items-center justify-center gap-2 bg-gray-800/50 hover:bg-gray-800 text-white rounded-xl px-6 py-3 font-medium transition-colors"
+                onClick={() => {
+                  window.location.href = `${API_URL}/api/auth/google`;
+                }}
+              >
                 <Chrome className="w-5 h-5" />
                 Google
               </button>
-              <button className="flex items-center justify-center gap-2 bg-gray-800/50 hover:bg-gray-800 text-white rounded-xl px-6 py-3 font-medium transition-colors">
+
+              <button
+                type="button"
+                className="flex items-center justify-center gap-2 bg-gray-800/50 cursor-not-allowed text-white rounded-xl px-6 py-3 font-medium transition-colors"
+                disabled
+              >
                 <Github className="w-5 h-5" />
                 GitHub
               </button>
             </div>
 
-            {/* Sign Up Link */}
             <p className="mt-8 text-center text-gray-400">
               Don't have an account?{' '}
               <Link to="/signup" className="text-purple-400 hover:text-purple-300 font-medium">

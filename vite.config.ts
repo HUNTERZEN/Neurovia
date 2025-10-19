@@ -33,7 +33,7 @@ export default defineConfig({
     })
   ],
   optimizeDeps: {
-    exclude: ['lucide-react'],
+    exclude: ['lucide-react']
   },
   build: {
     rollupOptions: {
@@ -41,9 +41,9 @@ export default defineConfig({
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'map-vendor': ['@maptiler/sdk', 'react-map-gl'],
-          'ui-vendor': ['lucide-react', 'clsx', 'tailwind-merge'],
-        },
-      },
+          'ui-vendor': ['lucide-react', 'clsx', 'tailwind-merge']
+        }
+      }
     },
     chunkSizeWarningLimit: 1000,
     sourcemap: true,
@@ -51,13 +51,32 @@ export default defineConfig({
     terserOptions: {
       compress: {
         drop_console: true,
-        drop_debugger: true,
-      },
-    },
+        drop_debugger: true
+      }
+    }
   },
   server: {
     port: 3000,
     strictPort: true,
     host: true,
-  },
+    // ✅ ADD THIS: Allow ngrok and other tunnel domains
+    allowedHosts: [
+      'localhost',
+      '.ngrok.io',
+      '.ngrok-free.dev',
+      '.ngrok.app',
+      '.devtunnels.ms',
+      '.loca.lt',
+      '.tunnelmole.com'
+    ],
+    // 'disableHostCheck' is not a valid Vite option; host behavior is controlled via `host` and `allowedHosts`
+    proxy: {
+      // Proxy API calls to backend
+      '/api': {
+        target: 'http://localhost:8080', // Your backend server URL and port
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  }
 });

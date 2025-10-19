@@ -6,7 +6,7 @@ interface ProtectedRouteProps {
   redirectTo?: string;
 }
 
-export function ProtectedRoute({ children, redirectTo = '/signin' }: ProtectedRouteProps) {
+export function ProtectedRoute({ children, redirectTo = '/login' }: ProtectedRouteProps) {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
   if (!isAuthenticated) {
@@ -14,4 +14,6 @@ export function ProtectedRoute({ children, redirectTo = '/signin' }: ProtectedRo
   }
 
   return <>{children}</>;
-} 
+}
+
+export default ProtectedRoute;

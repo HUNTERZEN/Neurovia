@@ -30,12 +30,12 @@ const navigation = {
     },
     {
       name: 'Twitter',
-      href: '#',
+      href: 'https://x.com/computech08',
       icon: Twitter
     },
     {
       name: 'Instagram',
-      href: '#',
+      href: 'https://www.instagram.com/computechsolutions08?igshid=MzNlNGNkZWQ4Mg%3D%3D',
       icon: Instagram
     },
     {
@@ -45,7 +45,7 @@ const navigation = {
     },
     {
       name: 'YouTube',
-      href: '#',
+      href: 'https://youtube.com/@computechsolutions-ks6hg?si=ihbgxxWD7626op7m',
       icon: Youtube
     }
   ]

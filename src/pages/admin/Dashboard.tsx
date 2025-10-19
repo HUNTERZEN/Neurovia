@@ -6,13 +6,21 @@ import {
   MessageSquare,
   TrendingUp,
   DollarSign,
-  Clock,
   Star,
   Activity
 } from 'lucide-react';
 
 // Mock data for demonstration
-const stats = [
+type StatColor = "purple" | "blue" | "green" | "yellow";
+type Stat = {
+  name: string;
+  value: string;
+  change: string;
+  icon: React.ElementType;
+  color: StatColor;
+};
+
+const stats: Stat[] = [
   { name: 'Total Users', value: '2,543', change: '+12.5%', icon: Users, color: 'purple' },
   { name: 'Active Shops', value: '185', change: '+5.2%', icon: Store, color: 'blue' },
   { name: 'Support Tickets', value: '42', change: '-8.1%', icon: MessageSquare, color: 'green' },
@@ -50,6 +58,31 @@ const recentActivity = [
   },
 ];
 
+// Color mapping for consistent styling
+const getColorClasses = (
+  color: 'purple' | 'blue' | 'green' | 'yellow'
+): { bg: string; text: string } => {
+  const colorMap = {
+    purple: {
+      bg: 'bg-purple-500/10',
+      text: 'text-purple-400'
+    },
+    blue: {
+      bg: 'bg-blue-500/10',
+      text: 'text-blue-400'
+    },
+    green: {
+      bg: 'bg-green-500/10',
+      text: 'text-green-400'
+    },
+    yellow: {
+      bg: 'bg-yellow-500/10',
+      text: 'text-yellow-400'
+    }
+  };
+  return colorMap[color] || colorMap.purple;
+};
+
 export function Dashboard() {
   return (
     <div className="space-y-8">
@@ -73,29 +106,32 @@ export function Dashboard() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
-          <motion.div
-            key={stat.name}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
-            className="relative group"
-          >
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-200" />
-            <div className="relative p-6 bg-gray-900/80 backdrop-blur-xl rounded-xl border border-gray-800">
-              <div className="flex items-center justify-between mb-4">
-                <div className={`p-2 bg-${stat.color}-500/10 rounded-lg`}>
-                  <stat.icon className={`w-6 h-6 text-${stat.color}-400`} />
+        {stats.map((stat, index) => {
+          const colorClasses = getColorClasses(stat.color);
+          return (
+            <motion.div
+              key={stat.name}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              className="relative group"
+            >
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-200" />
+              <div className="relative p-6 bg-gray-900/80 backdrop-blur-xl rounded-xl border border-gray-800">
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`p-2 ${colorClasses.bg} rounded-lg`}>
+                    <stat.icon className={`w-6 h-6 ${colorClasses.text}`} />
+                  </div>
+                  <span className={`text-sm font-medium ${stat.change.startsWith('+') ? 'text-green-400' : 'text-red-400'}`}>
+                    {stat.change}
+                  </span>
                 </div>
-                <span className={`text-sm font-medium ${stat.change.startsWith('+') ? 'text-green-400' : 'text-red-400'}`}>
-                  {stat.change}
-                </span>
+                <h3 className="text-2xl font-bold text-white mb-1">{stat.value}</h3>
+                <p className="text-gray-400">{stat.name}</p>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-1">{stat.value}</h3>
-              <p className="text-gray-400">{stat.name}</p>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Activity and Charts Section */}
@@ -153,4 +189,7 @@ export function Dashboard() {
       </div>
     </div>
   );
-} 
+}
+
+// Default export if needed
+export default Dashboard;

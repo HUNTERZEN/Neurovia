@@ -1,184 +1,177 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Mail, Lock, AlertCircle } from 'lucide-react';
-import type { User } from '../types/user';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, ArrowRight, Github, Chrome, AlertCircle } from 'lucide-react';
 
-export function Login() {
+export function SignIn() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-    setError('');
-  };
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Basic validation
-    if (!formData.email || !formData.password) {
+
+    if (!email || !password) {
       setError('All fields are required');
       return;
     }
 
     try {
-      // Get users from localStorage
-      const users = JSON.parse(localStorage.getItem('users') || '[]') as (User & { password: string })[];
-      const user = users.find(u => u.email === formData.email);
+      const response = await fetch(`${API_URL}/api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // if your backend uses cookies/sessions for auth
+        body: JSON.stringify({ username: email, password }),
+      });
 
-      if (!user) {
-        setError('Invalid email or password');
-        return;
-      }
+      const result = await response.json();
 
-      // Check password
-      if (formData.password !== user.password) {
-        setError('Invalid email or password');
-        return;
-      }
-
-      // Update last login
-      const updatedUsers = users.map(u => {
-        if (u.id === user.id) {
-          return {
-            ...u,
-            lastLogin: new Date().toISOString()
-          };
+      if (response.ok) {
+        // Optionally store JWT token if returned (example)
+        if (result.token) {
+          localStorage.setItem('authToken', result.token);
         }
-        return u;
-      });
-      localStorage.setItem('users', JSON.stringify(updatedUsers));
 
-      // Store authentication state
-      const { password: _, ...userWithoutPassword } = user;
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
-
-      // Clear form
-      setFormData({
-        email: '',
-        password: ''
-      });
-
-      // Redirect to home page
-      navigate('/');
+        setError('');
+        setEmail('');
+        setPassword('');
+        navigate('/'); // redirect after successful login
+      } else {
+        setError(result.error || 'Invalid email or password');
+      }
     } catch (err) {
-      console.error('Error during login:', err);
-      setError('An error occurred while logging in. Please try again.');
+      setError('An error occurred while signing in. Please try again.');
+      console.error('SignIn error:', err);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="mt-6 text-center text-3xl font-extrabold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-            Welcome back
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-400">
-            Sign in to your account
-          </p>
-        </motion.div>
+    <div className="relative min-h-screen bg-black flex items-center justify-center py-20 overflow-hidden">
+      {/* Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
 
-        <motion.form
-          className="mt-8 space-y-6"
-          onSubmit={handleSubmit}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          {error && (
-            <div className="flex items-center gap-2 text-red-400 bg-red-400/10 p-3 rounded-lg border border-red-400/20">
-              <AlertCircle className="w-5 h-5" />
-              <span className="text-sm">{error}</span>
+      {/* Glowing Orbs */}
+      <div className="absolute top-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 left-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
+
+      {/* Main Content */}
+      <div className="relative w-full max-w-md mx-auto px-6">
+        <div className="relative">
+          {/* Card Glow Effect */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-25" />
+
+          {/* Sign In Card */}
+          <div className="relative bg-gray-900/80 backdrop-blur-xl p-8 rounded-2xl border border-gray-800">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
+              <p className="text-gray-400">Sign in to your account</p>
             </div>
-          )}
 
-          <div className="rounded-md shadow-sm space-y-4">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 text-gray-500" />
+            {/* Sign In Form */}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <div className="flex items-center gap-2 text-red-400 bg-red-400/10 p-3 rounded-lg border border-red-400/20">
+                  <AlertCircle className="w-5 h-5" />
+                  <span className="text-sm">{error}</span>
+                </div>
+              )}
+
+              {/* Email / Username Input */}
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="text"
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); setError(''); }}
+                  className="w-full bg-gray-800/50 border border-gray-700 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                  placeholder="Username or Email"
+                  required
+                />
               </div>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="appearance-none relative block w-full pl-10 pr-3 py-3 bg-gray-900/50 border border-gray-800 placeholder-gray-500 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent sm:text-sm"
-                placeholder="Email address"
-              />
-            </div>
 
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-gray-500" />
+              {/* Password Input */}
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => { setPassword(e.target.value); setError(''); }}
+                  className="w-full bg-gray-800/50 border border-gray-700 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                  placeholder="Password"
+                  required
+                />
               </div>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="appearance-none relative block w-full pl-10 pr-3 py-3 bg-gray-900/50 border border-gray-800 placeholder-gray-500 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent sm:text-sm"
-                placeholder="Password"
-              />
-            </div>
-          </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 text-purple-500 focus:ring-purple-500 border-gray-800 rounded bg-gray-900/50"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-400">
-                Remember me
-              </label>
-            </div>
+              {/* Remember Me and Forgot Password */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <input
+                    id="remember-me"
+                    name="remember-me"
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-gray-700 bg-gray-800/50 text-purple-500 focus:ring-purple-500 focus:ring-offset-0"
+                  />
+                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-400">
+                    Remember me
+                  </label>
+                </div>
+                <Link to="/forgot-password" className="text-sm font-medium text-purple-400 hover:text-purple-300">
+                  Forgot password?
+                </Link>
+              </div>
 
-            <div className="text-sm">
+              {/* Sign In Button */}
               <button
-                type="button"
-                className="text-purple-400 hover:text-purple-500"
+                type="submit"
+                className="relative w-full group"
               >
-                Forgot your password?
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl blur opacity-60 group-hover:opacity-100 transition duration-200" />
+                <div className="relative w-full flex items-center justify-center bg-black rounded-xl px-6 py-3 text-white font-semibold">
+                  Sign In
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </div>
+              </button>
+            </form>
+
+            {/* Divider */}
+            <div className="relative my-8">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-700"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-gray-900/80 text-gray-400">Or continue with</span>
+              </div>
+            </div>
+
+            {/* Social Login Buttons */}
+            <div className="grid grid-cols-2 gap-4">
+              <button type="button" className="flex items-center justify-center gap-2 bg-gray-800/50 hover:bg-gray-800 text-white rounded-xl px-6 py-3 font-medium transition-colors">
+                <Chrome className="w-5 h-5" />
+                Google
+              </button>
+              <button type="button" className="flex items-center justify-center gap-2 bg-gray-800/50 hover:bg-gray-800 text-white rounded-xl px-6 py-3 font-medium transition-colors">
+                <Github className="w-5 h-5" />
+                GitHub
               </button>
             </div>
-          </div>
 
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-xl text-white bg-purple-500 hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
-            >
-              Sign in
-            </button>
+            {/* Sign Up Link */}
+            <p className="mt-8 text-center text-gray-400">
+              Don't have an account?{' '}
+              <Link to="/signup" className="text-purple-400 hover:text-purple-300 font-medium">
+                Sign up
+              </Link>
+            </p>
           </div>
-
-          <div className="text-center">
-            <button
-              type="button"
-              onClick={() => navigate('/signup')}
-              className="text-sm text-gray-400 hover:text-white transition-colors"
-            >
-              Don't have an account? Sign up
-            </button>
-          </div>
-        </motion.form>
+        </div>
       </div>
     </div>
   );
-} 
+}
