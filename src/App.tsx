@@ -15,6 +15,9 @@ import { Founders } from './components/Founders';
 import { Members } from './components/Members';
 import { Footer } from './components/Footer';
 
+// ✅ ADD: FeedbackSection import
+import { FeedbackSection } from './components/FeedbackSection';
+
 // Add splash screen import
 import { SplashScreen } from './components/SplashScreen';
 
@@ -37,6 +40,11 @@ import { ProfilePage } from './components/ProfilePage';
 
 // Profile Context Import - ✨ NEW ADDITION
 import { ProfileProvider } from './context/ProfileContext';
+
+// ✅ ADD: Technician page imports
+import { TechnicianSignIn } from './pages/technician/TechnicianSignIn';
+import { TechnicianDashboard } from './pages/technician/TechnicianDashboard';
+import { TechnicianProfile } from './pages/technician/TechnicianProfile';
 
 // Hook and other imports
 import { useScrollToTop } from './hooks/useScrollToTop';
@@ -89,6 +97,22 @@ function UserProtectedRoute({ children }: UserProtectedRouteProps) {
 
   if (!isAuthenticated) {
     return <Navigate to="/signin" replace />;
+  }
+
+  return <>{children}</>;
+}
+
+/* ----------  Technician Protected Route Component ---------- */
+
+interface TechnicianProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+function TechnicianProtectedRoute({ children }: TechnicianProtectedRouteProps) {
+  const token = localStorage.getItem('technicianToken');
+  
+  if (!token) {
+    return <Navigate to="/technician/signin" replace />;
   }
 
   return <>{children}</>;
@@ -277,6 +301,25 @@ export default function App() {
             <ScrollToTop />
             <div className="min-h-screen bg-black">
               <Routes>
+                {/* ✅ ADD: Technician Routes */}
+                <Route path="/technician/signin" element={<TechnicianSignIn />} />
+                <Route 
+                  path="/technician/dashboard" 
+                  element={
+                    <TechnicianProtectedRoute>
+                      <TechnicianDashboard />
+                    </TechnicianProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/technician/profile" 
+                  element={
+                    <TechnicianProtectedRoute>
+                      <TechnicianProfile />
+                    </TechnicianProtectedRoute>
+                  } 
+                />
+
                 {/* Admin Routes */}
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route
@@ -325,7 +368,7 @@ export default function App() {
                   }
                 />
 
-                {/* Public Routes */}
+                {/* ✅ UPDATED: Public Home Route with FeedbackSection */}
                 <Route
                   path="/"
                   element={
@@ -334,11 +377,14 @@ export default function App() {
                       <Hero />
                       <Features />
                       <Founders />
+                      {/* ✅ ADD: FeedbackSection between Founders and Members */}
+                      <FeedbackSection />
                       <Members />
                       <Footer />
                     </>
                   }
                 />
+                
                 <Route 
                   path="/about" 
                   element={

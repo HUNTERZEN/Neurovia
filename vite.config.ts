@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
@@ -57,23 +56,15 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    strictPort: true,
-    host: true,
-    // ✅ ADD THIS: Allow ngrok and other tunnel domains
-    allowedHosts: [
-      'localhost',
-      '.ngrok.io',
-      '.ngrok-free.dev',
-      '.ngrok.app',
-      '.devtunnels.ms',
-      '.loca.lt',
-      '.tunnelmole.com'
-    ],
-    // 'disableHostCheck' is not a valid Vite option; host behavior is controlled via `host` and `allowedHosts`
+    host: '0.0.0.0',
+    // ✅ ALLOW ALL HOSTS (Best for development)
+    allowedHosts: true,
+    hmr: {
+      clientPort: 443
+    },
     proxy: {
-      // Proxy API calls to backend
       '/api': {
-        target: 'http://localhost:8080', // Your backend server URL and port
+        target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false
       }

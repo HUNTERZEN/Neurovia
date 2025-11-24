@@ -1,18 +1,18 @@
 // src/config/api.js
 const getAPIBaseURL = () => {
-  if (process.env.NODE_ENV === 'production') {
-    return process.env.VITE_API_BASE_URL || 'https://your-production-api.com';
-  }
-  
-  // Development: Auto-detect if we're on mobile
   const hostname = window.location.hostname;
   
-  if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    return 'http://localhost:8080';
-  } else {
-    // Mobile access via IP
-    return `http://${hostname}:8080`;
+  // For public tunnels, use same origin (proxy will handle it)
+  if (hostname.includes('ngrok') || 
+      hostname.includes('devtunnels') || 
+      hostname.includes('loca.lt') ||
+      hostname.includes('tunnelmole') ||
+      hostname.includes('trycloudflare')) {
+    return window.location.origin;
   }
+  
+  // Local development
+  return 'http://localhost:8080';
 };
 
 export const API_BASE_URL = getAPIBaseURL();
