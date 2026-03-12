@@ -56,11 +56,13 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    host: '0.0.0.0',
-    // ✅ ALLOW ALL HOSTS (Best for development)
+    strictPort: true, // Force it to stay on 3000
+    host: true,       // Listen on all addresses, including LAN
     allowedHosts: true,
     hmr: {
-      clientPort: 443
+      // ✅ Fixed: Removed clientPort 443 so it uses the standard port 3000
+      host: 'localhost',
+      protocol: 'ws'
     },
     proxy: {
       '/api': {
