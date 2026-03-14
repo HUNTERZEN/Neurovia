@@ -46,6 +46,10 @@ import { TechnicianSignIn } from './pages/technician/TechnicianSignIn';
 import { TechnicianDashboard } from './pages/technician/TechnicianDashboard';
 import { TechnicianProfile } from './pages/technician/TechnicianProfile';
 
+// ✅ ADD: Partner page imports
+import { RegisterPartner } from './pages/partner/RegisterPartner';
+import { PartnerDashboard } from './pages/partner/PartnerDashboard';
+
 // Hook and other imports
 import { useScrollToTop } from './hooks/useScrollToTop';
 import { AdminLayout } from './components/admin/AdminLayout';
@@ -346,6 +350,28 @@ export default function App() {
                 <Route
                   path="/signup"
                   element={isAuthenticated ? <Navigate to="/" replace /> : <SignUp />}
+                />
+
+                {/* ✅ Partner Routes */}
+                <Route
+                  path="/register-partner"
+                  element={
+                    <UserProtectedRoute>
+                      <>
+                        <Navbar />
+                        <RegisterPartner />
+                        <Footer />
+                      </>
+                    </UserProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/partner/dashboard"
+                  element={
+                    <UserProtectedRoute>
+                      <PartnerDashboard />
+                    </UserProtectedRoute>
+                  }
                 />
 
                 {/* ✨ UPDATED: Protected User Profile Route with ProfileProvider integration */}

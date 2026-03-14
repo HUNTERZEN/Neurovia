@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, User, LogOut } from 'lucide-react';
+import { Menu, X, User, LogOut, Store, UserCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../App';
 
@@ -8,6 +8,7 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
+  const isPartner = localStorage.getItem('isPartner') === 'true';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -127,6 +128,25 @@ export function Navbar() {
                         <User className="w-4 h-4 mr-2" />
                         Profile
                       </Link>
+                      {isPartner ? (
+                        <Link
+                          to="/partner/dashboard"
+                          className="flex items-center px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-gray-800/50 transition-colors"
+                          onClick={() => setIsUserMenuOpen(false)}
+                        >
+                          <UserCheck className="w-4 h-4 mr-2" />
+                          Member Dashboard
+                        </Link>
+                      ) : (
+                        <Link
+                          to="/register-partner"
+                          className="flex items-center px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-gray-800/50 transition-colors"
+                          onClick={() => setIsUserMenuOpen(false)}
+                        >
+                          <Store className="w-4 h-4 mr-2" />
+                          Register as Partner
+                        </Link>
+                      )}
                       {/* ✅ UPDATED Sign Out button with better event handling */}
                       <button
                         onClick={(e) => {
@@ -248,6 +268,25 @@ export function Navbar() {
                     <User className="w-5 h-5" />
                     <span>Profile</span>
                   </Link>
+                  {isPartner ? (
+                    <Link
+                      to="/partner/dashboard"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center space-x-2 px-6 py-3 text-purple-400 hover:text-purple-300 transition-colors rounded-lg hover:bg-white/5"
+                    >
+                      <UserCheck className="w-5 h-5" />
+                      <span>Member Dashboard</span>
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/register-partner"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center space-x-2 px-6 py-3 text-purple-400 hover:text-purple-300 transition-colors rounded-lg hover:bg-white/5"
+                    >
+                      <Store className="w-5 h-5" />
+                      <span>Register as Partner</span>
+                    </Link>
+                  )}
                   {/* ✅ UPDATED Mobile Sign Out button */}
                   <button
                     onClick={(e) => {
