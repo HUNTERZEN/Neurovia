@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
+  // ✅ ADD THIS LINE: Ensures assets are loaded from the root
+  base: '/',
+
   plugins: [
     react(),
     VitePWA({
@@ -56,16 +59,16 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    strictPort: true, // Force it to stay on 3000
-    host: true,       // Listen on all addresses, including LAN
+    strictPort: true,
+    host: true,
     allowedHosts: true,
     hmr: {
-      // ✅ Fixed: Removed clientPort 443 so it uses the standard port 3000
       host: 'localhost',
       protocol: 'ws'
     },
     proxy: {
       '/api': {
+        // This only works locally. On Vercel, you must use vercel.json for rewrites
         target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false
