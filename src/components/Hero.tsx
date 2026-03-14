@@ -20,8 +20,8 @@ export function Hero() {
   const orbOpacity = useSpring(useTransform(scrollY, [0, 300], [0.3, 0]), springConfig);
 
   return (
-    <section className="relative min-h-screen pt-20 overflow-hidden">
-      <div className="relative">
+    <section className="relative min-h-screen pt-20 pb-4 overflow-hidden flex flex-col" style={{ minHeight: '100dvh' }}>
+      <div className="relative flex-1">
         {/* Background Effects */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-gray-950" />
@@ -58,11 +58,11 @@ export function Hero() {
                   </h1>
 
                   <p className="mt-6 text-base sm:text-lg text-gray-400 max-w-2xl mx-auto lg:mx-0">
-                    Get instant help from verified tech experts or find trusted local repair shops. 
+                    Get instant help from verified tech experts or find trusted local repair shops.
                     Professional support for all your device issues, available 24/7.
                   </p>
 
-                  <motion.div 
+                  <motion.div
                     className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-8 sm:mt-10"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -79,9 +79,9 @@ export function Hero() {
                       Find Repair Shops
                     </Link>
                   </motion.div>
-                  
+
                   {/* Stats */}
-                  <motion.div 
+                  <motion.div
                     className="mt-12 flex flex-col sm:flex-row items-center gap-8 justify-center lg:justify-start"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -106,7 +106,7 @@ export function Hero() {
                 >
                   <div className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-800">
                     <div className="space-y-4 mb-6">
-                      <motion.div 
+                      <motion.div
                         className="relative group p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl border border-gray-700"
                         whileHover={{ scale: 1.02 }}
                         transition={{ type: "spring", stiffness: 300 }}
@@ -121,8 +121,8 @@ export function Hero() {
                           </div>
                         </div>
                       </motion.div>
-                      
-                      <motion.div 
+
+                      <motion.div
                         className="relative group p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl border border-gray-700"
                         whileHover={{ scale: 1.02 }}
                         transition={{ type: "spring", stiffness: 300 }}
@@ -141,7 +141,7 @@ export function Hero() {
 
                     {/* Features */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <motion.div 
+                      <motion.div
                         className="flex items-center justify-center gap-2 p-4 bg-gray-800 rounded-xl text-white"
                         whileHover={{ scale: 1.05 }}
                         transition={{ type: "spring", stiffness: 300 }}
@@ -149,7 +149,7 @@ export function Hero() {
                         <Shield className="w-5 h-5 text-purple-400" />
                         <span>Verified Experts</span>
                       </motion.div>
-                      <motion.div 
+                      <motion.div
                         className="flex items-center justify-center gap-2 p-4 bg-gray-800 rounded-xl text-white"
                         whileHover={{ scale: 1.05 }}
                         transition={{ type: "spring", stiffness: 300 }}
@@ -166,8 +166,8 @@ export function Hero() {
         </div>
 
         {/* Scroll Indicator */}
-        <motion.div 
-          className="relative h-24 flex items-center justify-center"
+        <motion.div
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center justify-center"
           style={{ opacity }}
         >
           <ScrollIndicator />

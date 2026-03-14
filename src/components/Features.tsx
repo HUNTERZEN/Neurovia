@@ -27,7 +27,7 @@ export function Features() {
   ];
 
   return (
-    <section className="relative bg-black -mt-24 pt-28 sm:pt-36 pb-16 sm:pb-24 overflow-hidden">
+    <section className="relative bg-black pt-16 sm:pt-24 pb-16 sm:pb-24 overflow-hidden">
       {/* Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 via-black to-blue-900/10" />
       
