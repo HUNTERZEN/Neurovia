@@ -1,10 +1,11 @@
+// src/config/api.js
 const getAPIBaseURL = () => {
   const hostname = window.location.hostname;
   
   // 1. Check for Production (Vercel)
-  // If we are on your Vercel domain, use the same origin 
-  // (Your vercel.json rewrite will handle the rest)
-  if (hostname.includes('vercel.app')) {
+  // This now includes both your unique Vercel subdomains and your specific project domain
+  if (hostname.includes('vercel.app') || hostname.includes('neurovia-tech-support')) {
+    // When on Vercel, we use the same origin so vercel.json rewrites can work
     return window.location.origin;
   }
 
@@ -18,7 +19,7 @@ const getAPIBaseURL = () => {
   }
   
   // 3. Fallback for Local Development
-  // If you are on localhost, talk to Render so you don't have to run the server locally
+  // Defaults to your live Render backend so you can develop without running a local DB
   return import.meta.env.VITE_API_URL || 'https://neurovia-backend.onrender.com';
 };
 
