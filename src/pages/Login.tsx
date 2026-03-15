@@ -8,7 +8,7 @@ export function SignIn() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+  const API_URL = import.meta.env.VITE_API_URL || 'https://neurovia-backend.onrender.com';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

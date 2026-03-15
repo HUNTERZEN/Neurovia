@@ -14,7 +14,7 @@ export function SignUp() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+  const API_URL = import.meta.env.VITE_API_URL || 'https://neurovia-backend.onrender.com';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
