@@ -23,21 +23,21 @@ export function Navbar() {
   const handleLogout = async () => {
     console.log('Logout button clicked!'); // Debug line
     console.log('Before logout:', { isAuthenticated, user }); // Debug line
-    
+
     try {
       await logout(); // Make sure logout is awaited
       console.log('Logout completed successfully'); // Debug line
     } catch (error) {
       console.error('Logout error:', error);
     }
-    
+
     // Close menus after logout
     setIsUserMenuOpen(false);
     setIsMobileMenuOpen(false);
   };
 
   return (
-    <nav 
+    <nav
       className="fixed top-0 left-0 right-0 z-50"
       style={{
         backgroundColor: scrollY > 10 ? 'rgba(0, 0, 0, 0.7)' : 'transparent',
@@ -56,7 +56,7 @@ export function Navbar() {
               <span className="ml-3 text-lg font-medium bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Neurovia</span>
             </Link>
           </div>
-          
+
           {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
@@ -109,7 +109,7 @@ export function Navbar() {
                     {user?.username || 'User'}
                   </span>
                 </button>
-                
+
                 {/* User Dropdown Menu - ✅ UPDATED with better z-index and click handling */}
                 {isUserMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-gray-900/95 backdrop-blur-lg rounded-lg border border-gray-700/50 shadow-xl z-[60]">
@@ -197,7 +197,7 @@ export function Navbar() {
               <X className="h-6 w-6" />
             </button>
           </div>
-          
+
           <div className="flex flex-col items-center space-y-8 p-8">
             {/* Mobile Navigation Links */}
             <Link

@@ -87,7 +87,7 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
 
 
   return (
-    <div className="relative min-h-screen pt-24 pb-16 px-4 overflow-hidden">
+    <div className="relative min-h-screen pt-48 pb-16 px-4 overflow-hidden">
       {/* Theme background — strictly matches PartnerDashboard */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-gray-950" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent" />
