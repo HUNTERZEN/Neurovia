@@ -58,14 +58,6 @@ export function PartnerDashboard() {
         if (res.ok) {
           const data = await res.json();
           setPartnerData(data.partner);
-        } else {
-          // Fallback to check localStorage if backend hasn't synced (optional, for safety during transition)
-          const stored = localStorage.getItem('partnerData');
-          if (stored) {
-            try {
-              setPartnerData(JSON.parse(stored));
-            } catch {}
-          }
         }
       } catch (err) {
         console.error('Failed to fetch partner profile:', err);
