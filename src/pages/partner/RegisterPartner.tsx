@@ -240,10 +240,7 @@ export function RegisterPartner() {
         alert(data.message || 'Registration failed. Please try again.');
       }
     } catch {
-      localStorage.setItem('isPartner', 'true');
-      localStorage.setItem('partnerData', JSON.stringify(formData));
-      setIsSuccess(true);
-      setTimeout(() => navigate('/partner/dashboard'), 2500);
+      alert('Network error: Could not connect to the server. Please check your internet connection and try again.');
     } finally {
       setIsSubmitting(false);
     }
