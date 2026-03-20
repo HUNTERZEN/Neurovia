@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   User, Mail, Phone, MapPin, Edit3, Save, X, Camera,
   Briefcase, Calendar, Globe, Github, Linkedin, Twitter,
-  Shield, CheckCircle, TrendingUp, Activity, Building
+  Shield, CheckCircle, Activity, Building
 } from 'lucide-react';
 import { useProfile } from '../context/ProfileContext';
 
@@ -84,118 +84,112 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
     { label: 'Member Since', value: profileData.joinDate, icon: Calendar, color: 'text-violet-400', bg: 'bg-violet-400/10' },
   ];
 
-  const headerBlur = Math.min(scrollY / 100, 1);
-  const headerOpacity = Math.min(0.3 + (scrollY / 500), 0.8);
+
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 font-sans selection:bg-indigo-500/30">
-      {/* Premium Ambient Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-900/20 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-violet-900/20 blur-[120px]" />
-        <div className="absolute top-[40%] left-[60%] w-[30%] h-[30%] rounded-full bg-fuchsia-900/10 blur-[100px]" />
-      </div>
+    <div className="relative min-h-screen pt-24 pb-16 px-4 overflow-hidden">
+      {/* Theme background — strictly matches PartnerDashboard */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-gray-950" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent" />
+      <div className="absolute left-1/4 top-0 w-72 h-72 rounded-full bg-purple-500/15 blur-3xl" />
+      <div className="absolute right-1/4 top-1/4 w-72 h-72 rounded-full bg-blue-500/15 blur-3xl" />
 
-      {/* Sticky Header */}
-      <motion.header
-        className="sticky top-0 z-40 border-b border-white/5 transition-all duration-500"
-        style={{
-          backgroundColor: `rgba(5, 5, 5, ${headerOpacity})`,
-          backdropFilter: `blur(${12 + headerBlur * 12}px)`,
-        }}
+      {/* Main Page Area */}
+      <div className="relative z-10 max-w-6xl mx-auto">
+      
+      {/* Header Section */}
+      <motion.div
+        className="mb-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
       >
-        <div className="max-w-6xl mx-auto px-6 py-8">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            
-            {/* User Identity */}
-            <div className="flex items-center gap-6">
-              <motion.div className="relative group" whileHover={{ scale: 1.02 }}>
-                <div className="absolute -inset-1 bg-gradient-to-tr from-indigo-500 to-violet-500 rounded-full blur-md opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
-                <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full bg-zinc-900 border-2 border-white/10 overflow-hidden shadow-2xl flex items-center justify-center">
-                  {profileData.profileImage !== '/api/placeholder/150/150' ? (
-                    <img src={profileData.profileImage} alt={profileData.fullName} className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-3xl font-bold bg-gradient-to-br from-indigo-400 to-violet-400 bg-clip-text text-transparent">
-                      {profileData.fullName.split(' ').map(n => n[0]).join('').toUpperCase()}
-                    </span>
-                  )}
-                  {isEditing && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer backdrop-blur-sm">
-                      <Camera className="w-8 h-8 text-white" />
-                    </div>
-                  )}
-                </div>
-                <div className="absolute -bottom-2 -right-2 bg-emerald-500 text-black p-1.5 rounded-full border-4 border-[#050505] shadow-lg">
-                  <CheckCircle className="w-4 h-4" />
-                </div>
-              </motion.div>
-
-              <div>
-                {isEditing ? (
-                  <div className="space-y-3">
-                    <input
-                      type="text"
-                      value={tempData.fullName}
-                      onChange={(e) => handleInputChange('fullName', e.target.value)}
-                      className="text-2xl md:text-3xl font-bold bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all w-full max-w-sm"
-                      placeholder="Full Name"
-                    />
-                    <input
-                      type="text"
-                      value={tempData.profession}
-                      onChange={(e) => handleInputChange('profession', e.target.value)}
-                      className="text-sm bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all w-full max-w-sm"
-                      placeholder="Profession"
-                    />
-                  </div>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          
+          {/* User Identity */}
+          <div className="flex items-center gap-6">
+            <motion.div className="relative group" whileHover={{ scale: 1.02 }}>
+              <div className="absolute -inset-1 bg-gradient-to-tr from-purple-500 to-blue-500 rounded-full blur-md opacity-40 group-hover:opacity-60 transition-opacity duration-300" />
+              <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-900 border-2 border-gray-800 overflow-hidden shadow-2xl flex items-center justify-center">
+                {profileData.profileImage !== '/api/placeholder/150/150' ? (
+                  <img src={profileData.profileImage} alt={profileData.fullName} className="w-full h-full object-cover" />
                 ) : (
-                  <>
-                    <motion.h1 
-                      initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                      className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-2"
-                    >
-                      {profileData.fullName}
-                    </motion.h1>
-                    <motion.div 
-                      initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-                      className="flex flex-wrap items-center gap-3 text-sm text-zinc-400"
-                    >
-                      <span className="flex items-center gap-1.5 text-indigo-300 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
-                        <Briefcase className="w-4 h-4" /> {profileData.profession}
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <MapPin className="w-4 h-4" /> {profileData.location}
-                      </span>
-                    </motion.div>
-                  </>
+                  <span className="text-3xl font-bold bg-gradient-to-br from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                    {profileData.fullName.split(' ').map(n => n[0]).join('').toUpperCase()}
+                  </span>
+                )}
+                {isEditing && (
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer backdrop-blur-sm">
+                    <Camera className="w-8 h-8 text-white" />
+                  </div>
                 )}
               </div>
-            </div>
+              <div className="absolute -bottom-2 -right-2 bg-green-500 text-black p-1.5 rounded-full border-4 border-[#050505] shadow-lg">
+                <CheckCircle className="w-4 h-4" />
+              </div>
+            </motion.div>
 
-            {/* Actions */}
-            <div className="flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
+            <div>
               {isEditing ? (
-                <>
-                  <button onClick={handleCancel} className="flex-1 md:flex-none px-6 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 font-medium transition-all flex items-center justify-center gap-2">
-                    <X className="w-4 h-4" /> Cancel
-                  </button>
-                  <button onClick={handleSave} className="flex-1 md:flex-none px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium shadow-lg shadow-indigo-500/20 transition-all flex items-center justify-center gap-2">
-                    <Save className="w-4 h-4" /> Save
-                  </button>
-                </>
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    value={tempData.fullName}
+                    onChange={(e) => handleInputChange('fullName', e.target.value)}
+                    className="text-2xl md:text-3xl font-bold bg-gray-900/50 border border-gray-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all w-full max-w-sm"
+                    placeholder="Full Name"
+                  />
+                  <input
+                    type="text"
+                    value={tempData.profession}
+                    onChange={(e) => handleInputChange('profession', e.target.value)}
+                    className="text-sm bg-gray-900/50 border border-gray-800 rounded-xl px-4 py-2 text-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all w-full max-w-sm"
+                    placeholder="Profession"
+                  />
+                </div>
               ) : (
-                <button onClick={handleEdit} className="w-full md:w-auto px-6 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium transition-all flex items-center justify-center gap-2 hover:border-indigo-500/50">
-                  <Edit3 className="w-4 h-4 text-indigo-400" /> Edit Profile
-                </button>
+                <>
+                  <motion.h1 
+                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                    className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2"
+                  >
+                    {profileData.fullName}
+                  </motion.h1>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+                    className="flex flex-wrap items-center gap-3 text-sm text-gray-400"
+                  >
+                    <span className="flex items-center gap-1.5 text-purple-400">
+                      <Briefcase className="w-4 h-4" /> {profileData.profession}
+                    </span>
+                    <span className="flex items-center gap-1.5 px-3 border-l border-gray-800">
+                      <MapPin className="w-4 h-4" /> {profileData.location}
+                    </span>
+                  </motion.div>
+                </>
               )}
             </div>
-            
           </div>
-        </div>
-      </motion.header>
 
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-6 py-12 relative z-10">
+          {/* Actions */}
+          <div className="flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
+            {isEditing ? (
+              <>
+                <button onClick={handleCancel} className="flex-1 md:flex-none px-6 py-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 text-gray-300 font-medium transition-all flex items-center justify-center gap-2">
+                  <X className="w-4 h-4" /> Cancel
+                </button>
+                <button onClick={handleSave} className="flex-1 md:flex-none px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:opacity-90 text-white font-medium shadow-lg shadow-purple-500/20 transition-all flex items-center justify-center gap-2">
+                  <Save className="w-4 h-4" /> Save
+                </button>
+              </>
+            ) : (
+              <button onClick={handleEdit} className="w-full md:w-auto px-6 py-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 text-white font-medium transition-all flex items-center justify-center gap-2 hover:border-purple-500/50">
+                <Edit3 className="w-4 h-4 text-purple-400" /> Edit
+              </button>
+            )}
+          </div>
+          
+        </div>
+      </motion.div>
         
         {/* Stats Row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
@@ -360,7 +354,7 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
           </div>
 
         </div>
-      </main>
+      </div>
     </div>
   );
 }
