@@ -39,17 +39,54 @@ interface PartnerData {
 export function PartnerDashboard() {
   const [partnerData, setPartnerData] = useState<PartnerData | null>(null);
   const [isOnline, setIsOnline] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem('partnerData');
-    if (stored) {
+    const fetchPartnerProfile = async () => {
       try {
-        setPartnerData(JSON.parse(stored));
-      } catch {
-        // ignore parse errors
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          setIsLoading(false);
+          return;
+        }
+
+        const API_URL = import.meta.env.VITE_API_URL ?? 'https://neurovia-backend.onrender.com';
+        const res = await fetch(`${API_URL}/api/partner/profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (res.ok) {
+          const data = await res.json();
+          setPartnerData(data.partner);
+        } else {
+          // Fallback to check localStorage if backend hasn't synced (optional, for safety during transition)
+          const stored = localStorage.getItem('partnerData');
+          if (stored) {
+            try {
+              setPartnerData(JSON.parse(stored));
+            } catch {}
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch partner profile:', err);
+      } finally {
+        setIsLoading(false);
       }
-    }
+    };
+
+    fetchPartnerProfile();
   }, []);
+
+  if (isLoading) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen flex items-center justify-center bg-black">
+          <p className="text-gray-400">Loading your partner profile...</p>
+        </div>
+      </>
+    );
+  }
 
   if (!partnerData) {
     return (
