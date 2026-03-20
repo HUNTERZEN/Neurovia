@@ -41,45 +41,77 @@ const DEFAULT_PROFILE: ProfileData = {
 };
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
-  const [profileData, setProfileData] = useState<ProfileData>(() => {
-    const saved = localStorage.getItem('neurovia-profile-data');
-    if (saved) {
-      try {
-        return { ...DEFAULT_PROFILE, ...JSON.parse(saved) };
-      } catch (error) {
-        console.error('Error parsing saved profile data:', error);
-        return DEFAULT_PROFILE;
-      }
-    }
-    return DEFAULT_PROFILE;
-  });
+  const [profileData, setProfileData] = useState<ProfileData>(DEFAULT_PROFILE);
 
-  const updateProfile = (data: Partial<ProfileData>) => {
-    setProfileData(prev => {
-      const updated = { ...prev, ...data };
-      localStorage.setItem('neurovia-profile-data', JSON.stringify(updated));
-      return updated;
-    });
+  // Fetch true profile data from backend on mount
+  useEffect(() => {
+    const fetchRealProfile = async () => {
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+      try {
+        const API_URL = import.meta.env.VITE_API_URL || 'https://neurovia-backend.onrender.com';
+        const res = await fetch(`${API_URL}/api/profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const dbUser = data.user;
+          // Merge database data with defaults
+          setProfileData(prev => ({
+            ...prev,
+            fullName: dbUser.fullName || dbUser.username || dbUser.name || prev.fullName,
+            email: dbUser.email || prev.email,
+            phone: dbUser.phone || prev.phone,
+            location: dbUser.location || prev.location,
+            profession: dbUser.profession || prev.profession,
+            company: dbUser.company || prev.company,
+            bio: dbUser.bio || prev.bio,
+            website: dbUser.website || prev.website,
+            github: dbUser.github || prev.github,
+            linkedin: dbUser.linkedin || prev.linkedin,
+            twitter: dbUser.twitter || prev.twitter,
+            profileImage: dbUser.profileImage || prev.profileImage,
+            joinDate: dbUser.joinDate || prev.joinDate
+          }));
+        }
+      } catch (err) {
+        console.error('Failed to fetch profile from DB', err);
+      }
+    };
+    fetchRealProfile();
+  }, []);
+
+  const updateProfile = async (data: Partial<ProfileData>) => {
+    // Optimistic UI update
+    setProfileData(prev => ({ ...prev, ...data }));
+
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'https://neurovia-backend.onrender.com';
+      await fetch(`${API_URL}/api/profile`, {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}` 
+        },
+        body: JSON.stringify(data)
+      });
+    } catch (err) {
+      console.error('Failed to save profile to DB', err);
+    }
   };
 
   const initializeProfile = (userData: { name?: string; email?: string }) => {
+    // Maintain backwards compatibility if needed, though mostly handled by the fetch above
     if (userData.name || userData.email) {
-      const updates: Partial<ProfileData> = {};
-      if (userData.name && userData.name !== profileData.fullName) {
-        updates.fullName = userData.name;
-      }
-      if (userData.email && userData.email !== profileData.email) {
-        updates.email = userData.email;
-      }
-      if (Object.keys(updates).length > 0) {
-        updateProfile(updates);
-      }
+      setProfileData(prev => ({
+        ...prev,
+        fullName: prev.fullName === DEFAULT_PROFILE.fullName && userData.name ? userData.name : prev.fullName,
+        email: prev.email === DEFAULT_PROFILE.email && userData.email ? userData.email : prev.email
+      }));
     }
   };
-
-  useEffect(() => {
-    localStorage.setItem('neurovia-profile-data', JSON.stringify(profileData));
-  }, [profileData]);
 
   const value = {
     profileData,
