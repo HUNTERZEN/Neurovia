@@ -344,22 +344,22 @@ export function RepairShops() {
       </div>
 
       {/* Content */}
-      <div className="relative pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="relative pt-24 sm:pt-28 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <motion.div
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent sm:text-5xl">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent sm:text-5xl">
             Repair Shops Near You
           </h1>
-          <p className="mt-4 text-xl text-gray-400">
+          <p className="mt-4 text-sm sm:text-xl text-gray-400 max-w-2xl mx-auto">
             Find trusted repair shops in your area for all your tech needs
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* Real Google Map Integration */}
           <motion.div
             className="relative"
@@ -367,10 +367,10 @@ export function RepairShops() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="relative h-[600px] bg-gray-900/50 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-800">
+            <div className="relative h-[300px] sm:h-[450px] lg:h-[600px] bg-gray-900/50 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-800">
               {isLoaded ? (
                 <GoogleMap
-                  mapContainerStyle={mapContainerStyle}
+                  mapContainerStyle={{ width: '100%', height: '100%', borderRadius: '0.75rem' }}
                   center={center}
                   zoom={12}
                   onLoad={onLoad}

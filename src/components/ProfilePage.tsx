@@ -95,7 +95,7 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
       <div className="absolute right-1/4 top-1/4 w-72 h-72 rounded-full bg-blue-500/15 blur-3xl" />
 
       {/* Main Page Area */}
-      <div className="relative z-10 max-w-6xl mx-auto">
+      <div className="relative z-10 max-w-6xl mx-auto px-2 sm:px-4">
       
       {/* Header Section */}
       <motion.div
@@ -103,46 +103,46 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-6 text-center md:text-left">
           
           {/* User Identity */}
-          <div className="flex items-center gap-6">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
             <motion.div className="relative group" whileHover={{ scale: 1.02 }}>
               <div className="absolute -inset-1 bg-gradient-to-tr from-purple-500 to-blue-500 rounded-full blur-md opacity-40 group-hover:opacity-60 transition-opacity duration-300" />
-              <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-900 border-2 border-gray-800 overflow-hidden shadow-2xl flex items-center justify-center">
+              <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gray-900 border-2 border-gray-800 overflow-hidden shadow-2xl flex items-center justify-center">
                 {profileData.profileImage !== '/api/placeholder/150/150' ? (
                   <img src={profileData.profileImage} alt={profileData.fullName} className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-3xl font-bold bg-gradient-to-br from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                  <span className="text-2xl sm:text-3xl font-bold bg-gradient-to-br from-purple-400 to-blue-400 bg-clip-text text-transparent">
                     {profileData.fullName.split(' ').map(n => n[0]).join('').toUpperCase()}
                   </span>
                 )}
                 {isEditing && (
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer backdrop-blur-sm">
-                    <Camera className="w-8 h-8 text-white" />
+                    <Camera className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
                 )}
               </div>
-              <div className="absolute -bottom-2 -right-2 bg-green-500 text-black p-1.5 rounded-full border-4 border-[#050505] shadow-lg">
-                <CheckCircle className="w-4 h-4" />
+              <div className="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 bg-green-500 text-black p-1 sm:p-1.5 rounded-full border-2 sm:border-4 border-[#050505] shadow-lg">
+                <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" />
               </div>
             </motion.div>
 
-            <div>
+            <div className="space-y-1 sm:space-y-2">
               {isEditing ? (
-                <div className="space-y-3">
+                <div className="space-y-3 w-full max-w-xs mx-auto md:mx-0">
                   <input
                     type="text"
                     value={tempData.fullName}
                     onChange={(e) => handleInputChange('fullName', e.target.value)}
-                    className="text-2xl md:text-3xl font-bold bg-gray-900/50 border border-gray-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all w-full max-w-sm"
+                    className="text-xl sm:text-2xl md:text-3xl font-bold bg-gray-900/50 border border-gray-800 rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all w-full"
                     placeholder="Full Name"
                   />
                   <input
                     type="text"
                     value={tempData.profession}
                     onChange={(e) => handleInputChange('profession', e.target.value)}
-                    className="text-sm bg-gray-900/50 border border-gray-800 rounded-xl px-4 py-2 text-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all w-full max-w-sm"
+                    className="text-xs sm:text-sm bg-gray-900/50 border border-gray-800 rounded-xl px-4 py-2 text-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all w-full"
                     placeholder="Profession"
                   />
                 </div>
@@ -150,19 +150,19 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
                 <>
                   <motion.h1 
                     initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                    className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2"
+                    className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-white"
                   >
                     {profileData.fullName}
                   </motion.h1>
                   <motion.div 
                     initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-                    className="flex flex-wrap items-center gap-3 text-sm text-gray-400"
+                    className="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-3 text-xs sm:text-sm text-gray-400"
                   >
                     <span className="flex items-center gap-1.5 text-purple-400">
-                      <Briefcase className="w-4 h-4" /> {profileData.profession}
+                      <Briefcase className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {profileData.profession}
                     </span>
                     <span className="flex items-center gap-1.5 px-3 border-l border-gray-800">
-                      <MapPin className="w-4 h-4" /> {profileData.location}
+                      <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {profileData.location}
                     </span>
                   </motion.div>
                 </>
@@ -171,19 +171,19 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
+          <div className="flex items-center gap-3 w-full md:w-auto mt-2 md:mt-0 px-4 sm:px-0">
             {isEditing ? (
               <>
-                <button onClick={handleCancel} className="flex-1 md:flex-none px-6 py-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 text-gray-300 font-medium transition-all flex items-center justify-center gap-2">
+                <button onClick={handleCancel} className="flex-1 md:flex-none px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 text-gray-300 text-sm sm:text-base font-medium transition-all flex items-center justify-center gap-2">
                   <X className="w-4 h-4" /> Cancel
                 </button>
-                <button onClick={handleSave} className="flex-1 md:flex-none px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:opacity-90 text-white font-medium shadow-lg shadow-purple-500/20 transition-all flex items-center justify-center gap-2">
+                <button onClick={handleSave} className="flex-1 md:flex-none px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:opacity-90 text-white text-sm sm:text-base font-medium shadow-lg shadow-purple-500/20 transition-all flex items-center justify-center gap-2">
                   <Save className="w-4 h-4" /> Save
                 </button>
               </>
             ) : (
               <button onClick={handleEdit} className="w-full md:w-auto px-6 py-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 text-white font-medium transition-all flex items-center justify-center gap-2 hover:border-purple-500/50">
-                <Edit3 className="w-4 h-4 text-purple-400" /> Edit
+                <Edit3 className="w-4 h-4 text-purple-400" /> Edit Profile
               </button>
             )}
           </div>
@@ -192,25 +192,25 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
       </motion.div>
         
         {/* Stats Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-10">
           {stats.map((stat, i) => (
             <motion.div 
               key={stat.label}
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + (i * 0.1) }}
-              className="bg-white/[0.02] border border-white/5 hover:border-white/10 rounded-2xl p-6 backdrop-blur-xl transition-all duration-300 group"
+              className="bg-white/[0.02] border border-white/5 hover:border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 backdrop-blur-xl transition-all duration-300 group"
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-xl ${stat.bg}`}>
-                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
+              <div className="flex items-center justify-between mb-2 sm:mb-4">
+                <div className={`p-2 sm:p-3 rounded-lg sm:rounded-xl ${stat.bg}`}>
+                  <stat.icon className={`w-4 h-4 sm:w-6 sm:h-6 ${stat.color}`} />
                 </div>
               </div>
-              <h3 className="text-3xl font-bold text-white mb-1 group-hover:scale-105 origin-left transition-transform">{stat.value}</h3>
-              <p className="text-sm text-zinc-500 font-medium">{stat.label}</p>
+              <h3 className="text-xl sm:text-3xl font-bold text-white mb-0.5 sm:mb-1 group-hover:scale-105 origin-left transition-transform">{stat.value}</h3>
+              <p className="text-[10px] sm:text-sm text-zinc-500 font-medium uppercase tracking-wider">{stat.label}</p>
             </motion.div>
           ))}
           <motion.div 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-            className="bg-gradient-to-br from-emerald-500/10 to-teal-500/5 border border-emerald-500/20 rounded-2xl p-6 backdrop-blur-xl flex flex-col justify-between"
+            className="bg-gradient-to-br from-emerald-500/10 to-teal-500/5 border border-emerald-500/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 backdrop-blur-xl flex flex-col justify-between hidden sm:flex"
           >
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 rounded-xl bg-emerald-500/20">

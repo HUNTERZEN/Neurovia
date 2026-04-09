@@ -93,18 +93,18 @@ export function Founders() {
   };
 
   return (
-    <section className="relative py-16 sm:py-20 overflow-hidden bg-black">
+    <section className="relative py-12 sm:py-20 overflow-hidden bg-black">
       {/* Background Glow Effects */}
-      <div className="absolute top-0 left-1/4 w-72 sm:w-96 h-72 sm:h-96 bg-purple-500/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-72 sm:w-96 h-72 sm:h-96 bg-blue-500/20 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-purple-500/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-blue-500/20 rounded-full blur-3xl" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Section Header */}
-        <div className="text-center mb-12 sm:mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-4">
+        <div className="text-center mb-10 sm:mb-16">
+          <h2 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-4">
             Meet Our Founders
           </h2>
-          <h4 className="text-lg text-gray-400 mb-8 max-w-3xl mx-auto text-center">
+          <h4 className="text-sm sm:text-lg text-gray-400 mb-8 max-w-3xl mx-auto text-center">
             The visionaries behind Neurovia, bringing together decades of experience in technology and innovation.
           </h4>
         </div>
@@ -117,9 +117,9 @@ export function Founders() {
               <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-200" />
               
               {/* Founder Card */}
-              <div className="relative bg-gray-900/80 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 h-full flex flex-col">
+              <div className="relative bg-gray-900/80 backdrop-blur-xl p-5 sm:p-6 rounded-2xl border border-gray-800 h-full flex flex-col">
                 {/* Profile Image */}
-                <div className="relative w-20 sm:w-24 h-20 sm:h-24 mx-auto mb-4">
+                <div className="relative w-16 sm:w-24 h-16 sm:h-24 mx-auto mb-4">
                   <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur opacity-60 group-hover:opacity-100 transition duration-200" />
                   <div className="relative aspect-square overflow-hidden rounded-full border-2 border-gray-800">
                     <ImageWithFallback
@@ -132,13 +132,13 @@ export function Founders() {
 
                 {/* Content */}
                 <div className="text-center flex-1 flex flex-col">
-                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-1">
+                  <h3 className="text-base sm:text-xl font-semibold text-white mb-1">
                     {founder.name}
                   </h3>
-                  <p className={`${founder.roleColor} text-sm font-medium mb-3`}>
+                  <p className={`${founder.roleColor} text-xs sm:text-sm font-medium mb-3`}>
                     {founder.role}
                   </p>
-                  <p className="text-sm text-gray-400 mb-4 flex-1">
+                  <p className="text-xs sm:text-sm text-gray-400 mb-4 flex-1 leading-relaxed">
                     {founder.bio}
                   </p>
 

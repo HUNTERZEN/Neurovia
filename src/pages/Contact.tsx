@@ -50,7 +50,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 py-20 sm:py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background gradient orbs */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -left-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
@@ -60,9 +60,9 @@ export default function Contact() {
 
       <div className="max-w-7xl mx-auto relative">
         {/* Header Section */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10 sm:mb-12">
           <motion.h1 
-            className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 mb-4"
+            className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 mb-4"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -70,7 +70,7 @@ export default function Contact() {
             Get in Touch
           </motion.h1>
           <motion.p 
-            className="text-gray-400 max-w-2xl mx-auto"
+            className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto px-4"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -79,7 +79,7 @@ export default function Contact() {
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* Contact Information */}
           <motion.div 
             className="space-y-6"
@@ -87,31 +87,31 @@ export default function Contact() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <div className="bg-gray-800/50 backdrop-blur-lg rounded-lg p-6 shadow-lg border border-purple-500/20">
-              <h2 className="text-2xl font-semibold text-white mb-6">Contact Information</h2>
-              <div className="space-y-4">
+            <div className="bg-gray-800/50 backdrop-blur-lg rounded-lg p-5 sm:p-6 shadow-lg border border-purple-500/20">
+              <h2 className="text-xl sm:text-2xl font-semibold text-white mb-6">Contact Information</h2>
+              <div className="space-y-4 text-sm sm:text-base">
                 <div className="flex items-center space-x-4 text-gray-300">
-                  <Mail className="w-5 h-5 text-purple-400" />
-                  <span>support@example.com</span>
+                  <Mail className="w-5 h-5 text-purple-400 shrink-0" />
+                  <span className="truncate">support@example.com</span>
                 </div>
                 <div className="flex items-center space-x-4 text-gray-300">
-                  <Phone className="w-5 h-5 text-purple-400" />
+                  <Phone className="w-5 h-5 text-purple-400 shrink-0" />
                   <span>+1 (555) 123-4567</span>
                 </div>
-                <div className="flex items-center space-x-4 text-gray-300">
-                  <MapPin className="w-5 h-5 text-purple-400" />
+                <div className="flex items-start space-x-4 text-gray-300">
+                  <MapPin className="w-5 h-5 text-purple-400 shrink-0 mt-0.5" />
                   <span>123 Tech Street, Silicon Valley, CA 94025</span>
                 </div>
                 <div className="flex items-center space-x-4 text-gray-300">
-                  <MessageSquare className="w-5 h-5 text-purple-400" />
+                  <MessageSquare className="w-5 h-5 text-purple-400 shrink-0" />
                   <span>Live chat available 24/7</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gray-800/50 backdrop-blur-lg rounded-lg p-6 shadow-lg border border-purple-500/20">
-              <h2 className="text-2xl font-semibold text-white mb-6">Business Hours</h2>
-              <div className="space-y-2 text-gray-300">
+            <div className="bg-gray-800/50 backdrop-blur-lg rounded-lg p-5 sm:p-6 shadow-lg border border-purple-500/20">
+              <h2 className="text-xl sm:text-2xl font-semibold text-white mb-6">Business Hours</h2>
+              <div className="space-y-2 text-sm sm:text-base text-gray-300">
                 <div className="flex justify-between">
                   <span>Monday - Friday</span>
                   <span>9:00 AM - 6:00 PM</span>
@@ -130,42 +130,44 @@ export default function Contact() {
 
           {/* Contact Form */}
           <motion.div 
-            className="bg-gray-800/50 backdrop-blur-lg rounded-lg p-6 shadow-lg border border-purple-500/20"
+            className="bg-gray-800/50 backdrop-blur-lg rounded-lg p-5 sm:p-6 shadow-lg border border-purple-500/20"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <h2 className="text-2xl font-semibold text-white mb-6">Send us a Message</h2>
+            <h2 className="text-xl sm:text-2xl font-semibold text-white mb-6">Send us a Message</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full bg-gray-700/50 backdrop-blur-sm border border-purple-500/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  placeholder="Your name"
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full bg-gray-700/50 backdrop-blur-sm border border-purple-500/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  placeholder="your.email@example.com"
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="name" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-gray-700/50 backdrop-blur-sm border border-purple-500/20 rounded-lg px-4 py-2 text-white text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    placeholder="Your name"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-gray-700/50 backdrop-blur-sm border border-purple-500/20 rounded-lg px-4 py-2 text-white text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    placeholder="your@email.com"
+                  />
+                </div>
               </div>
               <div>
                 <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-1">

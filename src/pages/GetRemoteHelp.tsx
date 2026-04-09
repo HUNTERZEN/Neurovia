@@ -71,22 +71,22 @@ export function GetRemoteHelp() {
       </div>
       
       {/* Content */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
         <motion.div 
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent sm:text-5xl mb-4">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent sm:text-5xl mb-3 sm:mb-4">
             Get Remote Technical Support
           </h1>
-          <p className="text-xl text-gray-400">Connect with expert technicians instantly</p>
+          <p className="text-sm sm:text-xl text-gray-400 max-w-2xl mx-auto px-4">Connect with expert technicians instantly</p>
         </motion.div>
 
         {/* Support Types */}
         <motion.div 
-          className="grid md:grid-cols-3 gap-8 mb-16"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mb-12 sm:mb-16"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -101,26 +101,26 @@ export function GetRemoteHelp() {
               transition={{ duration: 0.2 }}
             >
               <div className={`
-                relative bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 cursor-pointer border border-gray-800
-                ${selectedType === index ? 'border-purple-500' : 'hover:border-purple-500/30'}
+                relative bg-gray-900/50 backdrop-blur-sm rounded-xl p-5 sm:p-6 cursor-pointer border border-gray-800 h-full
+                ${selectedType === index ? 'border-purple-500 shadow-lg shadow-purple-500/20' : 'hover:border-purple-500/30'}
               `}>
                 <div className="flex items-center mb-4">
-                  <div className="p-3 bg-purple-500/20 rounded-lg text-purple-400">
+                  <div className="p-2 sm:p-3 bg-purple-500/20 rounded-lg text-purple-400">
                     {type.icon}
                   </div>
-                  <h3 className="ml-3 text-xl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                  <h3 className="ml-3 text-lg sm:text-xl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                     {type.title}
                   </h3>
                 </div>
-                <p className="text-gray-400 mb-4">{type.description}</p>
-                <div className="flex justify-between items-center">
-                  <div>
+                <p className="text-xs sm:text-sm text-gray-400 mb-6 leading-relaxed">{type.description}</p>
+                <div className="flex justify-between items-center mt-auto">
+                  <div className="text-sm sm:text-base">
                     <span className="text-purple-400 font-semibold">${type.price}</span>
                     <span className="text-gray-400">/{type.duration}min</span>
                   </div>
                   <motion.button 
                     className={`
-                      px-4 py-2 rounded-lg font-medium bg-black text-white border
+                      px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-sm font-medium bg-black text-white border
                       ${selectedType === index ? 'border-purple-500' : 'border-gray-800 hover:border-purple-500/30'}
                     `}
                     whileHover={{ scale: 1.05 }}
@@ -141,11 +141,11 @@ export function GetRemoteHelp() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <div className="relative bg-gray-900/50 backdrop-blur-sm rounded-xl p-8 border border-gray-800">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-6">
+          <div className="relative bg-gray-900/50 backdrop-blur-sm rounded-xl p-5 sm:p-8 border border-gray-800">
+            <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-6 sm:mb-8">
               Available Experts
             </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <AnimatePresence>
                 {experts.map((expert) => (
                   <motion.div

@@ -27,22 +27,22 @@ export function About() {
   ];
 
   return (
-    <div className="min-h-screen bg-black pt-20">
+    <div className="min-h-screen bg-black pt-16 sm:pt-20">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
-      <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
+      <div className="absolute top-20 left-10 w-64 sm:w-96 h-64 sm:h-96 bg-purple-500/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-10 w-64 sm:w-96 h-64 sm:h-96 bg-blue-500/20 rounded-full blur-3xl" />
 
       {/* Hero Section */}
-      <section className="relative py-20">
+      <section className="relative py-12 sm:py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                 About Neurovia
               </span>
             </h1>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            <p className="text-gray-400 text-sm sm:text-lg max-w-2xl mx-auto px-2">
               Empowering users with expert tech support and innovative solutions for a seamlessly connected digital world.
             </p>
           </div>
@@ -50,18 +50,18 @@ export function About() {
       </section>
 
       {/* Story Section */}
-      <section className="relative py-20">
+      <section className="relative py-10 sm:py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="relative">
             {/* Card Glow Effect */}
             <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-25" />
             
             {/* Content Card */}
-            <div className="relative bg-gray-900/80 backdrop-blur-xl p-8 rounded-2xl border border-gray-800">
-              <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-6">
+            <div className="relative bg-gray-900/80 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-gray-800">
+              <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-6">
                 Our Story
               </h2>
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-gray-300 text-sm sm:text-base leading-relaxed">
                 <p>
                   Founded in 2024, Neurovia emerged from a simple yet powerful idea: making expert tech support accessible to everyone. Our founders, experienced in various aspects of technology and customer service, recognized the growing gap between increasingly complex technology and the support available to everyday users.
                 </p>
@@ -75,26 +75,26 @@ export function About() {
       </section>
 
       {/* Values Section */}
-      <section className="relative py-20">
+      <section className="relative py-10 sm:py-20">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-10 sm:mb-12">
             Our Core Values
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
             {values.map((value, index) => (
               <div key={index} className="group relative">
                 {/* Card Glow Effect */}
                 <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-200" />
                 
                 {/* Content */}
-                <div className="relative bg-gray-900/80 backdrop-blur-xl p-6 rounded-xl border border-gray-800">
+                <div className="relative bg-gray-900/80 backdrop-blur-xl p-5 sm:p-6 rounded-xl border border-gray-800 h-full">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="p-2 bg-gray-800 rounded-lg">
+                    <div className="p-2 bg-gray-800 rounded-lg shrink-0">
                       {value.icon}
                     </div>
-                    <h3 className="text-xl font-semibold text-white">{value.title}</h3>
+                    <h3 className="text-lg sm:text-xl font-semibold text-white">{value.title}</h3>
                   </div>
-                  <p className="text-gray-400">{value.description}</p>
+                  <p className="text-xs sm:text-base text-gray-400 leading-relaxed">{value.description}</p>
                 </div>
               </div>
             ))}
@@ -103,31 +103,31 @@ export function About() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative py-20">
+      <section className="relative py-12 sm:py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="relative">
             {/* Card Glow Effect */}
             <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-25" />
             
             {/* Content Card */}
-            <div className="relative bg-gray-900/80 backdrop-blur-xl p-8 rounded-2xl border border-gray-800 text-center">
-              <h2 className="text-3xl font-bold text-white mb-4">Ready to Get Started?</h2>
-              <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
+            <div className="relative bg-gray-900/80 backdrop-blur-xl p-6 sm:p-10 rounded-2xl border border-gray-800 text-center">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">Ready to Get Started?</h2>
+              <p className="text-sm sm:text-lg text-gray-400 mb-8 max-w-2xl mx-auto px-2">
                 Join our community of tech experts and users. Get the support you need or share your expertise with others.
               </p>
-              <div className="flex flex-wrap gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link
                   to="/signup"
-                  className="relative group inline-block"
+                  className="relative group w-full sm:w-auto"
                 >
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-200" />
-                  <button className="relative px-6 py-3 bg-black rounded-lg text-white font-semibold">
+                  <button className="relative w-full px-8 py-3 bg-black rounded-lg text-white font-semibold">
                     Join Neurovia
                   </button>
                 </Link>
                 <Link
                   to="/remote-help"
-                  className="px-6 py-3 border border-gray-700 hover:border-gray-600 rounded-lg text-gray-300 hover:text-white font-semibold transition-colors"
+                  className="w-full sm:w-auto px-8 py-3 border border-gray-700 hover:border-gray-600 rounded-lg text-gray-300 hover:text-white font-semibold transition-colors text-center"
                 >
                   Get Help Now
                 </Link>

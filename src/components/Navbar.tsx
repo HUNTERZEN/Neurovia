@@ -40,28 +40,48 @@ export function Navbar() {
     <nav
       className="fixed top-0 left-0 right-0 z-50"
       style={{
-        backgroundColor: scrollY > 10 ? 'rgba(0, 0, 0, 0.7)' : 'transparent',
-        backdropFilter: scrollY > 10 ? 'blur(12px)' : 'none',
-        WebkitBackdropFilter: scrollY > 10 ? 'blur(12px)' : 'none',
-        borderBottom: scrollY > 10 ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
-        transition: 'all 0.3s ease'
+        backgroundColor: isMobileMenuOpen ? '#000000' : (scrollY > 10 ? 'rgba(0, 0, 0, 0.8)' : 'transparent'),
+        backdropFilter: (isMobileMenuOpen || scrollY > 10) ? 'blur(16px)' : 'none',
+        WebkitBackdropFilter: (isMobileMenuOpen || scrollY > 10) ? 'blur(16px)' : 'none',
+        borderBottom: (isMobileMenuOpen || scrollY > 10) ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
       }}
     >
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center">
-              <img src="/logo.svg" className="h-8 w-8" alt="Logo" />
-              <span className="ml-3 text-lg font-medium bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Neurovia</span>
+            <Link to="/" className="flex items-center group" onClick={() => setIsMobileMenuOpen(false)}>
+              <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
+                <img src="/logo.svg" className="relative h-8 w-8 sm:h-9 sm:w-9" alt="Logo" />
+              </div>
+              <span className="ml-3 text-lg sm:text-xl font-bold bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent">Neurovia</span>
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          {/* Right Section: Auth (Mobile) + Hamburger */}
+          <div className="flex items-center gap-2 lg:hidden">
+            {isAuthenticated ? (
+              <Link
+                to="/profile"
+                className="p-2 text-gray-300 hover:text-white transition-colors"
+                aria-label="Profile"
+              >
+                <User className="h-6 w-6" />
+              </Link>
+            ) : (
+              <Link
+                to="/signin"
+                className="text-sm font-medium text-gray-300 hover:text-white px-3 py-2 transition-colors"
+              >
+                Log in
+              </Link>
+            )}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-gray-300 hover:text-white transition-colors"
+              className="p-2 text-gray-300 hover:text-white transition-colors relative z-[60]"
+              aria-label="Toggle Menu"
             >
               {isMobileMenuOpen ? (
                 <X className="h-6 w-6" />
@@ -72,32 +92,32 @@ export function Navbar() {
           </div>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-gray-300 hover:text-white transition-colors">
+          <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
+            <Link to="/" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
               Home
             </Link>
-            <Link to="/repair-shops" className="text-gray-300 hover:text-white transition-colors">
+            <Link to="/repair-shops" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
               Repair Shops
             </Link>
-            <Link to="/remote-help" className="text-gray-300 hover:text-white transition-colors">
+            <Link to="/remote-help" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
               Remote Help
             </Link>
-            <Link to="/video-solutions" className="text-gray-300 hover:text-white transition-colors">
+            <Link to="/video-solutions" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
               Video Solutions
             </Link>
-            <Link to="/about" className="text-gray-300 hover:text-white transition-colors">
+            <Link to="/about" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
               About
             </Link>
-            <Link to="/contact" className="text-gray-300 hover:text-white transition-colors">
+            <Link to="/contact" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
               Contact
             </Link>
-            <Link to="/faq" className="text-gray-300 hover:text-white transition-colors">
+            <Link to="/faq" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
               FAQ
             </Link>
           </div>
 
           {/* Desktop Auth Section */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4">
             {isAuthenticated ? (
               <div className="relative">
                 <button
@@ -110,7 +130,7 @@ export function Navbar() {
                   </span>
                 </button>
 
-                {/* User Dropdown Menu - ✅ UPDATED with better z-index and click handling */}
+                {/* User Dropdown Menu */}
                 {isUserMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-gray-900/95 backdrop-blur-lg rounded-lg border border-gray-700/50 shadow-xl z-[60]">
                     <div className="p-3 border-b border-gray-700/50">
@@ -147,7 +167,6 @@ export function Navbar() {
                           Register as Partner
                         </Link>
                       )}
-                      {/* ✅ UPDATED Sign Out button with better event handling */}
                       <button
                         onClick={(e) => {
                           e.preventDefault();
@@ -188,137 +207,89 @@ export function Navbar() {
         </div>
 
         {/* Mobile Menu */}
-        <div className={`md:hidden fixed inset-0 bg-black/95 backdrop-blur-lg z-50 transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-          <div className="flex justify-end p-6">
-            <button
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="p-2 text-gray-300 hover:text-white transition-colors"
-            >
-              <X className="h-6 w-6" />
-            </button>
-          </div>
-
-          <div className="flex flex-col items-center space-y-8 p-8">
-            {/* Mobile Navigation Links */}
+        <div 
+          className={`lg:hidden fixed inset-0 top-0 left-0 w-full h-screen bg-black transition-transform duration-300 ease-in-out z-50 overflow-y-auto ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+          style={{ paddingTop: '80px' }}
+        >
+          <div className="flex flex-col items-center space-y-6 p-8">
             <Link
               to="/"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-xl text-gray-300 hover:text-white transition-colors"
+              className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
             >
               Home
             </Link>
             <Link
               to="/repair-shops"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-xl text-gray-300 hover:text-white transition-colors"
+              className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
             >
               Repair Shops
             </Link>
             <Link
               to="/remote-help"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-xl text-gray-300 hover:text-white transition-colors"
+              className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
             >
               Remote Help
             </Link>
             <Link
               to="/video-solutions"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-xl text-gray-300 hover:text-white transition-colors"
+              className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
             >
               Video Solutions
             </Link>
             <Link
               to="/about"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-xl text-gray-300 hover:text-white transition-colors"
+              className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
             >
               About
             </Link>
             <Link
               to="/contact"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-xl text-gray-300 hover:text-white transition-colors"
+              className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
             >
               Contact
             </Link>
             <Link
               to="/faq"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-xl text-gray-300 hover:text-white transition-colors"
+              className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
             >
               FAQ
             </Link>
 
-            {/* Mobile Auth Section */}
-            <div className="pt-8 border-t border-gray-700/50 w-full">
+            {/* Mobile Bottom Section */}
+            <div className="pt-8 border-t border-gray-800 w-full max-w-xs mx-auto">
               {isAuthenticated ? (
                 <div className="flex flex-col items-center space-y-4">
-                  <div className="text-center">
-                    <p className="text-sm text-gray-400">Signed in as</p>
-                    <p className="text-lg font-medium text-white">
-                      {user?.username || 'User'}
-                    </p>
-                  </div>
                   <Link
                     to="/profile"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center space-x-2 px-6 py-3 text-gray-300 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                    className="flex items-center space-x-3 text-gray-300"
                   >
-                    <User className="w-5 h-5" />
-                    <span>Profile</span>
+                    <User className="w-5 h-5 text-purple-400" />
+                    <span className="font-medium">{user?.username || 'Profile'}</span>
                   </Link>
-                  {isPartner ? (
-                    <Link
-                      to="/partner/dashboard"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center space-x-2 px-6 py-3 text-purple-400 hover:text-purple-300 transition-colors rounded-lg hover:bg-white/5"
-                    >
-                      <UserCheck className="w-5 h-5" />
-                      <span>Member Dashboard</span>
-                    </Link>
-                  ) : (
-                    <Link
-                      to="/register-partner"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center space-x-2 px-6 py-3 text-purple-400 hover:text-purple-300 transition-colors rounded-lg hover:bg-white/5"
-                    >
-                      <Store className="w-5 h-5" />
-                      <span>Register as Partner</span>
-                    </Link>
-                  )}
-                  {/* ✅ UPDATED Mobile Sign Out button */}
                   <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleLogout();
-                    }}
-                    type="button"
-                    className="flex items-center space-x-2 px-6 py-3 text-gray-300 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                    onClick={handleLogout}
+                    className="flex items-center space-x-2 px-6 py-3 bg-white/5 rounded-xl text-red-400 hover:text-red-300 transition-colors w-full justify-center"
                   >
                     <LogOut className="w-5 h-5" />
                     <span>Sign Out</span>
                   </button>
                 </div>
               ) : (
-                <div className="flex flex-col items-center space-y-4">
-                  <Link
-                    to="/signin"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="px-6 py-3 text-lg text-gray-300 hover:text-white transition-colors rounded-lg hover:bg-white/5"
-                  >
-                    Log in
-                  </Link>
+                <div className="flex flex-col gap-4">
                   <Link
                     to="/signup"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="relative group"
+                    className="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl text-center text-white font-semibold"
                   >
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-60 group-hover:opacity-100 transition duration-200"></div>
-                    <div className="relative px-6 py-3 bg-black rounded-lg text-lg text-white font-medium flex items-center gap-2">
-                      Sign Up
-                      <span className="text-purple-400 group-hover:translate-x-0.5 transition-transform duration-200">↗</span>
-                    </div>
+                    Get Started
                   </Link>
                 </div>
               )}
