@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   MapPin,
   Star,
@@ -11,6 +11,7 @@ import {
   Shield,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { GoogleMap, useJsApiLoader, MarkerF, InfoWindowF } from '@react-google-maps/api';
 
 interface Shop {
   id: number;
@@ -20,8 +21,7 @@ interface Shop {
   hours: string;
   phone: string;
   services: string[];
-  coordinates: [number, number];
-  markerPosition?: { x: string; y: string };
+  coordinates: { lat: number; lng: number };
   isPremium?: boolean;
   bookingStatus?: 'available' | 'ready-to-pay' | 'busy';
 }
@@ -73,8 +73,7 @@ const MOCK_SHOPS: Shop[] = [
     hours: "9:00 AM - 6:00 PM",
     phone: "(555) 123-4567",
     services: ["Phone Repair", "Laptop Repair", "Data Recovery"],
-    coordinates: [37.7749, -122.4194],
-    markerPosition: { x: "30%", y: "40%" },
+    coordinates: { lat: 37.7749, lng: -122.4194 },
     isPremium: true,
     bookingStatus: 'ready-to-pay'
   },
@@ -86,8 +85,7 @@ const MOCK_SHOPS: Shop[] = [
     hours: "8:00 AM - 7:00 PM",
     phone: "(555) 987-6543",
     services: ["Screen Replacement", "Battery Replacement", "Water Damage"],
-    coordinates: [37.7849, -122.4094],
-    markerPosition: { x: "60%", y: "30%" },
+    coordinates: { lat: 37.7849, lng: -122.4094 },
     isPremium: false,
     bookingStatus: 'available'
   },
@@ -99,14 +97,124 @@ const MOCK_SHOPS: Shop[] = [
     hours: "10:00 AM - 8:00 PM",
     phone: "(555) 456-7890",
     services: ["Gaming Console Repair", "Tablet Repair", "Software Issues"],
-    coordinates: [37.7649, -122.4294],
-    markerPosition: { x: "45%", y: "60%" },
+    coordinates: { lat: 37.7649, lng: -122.4294 },
     isPremium: true,
     bookingStatus: 'ready-to-pay'
   }
 ];
 
+const mapContainerStyle = {
+  width: '100%',
+  height: '600px',
+  borderRadius: '0.75rem'
+};
+
+const center = {
+  lat: 37.7749,
+  lng: -122.4194
+};
+
+const mapOptions = {
+  styles: [
+    { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+    { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+    { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+    {
+      featureType: "administrative.locality",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#d59563" }],
+    },
+    {
+      featureType: "poi",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#d59563" }],
+    },
+    {
+      featureType: "poi.park",
+      elementType: "geometry",
+      stylers: [{ color: "#263c3f" }],
+    },
+    {
+      featureType: "poi.park",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#6b9a76" }],
+    },
+    {
+      featureType: "road",
+      elementType: "geometry",
+      stylers: [{ color: "#38414e" }],
+    },
+    {
+      featureType: "road",
+      elementType: "geometry.stroke",
+      stylers: [{ color: "#212a37" }],
+    },
+    {
+      featureType: "road",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#9ca5b3" }],
+    },
+    {
+      featureType: "road.highway",
+      elementType: "geometry",
+      stylers: [{ color: "#746855" }],
+    },
+    {
+      featureType: "road.highway",
+      elementType: "geometry.stroke",
+      stylers: [{ color: "#1f2835" }],
+    },
+    {
+      featureType: "road.highway",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#f3d19c" }],
+    },
+    {
+      featureType: "transit",
+      elementType: "geometry",
+      stylers: [{ color: "#2f3948" }],
+    },
+    {
+      featureType: "transit.station",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#d59563" }],
+    },
+    {
+      featureType: "water",
+      elementType: "geometry",
+      stylers: [{ color: "#17263c" }],
+    },
+    {
+      featureType: "water",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#515c6d" }],
+    },
+    {
+      featureType: "water",
+      elementType: "labels.text.stroke",
+      stylers: [{ color: "#17263c" }],
+    },
+  ],
+  disableDefaultUI: false,
+  zoomControl: true,
+};
+
 export function RepairShops() {
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""
+  });
+
+  const [map, setMap] = useState<google.maps.Map | null>(null);
+
+  const onLoad = useCallback(function callback(map: google.maps.Map) {
+    setMap(map);
+  }, []);
+
+  const onUnmount = useCallback(function callback(map: google.maps.Map) {
+    setMap(null);
+  }, []);
+
   const [shops, setShops] = useState<Shop[]>([]);
   const [selectedShop, setSelectedShop] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -252,7 +360,7 @@ export function RepairShops() {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Enhanced Interactive Map with Theme Colors */}
+          {/* Real Google Map Integration */}
           <motion.div
             className="relative"
             initial={{ opacity: 0, x: -20 }}
@@ -260,260 +368,52 @@ export function RepairShops() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div className="relative h-[600px] bg-gray-900/50 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-800">
-              {/* Map Background */}
-              <div className="absolute inset-0 bg-gradient-to-b from-gray-900 to-gray-950">
-                {/* Enhanced Grid Pattern with Theme Colors */}
-                <div
-                  className="absolute inset-0 opacity-20"
-                  style={{
-                    backgroundImage: `linear-gradient(to right, #a855f7 1px, transparent 1px), linear-gradient(to bottom, #3b82f6 1px, transparent 1px)`,
-                    backgroundSize: '100px 100px',
-                  }}
-                />
-                <div
-                  className="absolute inset-0 opacity-10"
-                  style={{
-                    backgroundImage: `linear-gradient(to right, #a855f7 1px, transparent 1px), linear-gradient(to bottom, #3b82f6 1px, transparent 1px)`,
-                    backgroundSize: '25px 25px',
-                  }}
-                />
-                
-                {/* Enhanced Geographic Features with Theme Colors */}
-                <motion.div 
-                  className="absolute top-[5%] right-[5%] w-1/4 h-1/4 bg-gradient-to-r from-purple-900/40 to-blue-900/30 rounded-full blur-xl"
-                  animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
-                  transition={{ duration: 6, repeat: Infinity }}
-                />
-                <motion.div 
-                  className="absolute bottom-[10%] right-[15%] w-1/3 h-1/5 bg-gradient-to-l from-blue-900/30 to-purple-900/20 rounded-full blur-xl"
-                  animate={{ scale: [1.05, 1, 1.05], opacity: [0.2, 0.4, 0.2] }}
-                  transition={{ duration: 8, repeat: Infinity }}
-                />
-                <div className="absolute top-[30%] left-[10%] w-[40%] h-[30%] bg-purple-800/20 rounded-full blur-xl"></div>
-                <div className="absolute bottom-[20%] left-[20%] w-[35%] h-[25%] bg-blue-800/30 rounded-full blur-xl"></div>
-                
-                {/* Animated Theme Color Roads - Horizontal */}
-                <motion.div 
-                  className="absolute h-[3px] bg-gradient-to-r from-purple-600/40 via-blue-500/50 to-purple-600/40 blur-[1px]" 
-                  style={{ top: '35%', left: '10%', right: '10%', transform: 'rotate(2deg)' }}
-                  animate={{ 
-                    opacity: [0.3, 0.7, 0.3],
-                    background: [
-                      'linear-gradient(to right, rgba(168, 85, 247, 0.4), rgba(59, 130, 246, 0.5), rgba(168, 85, 247, 0.4))',
-                      'linear-gradient(to right, rgba(59, 130, 246, 0.5), rgba(168, 85, 247, 0.6), rgba(59, 130, 246, 0.4))',
-                      'linear-gradient(to right, rgba(168, 85, 247, 0.4), rgba(59, 130, 246, 0.5), rgba(168, 85, 247, 0.4))'
-                    ]
-                  }}
-                  transition={{ duration: 4, repeat: Infinity }}
-                />
-                
-                <motion.div 
-                  className="absolute h-[2px] bg-gradient-to-r from-blue-500/30 via-purple-500/40 to-blue-500/30 blur-[1px]" 
-                  style={{ top: '45%', left: '5%', right: '20%', transform: 'rotate(-1deg)' }}
-                  animate={{ 
-                    opacity: [0.2, 0.6, 0.2],
-                    scale: [1, 1.02, 1]
-                  }}
-                  transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-                />
-                
-                <motion.div 
-                  className="absolute h-[2px] bg-gradient-to-r from-purple-500/25 via-blue-500/35 to-purple-500/25 blur-[1px]" 
-                  style={{ top: '60%', left: '15%', right: '10%', transform: 'rotate(1deg)' }}
-                  animate={{ 
-                    opacity: [0.25, 0.5, 0.25],
-                    background: [
-                      'linear-gradient(to right, rgba(168, 85, 247, 0.25), rgba(59, 130, 246, 0.35), rgba(168, 85, 247, 0.25))',
-                      'linear-gradient(to right, rgba(59, 130, 246, 0.35), rgba(168, 85, 247, 0.45), rgba(59, 130, 246, 0.25))',
-                      'linear-gradient(to right, rgba(168, 85, 247, 0.25), rgba(59, 130, 246, 0.35), rgba(168, 85, 247, 0.25))'
-                    ]
-                  }}
-                  transition={{ duration: 6, repeat: Infinity, delay: 2 }}
-                />
-                
-                {/* Animated Theme Color Roads - Vertical */}
-                <motion.div 
-                  className="absolute w-[2px] bg-gradient-to-b from-purple-500/30 via-blue-500/40 to-purple-500/30 blur-[1px]" 
-                  style={{ left: '30%', top: '10%', bottom: '15%', transform: 'rotate(1deg)' }}
-                  animate={{ 
-                    opacity: [0.3, 0.6, 0.3],
-                    background: [
-                      'linear-gradient(to bottom, rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.4), rgba(168, 85, 247, 0.3))',
-                      'linear-gradient(to bottom, rgba(59, 130, 246, 0.4), rgba(168, 85, 247, 0.5), rgba(59, 130, 246, 0.3))',
-                      'linear-gradient(to bottom, rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.4), rgba(168, 85, 247, 0.3))'
-                    ]
-                  }}
-                  transition={{ duration: 7, repeat: Infinity, delay: 0.5 }}
-                />
-                
-                <motion.div 
-                  className="absolute w-[2px] bg-gradient-to-b from-blue-500/25 via-purple-500/35 to-blue-500/25 blur-[1px]" 
-                  style={{ left: '60%', top: '20%', bottom: '10%', transform: 'rotate(-1deg)' }}
-                  animate={{ 
-                    opacity: [0.25, 0.55, 0.25],
-                    scale: [1, 1.1, 1]
-                  }}
-                  transition={{ duration: 5.5, repeat: Infinity, delay: 1.5 }}
-                />
-              </div>
-
-              {/* Interactive Map Markers with Enhanced Theme Colors */}
-              {shops.map((shop) => (
-                <div
-                  key={shop.id}
-                  className="absolute cursor-pointer z-10"
-                  style={{
-                    top: shop.markerPosition?.y || '50%',
-                    left: shop.markerPosition?.x || '50%',
-                    transform: 'translate(-50%, -50%)'
-                  }}
-                  onClick={() => handleMarkerClick(shop.id)}
+              {isLoaded ? (
+                <GoogleMap
+                  mapContainerStyle={mapContainerStyle}
+                  center={center}
+                  zoom={12}
+                  onLoad={onLoad}
+                  onUnmount={onUnmount}
+                  options={mapOptions}
                 >
-                  <motion.div
-                    className="relative"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    animate={{ 
-                      scale: selectedShop === shop.id ? 1.2 : 1,
-                    }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {/* Enhanced Marker Shadow */}
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-6 h-3 bg-black/40 rounded-full blur-sm" />
-                    
-                    {/* Premium Ring for Premium Shops */}
-                    {shop.isPremium && (
-                      <motion.div
-                        className="absolute inset-[-8px] rounded-full border-2 border-gradient-to-r from-purple-400 to-blue-400"
-                        style={{
-                          background: 'conic-gradient(from 0deg, #a855f7, #3b82f6, #a855f7)',
-                          padding: '2px',
-                        }}
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                      >
-                        <div className="w-full h-full bg-gray-900 rounded-full"></div>
-                      </motion.div>
-                    )}
-                    
-                    {/* Main Marker with Enhanced Theme Colors */}
-                    <div
-                      className={`flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 relative ${
-                        selectedShop === shop.id
-                          ? 'bg-gradient-to-br from-purple-500 via-blue-500 to-purple-600 ring-4 ring-purple-400/50 shadow-2xl shadow-purple-500/50'
-                          : shop.isPremium
-                          ? 'bg-gradient-to-br from-purple-500/90 via-blue-500/90 to-purple-600/90 hover:from-purple-500 hover:via-blue-500 hover:to-purple-600 shadow-xl shadow-purple-500/30'
-                          : 'bg-gradient-to-br from-purple-500/80 via-blue-500/80 to-purple-600/80 hover:from-purple-500/90 hover:via-blue-500/90 hover:to-purple-600/90 shadow-lg'
-                      }`}
+                  {shops.map((shop) => (
+                    <MarkerF
+                      key={shop.id}
+                      position={shop.coordinates}
+                      onClick={() => handleMarkerClick(shop.id)}
+                      animation={selectedShop === shop.id && typeof google !== 'undefined' ? google.maps.Animation.BOUNCE : undefined}
+                    />
+                  ))}
+                  
+                  {selectedShop && shops.find(s => s.id === selectedShop) && (
+                    <InfoWindowF
+                      position={shops.find(s => s.id === selectedShop)!.coordinates}
+                      onCloseClick={() => setSelectedShop(null)}
                     >
-                      {/* Pulsing Ring for Selected with Theme Colors */}
-                      {selectedShop === shop.id && (
-                        <>
-                          <motion.div
-                            className="absolute inset-0 rounded-full border-2 border-purple-400"
-                            animate={{ scale: [1, 1.5], opacity: [0.7, 0] }}
-                            transition={{ duration: 1.5, repeat: Infinity }}
-                          />
-                          <motion.div
-                            className="absolute inset-0 rounded-full border-2 border-blue-400"
-                            animate={{ scale: [1, 1.8], opacity: [0.5, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
-                          />
-                        </>
-                      )}
-                      
-                      <MapPin
-                        className="w-6 h-6 text-white drop-shadow-lg"
-                        strokeWidth={selectedShop === shop.id ? 2.5 : 2}
-                      />
-                      
-                      {/* Premium Badge */}
-                      {shop.isPremium && (
-                        <motion.div
-                          className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center"
-                          animate={{ scale: [1, 1.2, 1] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                        >
-                          <Shield className="w-2.5 h-2.5 text-white" />
-                        </motion.div>
-                      )}
-                    </div>
-                    
-                    {/* Enhanced Tooltip with Theme Colors */}
-                    {selectedShop === shop.id && (
-                      <motion.div 
-                        className="absolute left-1/2 transform -translate-x-1/2 mt-2 bg-black/95 backdrop-blur-md text-white text-sm py-3 px-4 rounded-lg whitespace-nowrap border border-purple-500/60 shadow-2xl z-20"
-                        style={{
-                          background: 'linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(30,0,60,0.95) 100%)'
-                        }}
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <div className="font-semibold text-white flex items-center gap-2">
-                          {shop.name}
-                          {shop.isPremium && <Shield className="w-3 h-3 text-yellow-400" />}
+                      <div className="p-2 min-w-[150px]">
+                        <h3 className="font-bold text-gray-900">{shops.find(s => s.id === selectedShop)!.name}</h3>
+                        <p className="text-sm text-gray-700">{shops.find(s => s.id === selectedShop)!.address}</p>
+                        <div className="flex items-center gap-1 mt-1">
+                          <Star className="w-3 h-3 text-yellow-500 fill-current" />
+                          <span className="text-xs text-gray-600">{shops.find(s => s.id === selectedShop)!.rating}</span>
                         </div>
-                        <div className="text-purple-300 text-xs flex items-center gap-2 mt-1">
-                          <Star className="w-3 h-3 fill-current" />
-                          {shop.rating}
-                          <Clock className="w-3 h-3 ml-1" />
-                          {shop.hours.split(' - ')[0]}
-                        </div>
-                        <div className="text-gray-300 text-xs mt-1 flex items-center gap-1">
-                          {shop.bookingStatus === 'ready-to-pay' && (
-                            <>
-                              <Lock className="w-3 h-3 text-green-400" />
-                              <span className="text-green-400">Ready to Pay</span>
-                            </>
-                          )}
-                        </div>
-                        <div className="text-gray-400 text-xs mt-1">{shop.services[0]}...</div>
-                        
-                        {/* Enhanced Tooltip Arrow with Theme Color */}
-                        <div 
-                          className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 rotate-45 border-l border-t border-purple-500/60"
-                          style={{
-                            background: 'linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(30,0,60,0.95) 100%)'
-                          }}
-                        />
-                      </motion.div>
-                    )}
-                  </motion.div>
-                </div>
-              ))}
+                      </div>
+                    </InfoWindowF>
+                  )}
+                </GoogleMap>
+              ) : (
+                <MapSkeleton />
+              )}
 
-              {/* Enhanced Map Header with Theme Colors */}
-              <div className="absolute top-4 left-4 bg-gradient-to-r from-black/80 via-purple-900/20 to-black/80 backdrop-blur-md py-3 px-4 rounded-lg border border-purple-500/30 shadow-xl">
+              {/* Enhanced Map Header Overlay */}
+              <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md py-3 px-4 rounded-lg border border-purple-500/30 shadow-xl z-10 pointer-events-none">
                 <p className="text-white text-sm font-medium">San Francisco Bay Area</p>
                 <div className="flex items-center gap-2 mt-1">
                   <p className="text-purple-300 text-xs">{shops.length} repair shops found</p>
                   <div className="w-1 h-1 bg-purple-400 rounded-full"></div>
-                  <p className="text-blue-300 text-xs">Interactive</p>
+                  <p className="text-blue-300 text-xs">Live Map</p>
                 </div>
-              </div>
-
-              {/* Enhanced Map Controls with Theme Colors */}
-              <div className="absolute top-4 right-4 flex flex-col gap-1">
-                <motion.button 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-gradient-to-r from-black/80 via-purple-900/20 to-black/80 backdrop-blur-md p-3 rounded-lg border border-purple-500/30 hover:border-purple-400/50 transition-all duration-200 shadow-xl"
-                >
-                  <ChevronUp className="w-4 h-4 text-white" />
-                </motion.button>
-                <motion.button 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-gradient-to-r from-black/80 via-purple-900/20 to-black/80 backdrop-blur-md p-3 rounded-lg border border-purple-500/30 hover:border-purple-400/50 transition-all duration-200 shadow-xl"
-                >
-                  <ChevronDown className="w-4 h-4 text-white" />
-                </motion.button>
-              </div>
-
-              {/* Enhanced Attribution with Theme Colors */}
-              <div className="absolute bottom-2 right-2 text-[10px] text-purple-400/60 opacity-80">
-                © Neurovia Maps • Interactive • Theme Enhanced
               </div>
             </div>
           </motion.div>
