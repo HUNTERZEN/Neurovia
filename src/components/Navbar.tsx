@@ -52,11 +52,7 @@ export function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center group" onClick={() => setIsMobileMenuOpen(false)}>
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
-                <img src="/logo.svg" className="relative h-8 w-8 sm:h-9 sm:w-9" alt="Logo" />
-              </div>
-              <span className="ml-3 text-lg sm:text-xl font-bold bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent">Neurovia</span>
+              <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent">Neurovia</span>
             </Link>
           </div>
 
