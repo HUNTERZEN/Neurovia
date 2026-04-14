@@ -63,16 +63,16 @@ export function Founders() {
       ]
     },
     {
-      name: 'Kunal',
+      name: 'Kunal Singha',
       role: 'CTO & Dev Lead',
       roleColor: 'text-purple-400',
       bio: 'Cybersecurity veteran with expertise in building secure, enterprise-grade solutions.',
       image: '/images/founders/kunal.jpg',
       socials: [
-        { type: 'instagram', url: 'https://instagram.com/kunal' },
-        { type: 'twitter', url: 'https://twitter.com/kunal' },
-        { type: 'linkedin', url: 'https://linkedin.com/in/kunal' },
-        { type: 'github', url: 'https://github.com/kunal' }
+        { type: 'instagram', url: 'https://www.instagram.com/_kunal_singha_?igsh=a3hta3F6bTdpNXA1' },
+        { type: 'twitter', url: 'https://x.com/edits_nitrox' },
+        { type: 'linkedin', url: 'https://www.linkedin.com/in/kunal-singha-9b74b234a?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
+        { type: 'github', url: 'https://github.com/HUNTERZEN' }
       ]
     }
   ];
@@ -115,7 +115,7 @@ export function Founders() {
             <div key={founder.name} className="group relative">
               {/* Card Glow Effect */}
               <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-200" />
-              
+
               {/* Founder Card */}
               <div className="relative bg-gray-900/80 backdrop-blur-xl p-5 sm:p-6 rounded-2xl border border-gray-800 h-full flex flex-col">
                 {/* Profile Image */}
