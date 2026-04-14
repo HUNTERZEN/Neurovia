@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   User, Mail, Phone, MapPin, Edit3, Save, X, Camera,
   Briefcase, Calendar, Globe, Github, Linkedin, Twitter,
-  Shield, CheckCircle, Activity, Building
+  Shield, CheckCircle, Activity, Building, Loader2, AlertCircle
 } from 'lucide-react';
 import { useProfile } from '../context/ProfileContext';
 
@@ -32,10 +32,11 @@ interface ProfilePageProps {
 }
 
 export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
-  const { profileData, updateProfile, initializeProfile } = useProfile();
+  const { profileData, updateProfile, initializeProfile, isSaving, isLoading } = useProfile();
   const [isEditing, setIsEditing] = useState(false);
   const [tempData, setTempData] = useState(profileData);
   const [scrollY, setScrollY] = useState(0);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -53,16 +54,29 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
     setTempData(profileData);
   }, [profileData]);
 
+  // Auto-hide save status toast after 3 seconds
+  useEffect(() => {
+    if (saveStatus !== 'idle') {
+      const timer = setTimeout(() => setSaveStatus('idle'), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [saveStatus]);
+
   const handleEdit = () => {
     setIsEditing(true);
     setTempData(profileData);
   };
 
-  const handleSave = () => {
-    updateProfile(tempData);
-    setIsEditing(false);
-    if (onUpdateProfile) {
-      onUpdateProfile(tempData);
+  const handleSave = async () => {
+    const success = await updateProfile(tempData);
+    if (success) {
+      setSaveStatus('success');
+      setIsEditing(false);
+      if (onUpdateProfile) {
+        onUpdateProfile(tempData);
+      }
+    } else {
+      setSaveStatus('error');
     }
   };
 
@@ -88,6 +102,28 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
 
   return (
     <div className="relative min-h-screen pt-36 pb-16 px-4 overflow-hidden">
+      {/* Save Status Toast */}
+      <AnimatePresence>
+        {saveStatus !== 'idle' && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            exit={{ opacity: 0, y: -20, x: '-50%' }}
+            className={`fixed top-24 left-1/2 z-[100] px-6 py-3 rounded-xl border backdrop-blur-xl shadow-2xl flex items-center gap-3 ${
+              saveStatus === 'success'
+                ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-300'
+                : 'bg-red-500/20 border-red-500/30 text-red-300'
+            }`}
+          >
+            {saveStatus === 'success' ? (
+              <><CheckCircle className="w-5 h-5" /> Profile saved successfully!</>
+            ) : (
+              <><AlertCircle className="w-5 h-5" /> Failed to save profile. Try again.</>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Theme background — strictly matches PartnerDashboard */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-gray-950" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent" />
@@ -114,7 +150,7 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
                   <img src={profileData.profileImage} alt={profileData.fullName} className="w-full h-full object-cover" />
                 ) : (
                   <span className="text-2xl sm:text-3xl font-bold bg-gradient-to-br from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                    {profileData.fullName.split(' ').map(n => n[0]).join('').toUpperCase()}
+                    {(profileData.fullName || 'U').split(' ').filter(Boolean).map(n => n[0]).join('').toUpperCase() || 'U'}
                   </span>
                 )}
                 {isEditing && (
@@ -152,18 +188,20 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
                     initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                     className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-white"
                   >
-                    {profileData.fullName}
+                    {profileData.fullName || 'Your Name'}
                   </motion.h1>
                   <motion.div 
                     initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
                     className="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-3 text-xs sm:text-sm text-gray-400"
                   >
                     <span className="flex items-center gap-1.5 text-purple-400">
-                      <Briefcase className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {profileData.profession}
+                      <Briefcase className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {profileData.profession || 'Not set'}
                     </span>
-                    <span className="flex items-center gap-1.5 px-3 border-l border-gray-800">
-                      <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {profileData.location}
-                    </span>
+                    {profileData.location && (
+                      <span className="flex items-center gap-1.5 px-3 border-l border-gray-800">
+                        <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {profileData.location}
+                      </span>
+                    )}
                   </motion.div>
                 </>
               )}
@@ -174,11 +212,12 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
           <div className="flex items-center gap-3 w-full md:w-auto mt-2 md:mt-0 px-4 sm:px-0">
             {isEditing ? (
               <>
-                <button onClick={handleCancel} className="flex-1 md:flex-none px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 text-gray-300 text-sm sm:text-base font-medium transition-all flex items-center justify-center gap-2">
+                <button onClick={handleCancel} disabled={isSaving} className="flex-1 md:flex-none px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 text-gray-300 text-sm sm:text-base font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50">
                   <X className="w-4 h-4" /> Cancel
                 </button>
-                <button onClick={handleSave} className="flex-1 md:flex-none px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:opacity-90 text-white text-sm sm:text-base font-medium shadow-lg shadow-purple-500/20 transition-all flex items-center justify-center gap-2">
-                  <Save className="w-4 h-4" /> Save
+                <button onClick={handleSave} disabled={isSaving} className="flex-1 md:flex-none px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:opacity-90 text-white text-sm sm:text-base font-medium shadow-lg shadow-purple-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+                  {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                  {isSaving ? 'Saving...' : 'Save'}
                 </button>
               </>
             ) : (
@@ -273,25 +312,25 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
                       <div className="group">
                         <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">Email Address</p>
                         <p className="text-zinc-200 font-medium flex items-center gap-2 group-hover:text-indigo-300 transition-colors">
-                          <Mail className="w-4 h-4 text-zinc-600 group-hover:text-indigo-400" /> {profileData.email}
+                          <Mail className="w-4 h-4 text-zinc-600 group-hover:text-indigo-400" /> {profileData.email || <span className="text-zinc-600 italic">Not specified</span>}
                         </p>
                       </div>
                       <div className="group">
                         <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">Phone Number</p>
                         <p className="text-zinc-200 font-medium flex items-center gap-2 group-hover:text-indigo-300 transition-colors">
-                          <Phone className="w-4 h-4 text-zinc-600 group-hover:text-indigo-400" /> {profileData.phone}
+                          <Phone className="w-4 h-4 text-zinc-600 group-hover:text-indigo-400" /> {profileData.phone || <span className="text-zinc-600 italic">Not specified</span>}
                         </p>
                       </div>
                       <div className="group">
                         <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">Location</p>
                         <p className="text-zinc-200 font-medium flex items-center gap-2 group-hover:text-indigo-300 transition-colors">
-                          <MapPin className="w-4 h-4 text-zinc-600 group-hover:text-indigo-400" /> {profileData.location}
+                          <MapPin className="w-4 h-4 text-zinc-600 group-hover:text-indigo-400" /> {profileData.location || <span className="text-zinc-600 italic">Not specified</span>}
                         </p>
                       </div>
                       <div className="group">
                         <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">Company</p>
                         <p className="text-zinc-200 font-medium flex items-center gap-2 group-hover:text-indigo-300 transition-colors">
-                          <Building className="w-4 h-4 text-zinc-600 group-hover:text-indigo-400" /> {profileData.company}
+                          <Building className="w-4 h-4 text-zinc-600 group-hover:text-indigo-400" /> {profileData.company || <span className="text-zinc-600 italic">Not specified</span>}
                         </p>
                       </div>
                     </div>
@@ -299,7 +338,7 @@ export function ProfilePage({ user, onUpdateProfile }: ProfilePageProps) {
                     <div className="pt-6 border-t border-white/5">
                       <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">About Me</p>
                       <p className="text-zinc-300 leading-relaxed max-w-3xl">
-                        {profileData.bio || "No biography provided yet."}
+                        {profileData.bio || <span className="text-zinc-600 italic">No biography provided yet.</span>}
                       </p>
                     </div>
                   </motion.div>

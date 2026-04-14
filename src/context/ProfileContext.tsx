@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 
 interface ProfileData {
   fullName: string;
@@ -18,105 +18,154 @@ interface ProfileData {
 
 interface ProfileContextType {
   profileData: ProfileData;
-  updateProfile: (data: Partial<ProfileData>) => void;
+  updateProfile: (data: Partial<ProfileData>) => Promise<boolean>;
   initializeProfile: (userData: { name?: string; email?: string }) => void;
+  isSaving: boolean;
+  isLoading: boolean;
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 const DEFAULT_PROFILE: ProfileData = {
-  fullName: 'Madhurjya Bordoloi',
-  email: 'bm685810@gmail.com',
-  phone: '+91 98765 43210',
-  location: 'Assam, India',
-  profession: 'Full Stack Developer',
-  company: 'Tech Solutions Inc.',
-  joinDate: '2024',
-  bio: 'Passionate about creating innovative tech solutions and helping users with their device issues.',
-  website: 'https://yourwebsite.com',
-  github: 'yourusername',
-  linkedin: 'yourusername',
-  twitter: 'yourusername',
+  fullName: '',
+  email: '',
+  phone: '',
+  location: '',
+  profession: '',
+  company: '',
+  joinDate: '',
+  bio: '',
+  website: '',
+  github: '',
+  linkedin: '',
+  twitter: '',
   profileImage: '/api/placeholder/150/150'
 };
 
+const API_URL = import.meta.env.VITE_API_URL || 'https://neurovia-backend.onrender.com';
+
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profileData, setProfileData] = useState<ProfileData>(DEFAULT_PROFILE);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch true profile data from backend on mount
-  useEffect(() => {
-    const fetchRealProfile = async () => {
-      const token = localStorage.getItem('authToken');
-      if (!token) return;
-      try {
-        const API_URL = import.meta.env.VITE_API_URL || 'https://neurovia-backend.onrender.com';
-        const res = await fetch(`${API_URL}/api/profile`, {
-          headers: { Authorization: `Bearer ${token}` }
+  // Fetch profile data from backend on mount
+  const fetchProfile = useCallback(async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      setIsLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch(`${API_URL}/api/profile`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const dbUser = data.user;
+        // Use DB values directly — don't fall back to hardcoded defaults
+        setProfileData({
+          fullName: dbUser.fullName || dbUser.username || dbUser.name || '',
+          email: dbUser.email || '',
+          phone: dbUser.phone ?? '',
+          location: dbUser.location ?? '',
+          profession: dbUser.profession ?? '',
+          company: dbUser.company ?? '',
+          bio: dbUser.bio ?? '',
+          website: dbUser.website ?? '',
+          github: dbUser.github ?? '',
+          linkedin: dbUser.linkedin ?? '',
+          twitter: dbUser.twitter ?? '',
+          profileImage: dbUser.profileImage || '/api/placeholder/150/150',
+          joinDate: dbUser.joinDate || new Date().getFullYear().toString()
         });
-        if (res.ok) {
-          const data = await res.json();
-          const dbUser = data.user;
-          // Merge database data with defaults
-          setProfileData(prev => ({
-            ...prev,
-            fullName: dbUser.fullName || dbUser.username || dbUser.name || prev.fullName,
-            email: dbUser.email || prev.email,
-            phone: dbUser.phone || prev.phone,
-            location: dbUser.location || prev.location,
-            profession: dbUser.profession || prev.profession,
-            company: dbUser.company || prev.company,
-            bio: dbUser.bio || prev.bio,
-            website: dbUser.website || prev.website,
-            github: dbUser.github || prev.github,
-            linkedin: dbUser.linkedin || prev.linkedin,
-            twitter: dbUser.twitter || prev.twitter,
-            profileImage: dbUser.profileImage || prev.profileImage,
-            joinDate: dbUser.joinDate || prev.joinDate
-          }));
-        }
-      } catch (err) {
-        console.error('Failed to fetch profile from DB', err);
       }
-    };
-    fetchRealProfile();
+    } catch (err) {
+      console.error('Failed to fetch profile from DB:', err);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
-  const updateProfile = async (data: Partial<ProfileData>) => {
-    // Optimistic UI update
-    setProfileData(prev => ({ ...prev, ...data }));
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
+  // Save profile data to backend
+  const updateProfile = async (data: Partial<ProfileData>): Promise<boolean> => {
     const token = localStorage.getItem('authToken');
-    if (!token) return;
+    if (!token) {
+      console.error('No auth token found — cannot save profile');
+      return false;
+    }
+
+    setIsSaving(true);
+
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'https://neurovia-backend.onrender.com';
-      await fetch(`${API_URL}/api/profile`, {
+      const res = await fetch(`${API_URL}/api/profile`, {
         method: 'PUT',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}` 
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(data)
       });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        console.error('Profile save failed:', res.status, errData);
+        return false;
+      }
+
+      const result = await res.json();
+      // Update local state with the server response (source of truth)
+      if (result.user) {
+        const dbUser = result.user;
+        setProfileData({
+          fullName: dbUser.fullName || dbUser.username || '',
+          email: dbUser.email || '',
+          phone: dbUser.phone ?? '',
+          location: dbUser.location ?? '',
+          profession: dbUser.profession ?? '',
+          company: dbUser.company ?? '',
+          bio: dbUser.bio ?? '',
+          website: dbUser.website ?? '',
+          github: dbUser.github ?? '',
+          linkedin: dbUser.linkedin ?? '',
+          twitter: dbUser.twitter ?? '',
+          profileImage: dbUser.profileImage || '/api/placeholder/150/150',
+          joinDate: dbUser.joinDate || new Date().getFullYear().toString()
+        });
+      } else {
+        // Fallback: optimistic update if server doesn't return user
+        setProfileData(prev => ({ ...prev, ...data }));
+      }
+
+      return true;
     } catch (err) {
-      console.error('Failed to save profile to DB', err);
+      console.error('Failed to save profile to DB:', err);
+      return false;
+    } finally {
+      setIsSaving(false);
     }
   };
 
-  const initializeProfile = (userData: { name?: string; email?: string }) => {
-    // Maintain backwards compatibility if needed, though mostly handled by the fetch above
+  const initializeProfile = useCallback((userData: { name?: string; email?: string }) => {
     if (userData.name || userData.email) {
       setProfileData(prev => ({
         ...prev,
-        fullName: prev.fullName === DEFAULT_PROFILE.fullName && userData.name ? userData.name : prev.fullName,
-        email: prev.email === DEFAULT_PROFILE.email && userData.email ? userData.email : prev.email
+        fullName: !prev.fullName && userData.name ? userData.name : prev.fullName,
+        email: !prev.email && userData.email ? userData.email : prev.email
       }));
     }
-  };
+  }, []);
 
   const value = {
     profileData,
     updateProfile,
     initializeProfile,
+    isSaving,
+    isLoading,
   };
 
   return (
