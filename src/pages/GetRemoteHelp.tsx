@@ -29,7 +29,7 @@ const supportTypes = [
 const experts = [
   {
     id: 1,
-    name: 'Sarah Chen',
+    name: 'Aadhya patel',
     rating: 4.9,
     reviews: 156,
     specialties: ['Windows', 'macOS', 'Linux'],
@@ -39,7 +39,7 @@ const experts = [
   },
   {
     id: 2,
-    name: 'Michael Rodriguez',
+    name: 'Rajesh Kumar',
     rating: 4.8,
     reviews: 142,
     specialties: ['Windows', 'Networking', 'Security'],
@@ -49,7 +49,7 @@ const experts = [
   },
   {
     id: 3,
-    name: 'Emily Watson',
+    name: 'anika singh',
     rating: 4.9,
     reviews: 198,
     specialties: ['macOS', 'iOS', 'Data Recovery'],
@@ -69,10 +69,10 @@ export function GetRemoteHelp() {
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
       </div>
-      
+
       {/* Content */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
-        <motion.div 
+        <motion.div
           className="text-center mb-8 sm:mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -85,7 +85,7 @@ export function GetRemoteHelp() {
         </motion.div>
 
         {/* Support Types */}
-        <motion.div 
+        <motion.div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mb-12 sm:mb-16"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -118,7 +118,7 @@ export function GetRemoteHelp() {
                     <span className="text-purple-400 font-semibold">${type.price}</span>
                     <span className="text-gray-400">/{type.duration}min</span>
                   </div>
-                  <motion.button 
+                  <motion.button
                     className={`
                       px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-sm font-medium bg-black text-white border
                       ${selectedType === index ? 'border-purple-500' : 'border-gray-800 hover:border-purple-500/30'}
@@ -135,7 +135,7 @@ export function GetRemoteHelp() {
         </motion.div>
 
         {/* Available Experts */}
-        <motion.div 
+        <motion.div
           className="relative"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -201,7 +201,7 @@ export function GetRemoteHelp() {
                           <span className="text-sm text-gray-400">Starting from</span>
                           <p className="text-xl font-semibold text-purple-400">${expert.price}/30min</p>
                         </div>
-                        <motion.button 
+                        <motion.button
                           className="px-6 py-2 rounded-lg font-medium bg-black text-white border border-gray-800 hover:border-purple-500/30"
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
