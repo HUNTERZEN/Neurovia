@@ -33,10 +33,10 @@ export default function Contact() {
 
     // Simulate form submission
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
+
     setSending(false);
     setSent(true);
-    
+
     // Reset form after 3 seconds
     setTimeout(() => {
       setSent(false);
@@ -61,7 +61,7 @@ export default function Contact() {
       <div className="max-w-7xl mx-auto relative">
         {/* Header Section */}
         <div className="text-center mb-10 sm:mb-12">
-          <motion.h1 
+          <motion.h1
             className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 mb-4"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -69,7 +69,7 @@ export default function Contact() {
           >
             Get in Touch
           </motion.h1>
-          <motion.p 
+          <motion.p
             className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto px-4"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -81,7 +81,7 @@ export default function Contact() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* Contact Information */}
-          <motion.div 
+          <motion.div
             className="space-y-6"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -92,15 +92,15 @@ export default function Contact() {
               <div className="space-y-4 text-sm sm:text-base">
                 <div className="flex items-center space-x-4 text-gray-300">
                   <Mail className="w-5 h-5 text-purple-400 shrink-0" />
-                  <span className="truncate">support@example.com</span>
+                  <span className="truncate">neurovianexusaitechnician@gmail.com</span>
                 </div>
                 <div className="flex items-center space-x-4 text-gray-300">
                   <Phone className="w-5 h-5 text-purple-400 shrink-0" />
-                  <span>+1 (555) 123-4567</span>
+                  <span>+91 8822096485</span>
                 </div>
                 <div className="flex items-start space-x-4 text-gray-300">
                   <MapPin className="w-5 h-5 text-purple-400 shrink-0 mt-0.5" />
-                  <span>123 Tech Street, Silicon Valley, CA 94025</span>
+                  <span>purunigudam, nagaon, assam</span>
                 </div>
                 <div className="flex items-center space-x-4 text-gray-300">
                   <MessageSquare className="w-5 h-5 text-purple-400 shrink-0" />
@@ -129,7 +129,7 @@ export default function Contact() {
           </motion.div>
 
           {/* Contact Form */}
-          <motion.div 
+          <motion.div
             className="bg-gray-800/50 backdrop-blur-lg rounded-lg p-5 sm:p-6 shadow-lg border border-purple-500/20"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -202,13 +202,12 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={sending || sent}
-                className={`w-full flex items-center justify-center space-x-2 px-6 py-3 rounded-lg text-white font-medium transition-colors ${
-                  sent
+                className={`w-full flex items-center justify-center space-x-2 px-6 py-3 rounded-lg text-white font-medium transition-colors ${sent
                     ? 'bg-green-600'
                     : sending
-                    ? 'bg-purple-700 cursor-not-allowed'
-                    : 'bg-purple-600 hover:bg-purple-700'
-                }`}
+                      ? 'bg-purple-700 cursor-not-allowed'
+                      : 'bg-purple-600 hover:bg-purple-700'
+                  }`}
               >
                 {sent ? (
                   'Message Sent!'
