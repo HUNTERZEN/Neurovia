@@ -29,7 +29,7 @@ interface Expert {
 const experts: Expert[] = [
   {
     id: '1',
-    name: 'Sarah Chen',
+    name: 'Aadhya patel',
     avatar: '/api/placeholder/60/60',
     rating: 4.9,
     reviews: 156,
@@ -40,7 +40,7 @@ const experts: Expert[] = [
   },
   {
     id: '2',
-    name: 'Michael Rodriguez',
+    name: 'Rajesh Kumar',
     avatar: '/api/placeholder/60/60',
     rating: 4.8,
     reviews: 142,
@@ -51,7 +51,7 @@ const experts: Expert[] = [
   },
   {
     id: '3',
-    name: 'Emily Watson',
+    name: 'anika singh',
     avatar: '/api/placeholder/60/60',
     rating: 4.9,
     reviews: 198,
