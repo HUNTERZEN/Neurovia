@@ -1,141 +1,175 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { DollarSign, HelpCircle, Mail, Settings, Users, Shield, Clock, Image } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ChevronDown, Search } from 'lucide-react';
 
-const faqs = [
-  {
-    icon: <DollarSign className="w-5 h-5 sm:w-6 sm:h-6" />,
-    question: "Do you offer refund?",
-    answer: "Yes, we offer a 30-day money-back guarantee if you're not satisfied with our services. Terms and conditions apply."
-  },
-  {
-    icon: <HelpCircle className="w-5 h-5 sm:w-6 sm:h-6" />,
-    question: "Can I try free trial now?",
-    answer: "We offer a 7-day free trial for new users to test our premium features. No credit card required to start."
-  },
-  {
-    icon: <Mail className="w-5 h-5 sm:w-6 sm:h-6" />,
-    question: "How can I reach support?",
-    answer: "Our support team is available 24/7 through live chat, email, or phone. Premium users get priority support access."
-  },
-  {
-    icon: <Settings className="w-5 h-5 sm:w-6 sm:h-6" />,
-    question: "Will it work for me?",
-    answer: "Our service is compatible with all major devices and operating systems. We provide comprehensive documentation and setup guides."
-  },
-  {
-    icon: <Clock className="w-5 h-5 sm:w-6 sm:h-6" />,
-    question: "How much does it cost?",
-    answer: "We offer flexible pricing plans starting from $9.99/month. Enterprise solutions are available for larger organizations."
-  },
-  {
-    icon: <Image className="w-5 h-5 sm:w-6 sm:h-6" />,
-    question: "How to change profile pics?",
-    answer: "You can easily update your profile picture from your account settings. We support JPG, PNG, and GIF formats up to 5MB."
-  }
-];
+interface FAQItem {
+  q: string;
+  a: string;
+  category: string;
+}
 
-const supportTeam = [
+const FAQ_DATA: FAQItem[] = [
   {
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    name: "Sarah Chen"
+    category: 'General',
+    q: 'How does Neurovia support work?',
+    a: 'Neurovia offers two primary modes of support: instant Remote Support and certified Onsite Repair / Local Repair Shops. With remote support, our certified technician connects securely to your PC or Mac to diagnose and resolve software, driver, or malware issues live. For physical hardware damage or part replacements, you can find and book an appointment with our partner repair shops near you.'
   },
   {
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    name: "Michael Rodriguez"
+    category: 'General',
+    q: 'What is the "No Fix, No Fee" policy?',
+    a: 'If our technician is unable to resolve your software problem or provide a clear diagnosis and path to resolution during a remote session, you will not be charged. We stand 100% behind the quality and accountability of our repairs.'
   },
   {
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    name: "Emily Watson"
+    category: 'Remote Support',
+    q: 'Is remote access to my computer safe and private?',
+    a: 'Yes, absolutely. We use encrypted peer-to-peer session tools. You maintain full visibility of your screen at every moment, and you can pause or terminate the connection with a single click. Our technicians never access private files, personal folders, or passwords.'
   },
   {
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    name: "Tom Wilson"
+    category: 'Remote Support',
+    q: 'What issues can be solved remotely?',
+    a: 'We can fix operating system crashes (Windows, macOS, Linux), malware & virus cleanup, driver updates, printer & peripheral configurations, email client setup, slow computer optimization, network connectivity glitches, and cloud backups.'
   },
   {
-    image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    name: "Lisa Anderson"
+    category: 'Repair Shops',
+    q: 'How do you verify local repair shops?',
+    a: 'Every repair shop in our network goes through strict vetting: business registration checks, technician certification verification, shop facility inspection, and continuous customer satisfaction monitoring. All repair shops maintain a minimum 4.5+ star service rating.'
+  },
+  {
+    category: 'Pricing',
+    q: 'How much does a support session cost?',
+    a: 'Remote diagnostics and basic troubleshooting start from ₹499 ($15-$25). Physical repair services vary by hardware requirement and part replacements, with transparent estimates provided before any work begins.'
+  },
+  {
+    category: 'Future',
+    q: 'What is NADT?',
+    a: 'NADT (Neurovia Autonomous Device Technician) is our proprietary AI diagnostic engine currently under development, set to launch in 2027. It will autonomously diagnose hardware telemetry, predict hardware failures before they occur, and deliver instant self-healing system fixes.'
   }
 ];
 
 export function FAQ() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const categories = ['All', 'General', 'Remote Support', 'Repair Shops', 'Pricing', 'Future'];
+
+  const filteredFaqs = FAQ_DATA.filter(item => {
+    const matchesCategory = activeCategory === 'All' || item.category === activeCategory;
+    const matchesSearch = item.q.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          item.a.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const toggleAccordion = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   return (
-    <div className="relative min-h-screen bg-black py-16 sm:py-20">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-gray-950" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent" />
-      </div>
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <motion.div 
-          className="text-center mb-12 sm:mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-4">
-            Frequently Asked Questions
+    <div className="bg-[#080808] text-[#e8e8e8] min-h-screen">
+      {/* ═══ PAGE HERO ═══ */}
+      <section className="page-hero">
+        <div className="max-w-[1160px] mx-auto px-6 lg:px-8">
+          <span className="nv-section-label">Knowledge Base</span>
+          <h1 className="page-title">
+            Frequently asked<br /><em>questions.</em>
           </h1>
-          <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto">
-            Find answers to common questions about our services and platform
+          <p className="page-sub">
+            Everything you need to know about our remote support, verified repair shops, response times, and guarantees.
           </p>
-        </motion.div>
+        </div>
+      </section>
 
-        {/* FAQ Grid */}
-        <motion.div 
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          {faqs.map((faq, index) => (
-            <motion.div
-              key={index}
-              className="relative"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-            >
-              <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-800 hover:border-purple-500/30 h-full">
-                <div className="flex items-center mb-4">
-                  <div className="p-2 sm:p-3 bg-purple-500/10 rounded-lg text-purple-400">
-                    {faq.icon}
-                  </div>
-                  <h3 className="ml-3 text-lg sm:text-xl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                    {faq.question}
-                  </h3>
+      {/* ═══ FAQ LIST SECTION ═══ */}
+      <section className="py-20">
+        <div className="max-w-[880px] mx-auto px-6 lg:px-8">
+          {/* Search Bar */}
+          <div className="relative mb-8">
+            <Search className="w-5 h-5 text-[#888888] absolute left-4 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search questions or keywords..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-[#141414] border border-white/10 rounded-full pl-12 pr-6 py-3.5 text-sm text-white placeholder-[#555555] focus:outline-none focus:border-white/30 transition-colors"
+            />
+          </div>
+
+          {/* Categories */}
+          <div className="flex gap-2 flex-wrap mb-10">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`text-xs font-semibold px-4 py-2 rounded-full border transition-all ${
+                  activeCategory === cat
+                    ? 'bg-white text-black border-white'
+                    : 'bg-transparent text-[#888888] border-white/10 hover:border-white/20 hover:text-white'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* FAQ Accordion Items */}
+          <div className="space-y-3">
+            {filteredFaqs.map((faq, idx) => {
+              const isOpen = openIndex === idx;
+              return (
+                <div
+                  key={idx}
+                  className="bg-[#141414] border border-white/[0.08] hover:border-white/[0.16] rounded-2xl overflow-hidden transition-colors"
+                >
+                  <button
+                    onClick={() => toggleAccordion(idx)}
+                    className="w-full p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
+                  >
+                    <span className="font-['Syne'] font-bold text-base sm:text-lg text-white">
+                      {faq.q}
+                    </span>
+                    <ChevronDown
+                      className={`w-5 h-5 text-[#888888] shrink-0 transition-transform duration-300 ${
+                        isOpen ? 'rotate-180 text-white' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {isOpen && (
+                    <div className="px-6 pb-6 pt-0 text-sm text-[#888888] leading-relaxed border-t border-white/[0.04]">
+                      <p className="pt-4">{faq.a}</p>
+                    </div>
+                  )}
                 </div>
-                <p className="text-sm sm:text-base text-gray-400">
-                  {faq.answer}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+              );
+            })}
 
-        {/* Support Team Section */}
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-4">
-            Still Have Questions?
-          </h2>
-          <p className="text-base sm:text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
-            Our support team is here to help. Contact us anytime and we'll get back to you as soon as possible.
-          </p>
-          <a
-            href="/contact"
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base sm:text-lg font-medium rounded-lg text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-          >
-            Contact Support
-          </a>
-        </motion.div>
-      </div>
+            {filteredFaqs.length === 0 && (
+              <div className="text-center py-12 text-[#888888]">
+                No matching questions found. Try searching with different terms.
+              </div>
+            )}
+          </div>
+
+          {/* Bottom Help CTA */}
+          <div className="mt-16 p-8 rounded-2xl bg-[#141414] border border-white/[0.08] text-center">
+            <h3 className="font-['Syne'] text-xl font-bold text-white mb-2">
+              Still have a question?
+            </h3>
+            <p className="text-sm text-[#888888] max-w-md mx-auto mb-6">
+              Can't find what you're looking for? Reach out directly to our support team and we'll be glad to help.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <Link to="/contact" className="btn-primary">
+                Contact our team →
+              </Link>
+              <Link to="/remote-help" className="btn-ghost">
+                Book remote help
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
-} 
+}
+export default FAQ;

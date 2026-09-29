@@ -51,8 +51,13 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center group" onClick={() => setIsMobileMenuOpen(false)}>
-              <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent">Neurovia</span>
+            <Link to="/" className="inline-flex items-center gap-2.5 group" onClick={() => setIsMobileMenuOpen(false)}>
+              <span className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center font-bold text-white text-sm font-['Syne']">
+                N
+              </span>
+              <span className="font-['Syne'] text-lg sm:text-xl font-bold tracking-tight text-white group-hover:text-gray-200 transition-colors">
+                Neurovia Nexus
+              </span>
             </Link>
           </div>
 
@@ -113,24 +118,31 @@ export function Navbar() {
           </div>
 
           {/* Desktop Auth Section */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-3">
+            <Link
+              to="/remote-help"
+              className="nv-btn-primary !text-xs !py-2 !px-4 !font-semibold !shadow-none"
+            >
+              Book Support →
+            </Link>
+
             {isAuthenticated ? (
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center space-x-2 px-4 py-2 text-gray-300 hover:text-white transition-colors duration-200 rounded-lg hover:bg-white/5"
+                  className="flex items-center space-x-2 px-3 py-2 text-gray-300 hover:text-white transition-colors duration-200 rounded-lg hover:bg-white/5 border border-white/10"
                 >
-                  <User className="w-5 h-5" />
-                  <span className="text-sm font-medium">
+                  <User className="w-4 h-4" />
+                  <span className="text-xs font-medium">
                     {user?.username || 'User'}
                   </span>
                 </button>
 
                 {/* User Dropdown Menu */}
                 {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-gray-900/95 backdrop-blur-lg rounded-lg border border-gray-700/50 shadow-xl z-[60]">
-                    <div className="p-3 border-b border-gray-700/50">
-                      <p className="text-sm text-gray-300">Signed in as</p>
+                  <div className="absolute right-0 mt-2 w-48 bg-[#141414] rounded-xl border border-white/10 shadow-2xl z-[60] overflow-hidden">
+                    <div className="p-3 border-b border-white/[0.08]">
+                      <p className="text-xs text-gray-400">Signed in as</p>
                       <p className="text-sm font-medium text-white truncate">
                         {user?.email || user?.username}
                       </p>
@@ -138,7 +150,7 @@ export function Navbar() {
                     <div className="py-1">
                       <Link
                         to="/profile"
-                        className="flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors"
+                        className="flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
                         <User className="w-4 h-4 mr-2" />
@@ -147,7 +159,7 @@ export function Navbar() {
                       {isPartner ? (
                         <Link
                           to="/partner/dashboard"
-                          className="flex items-center px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-gray-800/50 transition-colors"
+                          className="flex items-center px-4 py-2 text-sm text-blue-400 hover:text-blue-300 hover:bg-white/5 transition-colors"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <UserCheck className="w-4 h-4 mr-2" />
@@ -156,7 +168,7 @@ export function Navbar() {
                       ) : (
                         <Link
                           to="/register-partner"
-                          className="flex items-center px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-gray-800/50 transition-colors"
+                          className="flex items-center px-4 py-2 text-sm text-blue-400 hover:text-blue-300 hover:bg-white/5 transition-colors"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <Store className="w-4 h-4 mr-2" />
@@ -170,7 +182,7 @@ export function Navbar() {
                           handleLogout();
                         }}
                         type="button"
-                        className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors text-left"
+                        className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors text-left"
                       >
                         <LogOut className="w-4 h-4 mr-2" />
                         Sign Out
@@ -183,19 +195,15 @@ export function Navbar() {
               <>
                 <Link
                   to="/signin"
-                  className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors duration-200 rounded-lg hover:bg-white/5"
+                  className="px-3 py-2 text-xs font-medium text-gray-300 hover:text-white transition-colors"
                 >
                   Log in
                 </Link>
                 <Link
                   to="/signup"
-                  className="relative group"
+                  className="px-3.5 py-1.5 rounded-full border border-white/20 text-xs font-semibold text-white hover:border-white/50 hover:bg-white/5 transition-all"
                 >
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-60 group-hover:opacity-100 transition duration-200"></div>
-                  <div className="relative px-4 py-2 bg-black rounded-lg text-sm text-white font-medium flex items-center gap-2">
-                    Sign Up
-                    <span className="text-purple-400 group-hover:translate-x-0.5 transition-transform duration-200">↗</span>
-                  </div>
+                  Sign Up
                 </Link>
               </>
             )}

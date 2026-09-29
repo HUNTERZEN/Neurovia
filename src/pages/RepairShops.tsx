@@ -312,15 +312,15 @@ export function RepairShops() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
-        <div className="relative pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="min-h-screen bg-[#080808] relative text-[#e8e8e8]">
+        <div className="relative pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent sm:text-5xl">
-              Repair Shops Near You
+            <span className="nv-section-label">Verified Network</span>
+            <h1 className="font-['Syne'] text-3xl sm:text-5xl font-extrabold text-white">
+              Repair Shops <em className="italic text-[#888888]">Near You.</em>
             </h1>
-            <p className="mt-4 text-xl text-gray-400">
-              Find trusted repair shops in your area for all your tech needs
+            <p className="mt-3 text-sm sm:text-base text-[#888888] max-w-2xl mx-auto">
+              Find trusted repair shops in your area with verified technicians and genuine spare parts.
             </p>
           </div>
           <div className="grid lg:grid-cols-2 gap-8">
@@ -337,12 +337,7 @@ export function RepairShops() {
   }
 
   return (
-    <div className="min-h-screen bg-black relative">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
-      </div>
-
+    <div className="min-h-screen bg-[#080808] relative text-[#e8e8e8]">
       {/* Content */}
       <div className="relative pt-24 sm:pt-28 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <motion.div
@@ -351,11 +346,12 @@ export function RepairShops() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent sm:text-5xl">
-            Repair Shops Near You
+          <span className="nv-section-label">Verified Network</span>
+          <h1 className="font-['Syne'] text-3xl sm:text-5xl font-extrabold text-white">
+            Repair Shops <em className="italic text-[#888888]">Near You.</em>
           </h1>
-          <p className="mt-4 text-sm sm:text-xl text-gray-400 max-w-2xl mx-auto">
-            Find trusted repair shops in your area for all your tech needs
+          <p className="mt-3 text-sm sm:text-base text-[#888888] max-w-2xl mx-auto">
+            Find trusted repair shops in your area with verified technicians and genuine spare parts.
           </p>
         </motion.div>
 

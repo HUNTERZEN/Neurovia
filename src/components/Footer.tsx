@@ -1,166 +1,136 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Linkedin, Youtube, MessageSquare, Monitor } from 'lucide-react';
-
-const navigation = {
-  company: [
-    { name: 'About', href: '/about' },
-    { name: 'FAQ', href: '/faq' },
-    { name: 'Careers', href: '/careers' },
-    { name: 'Press', href: '/press' },
-    { name: 'Blog', href: '/blog' }
-  ],
-  services: [
-    { name: 'Repair Shops', href: '/repair-shops' },
-    { name: 'Remote Support', href: '/remote-help' },
-    { name: 'Video Consultation', href: '/remote-help?type=video' },
-    { name: 'Device Diagnostics', href: '/diagnostics' }
-  ],
-  legal: [
-    { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Terms of Service', href: '/terms' },
-    { name: 'Cookie Policy', href: '/cookies' },
-    { name: 'Refund Policy', href: '/refund' }
-  ],
-  social: [
-    {
-      name: 'Facebook',
-      href: '#',
-      icon: Facebook
-    },
-    {
-      name: 'Twitter',
-      href: 'https://x.com/computech08',
-      icon: Twitter
-    },
-    {
-      name: 'Instagram',
-      href: 'https://www.instagram.com/computechsolutions08?igshid=MzNlNGNkZWQ4Mg%3D%3D',
-      icon: Instagram
-    },
-    {
-      name: 'LinkedIn',
-      href: '#',
-      icon: Linkedin
-    },
-    {
-      name: 'YouTube',
-      href: 'https://youtube.com/@computechsolutions-ks6hg?si=ihbgxxWD7626op7m',
-      icon: Youtube
-    }
-  ]
-};
+import { Linkedin, Instagram, Youtube } from 'lucide-react';
 
 export function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="relative bg-gray-950" aria-labelledby="footer-heading">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-gray-950" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
-      </div>
-      
+    <footer className="footer bg-[#080808] border-t border-white/[0.08] text-[#e8e8e8] pt-16 pb-8" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">Footer</h2>
-      <div className="relative max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-6">
-              <Link to="/" className="flex items-center group">
-                <div className="relative">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur opacity-60 group-hover:opacity-100 transition duration-200"></div>
-                  <div className="relative bg-black rounded-full p-2">
-                    <Monitor className="h-6 w-6 text-white" />
-                  </div>
-                </div>
-                <span className="ml-3 text-lg font-bold text-white">Neurovia</span>
-              </Link>
-            </div>
-            <p className="text-gray-400 text-sm text-center sm:text-left">
-              Professional tech support and repair services, available instantly online or at local repair shops.
+      
+      <div className="max-w-[1160px] mx-auto px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_2fr] gap-12 lg:gap-16 mb-14">
+          {/* Brand Column */}
+          <div className="space-y-4">
+            <Link to="/" className="inline-flex items-center gap-2.5 group text-white">
+              <span className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center font-bold text-white text-sm font-['Syne']">
+                N
+              </span>
+              <span className="font-['Syne'] text-xl font-bold tracking-tight text-white">
+                Neurovia Nexus
+              </span>
+            </Link>
+            
+            <p className="text-sm text-[#888888] leading-relaxed max-w-sm">
+              IT support, software solutions, and AI innovation. Assam, India. Available instantly online or at verified local repair shops.
             </p>
-            <div className="flex justify-center sm:justify-start space-x-4">
-              {navigation.social.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-gray-400 hover:text-purple-400 transition-colors"
-                >
-                  <span className="sr-only">{item.name}</span>
-                  <item.icon className="h-5 w-5" />
-                </a>
-              ))}
+            
+            <div className="flex items-center gap-2.5 pt-2">
+              <a
+                href="https://www.linkedin.com/company/neurovia-nexus-pvt-ltd/"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="LinkedIn"
+                className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-[#888888] hover:text-white hover:border-white/30 transition-all duration-200"
+              >
+                <Linkedin className="w-4 h-4" />
+              </a>
+              <a
+                href="https://www.instagram.com/neurovianexus?igsh=MXFmbnNlc2s4eDRzOQ=="
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Instagram"
+                className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-[#888888] hover:text-white hover:border-white/30 transition-all duration-200"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a
+                href="https://x.com/computech08"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Twitter / X"
+                className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-[#888888] hover:text-white hover:border-white/30 transition-all duration-200 text-xs font-bold"
+              >
+                𝕏
+              </a>
+              <a
+                href="https://youtube.com/@computechsolutions-ks6hg?si=ihbgxxWD7626op7m"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="YouTube"
+                className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-[#888888] hover:text-white hover:border-white/30 transition-all duration-200"
+              >
+                <Youtube className="w-4 h-4" />
+              </a>
             </div>
           </div>
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-8 xl:mt-0 xl:col-span-2">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="mt-8 sm:mt-0">
-                <h3 className="text-sm font-semibold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent uppercase tracking-wider text-center sm:text-left">
-                  Company
-                </h3>
-                <ul className="mt-4 space-y-3">
-                  {navigation.company.map((item) => (
-                    <li key={item.name} className="text-center sm:text-left">
-                      <Link 
-                        to={item.href} 
-                        className="text-sm text-gray-400 hover:text-white transition-colors"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="mt-8 sm:mt-0">
-                <h3 className="text-sm font-semibold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent uppercase tracking-wider text-center sm:text-left">
-                  Services
-                </h3>
-                <ul className="mt-4 space-y-3">
-                  {navigation.services.map((item) => (
-                    <li key={item.name} className="text-center sm:text-left">
-                      <Link 
-                        to={item.href} 
-                        className="text-sm text-gray-400 hover:text-white transition-colors"
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <div className="mt-8 sm:mt-0">
-              <h3 className="text-sm font-semibold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent uppercase tracking-wider text-center sm:text-left">
-                Legal
-              </h3>
-              <ul className="mt-4 space-y-3">
-                {navigation.legal.map((item) => (
-                  <li key={item.name} className="text-center sm:text-left">
-                    <Link 
-                      to={item.href} 
-                      className="text-sm text-gray-400 hover:text-white transition-colors"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
+
+          {/* Navigation Links Columns */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
+            {/* Services */}
+            <div>
+              <h5 className="font-['Syne'] text-xs font-semibold tracking-widest uppercase text-white mb-4">
+                Services
+              </h5>
+              <ul className="space-y-2.5 text-sm text-[#888888]">
+                <li><Link to="/remote-help" className="hover:text-white transition-colors">Remote Support</Link></li>
+                <li><Link to="/repair-shops" className="hover:text-white transition-colors">Onsite & Shops</Link></li>
+                <li><Link to="/video-solutions" className="hover:text-white transition-colors">Video Solutions</Link></li>
+                <li><Link to="/remote-help?tab=chat" className="hover:text-white transition-colors">Expert Chat</Link></li>
               </ul>
+            </div>
+
+            {/* Company */}
+            <div>
+              <h5 className="font-['Syne'] text-xs font-semibold tracking-widest uppercase text-white mb-4">
+                Company
+              </h5>
+              <ul className="space-y-2.5 text-sm text-[#888888]">
+                <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
+                <li><Link to="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
+                <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                <li><Link to="/remote-help" className="hover:text-white transition-colors">Book Support</Link></li>
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h5 className="font-['Syne'] text-xs font-semibold tracking-widest uppercase text-white mb-4">
+                Legal
+              </h5>
+              <ul className="space-y-2.5 text-sm text-[#888888]">
+                <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
+                <li><Link to="/cookies" className="hover:text-white transition-colors">Cookie Policy</Link></li>
+                <li><Link to="/refund" className="hover:text-white transition-colors">Refund Policy</Link></li>
+              </ul>
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h5 className="font-['Syne'] text-xs font-semibold tracking-widest uppercase text-white mb-4">
+                Contact
+              </h5>
+              <div className="space-y-2 text-sm text-[#888888]">
+                <div><a href="mailto:support@neurovia.site" className="hover:text-white transition-colors text-xs break-all">support@neurovia.site</a></div>
+                <div><a href="tel:+918822096485" className="hover:text-white transition-colors text-xs">+91 88220 96485</a></div>
+                <div className="text-xs text-[#666666] pt-1">Guwahati, Assam<br />India</div>
+              </div>
             </div>
           </div>
         </div>
-        <div className="mt-8 border-t border-gray-700 pt-8 md:flex md:items-center md:justify-between">
-          <div className="flex space-x-6 md:order-2">
-            {navigation.social.map((item) => (
-              <a key={item.name} href={item.href} className="text-gray-400 hover:text-gray-300" aria-label={item.name}>
-                <item.icon className="h-6 w-6" aria-hidden="true" />
-              </a>
-            ))}
+
+        {/* Lower / Bottom Bar of the Footer */}
+        <div className="pt-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#666666]">
+          <span>© {currentYear} Neurovia Nexus Pvt. Ltd. All rights reserved.</span>
+          <div className="flex items-center gap-6">
+            <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link to="/cookies" className="hover:text-white transition-colors">Cookie Policy</Link>
           </div>
-          <p className="mt-8 text-base text-gray-400 md:order-1 md:mt-0">
-            &copy; {new Date().getFullYear()} Neurovia. All rights reserved.
-          </p>
         </div>
       </div>
     </footer>
   );
-} 
+}

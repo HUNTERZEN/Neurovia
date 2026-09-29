@@ -74,10 +74,9 @@ export function VideoSolutions() {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#080808] text-[#e8e8e8]">
       {/* Hero Section */}
       <div className="relative pt-24 pb-12">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 via-black to-blue-900/10" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -85,11 +84,12 @@ export function VideoSolutions() {
             transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <h1 className="text-4xl sm:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-500 via-purple-400 to-blue-500 bg-clip-text text-transparent">
-              Video Solutions Library
+            <span className="nv-section-label">Video Library</span>
+            <h1 className="font-['Syne'] text-3xl sm:text-5xl font-extrabold text-white mb-3">
+              Watch us <em className="italic text-[#888888]">fix it live.</em>
             </h1>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              Access our curated collection of expert solutions for common tech problems
+            <p className="text-sm sm:text-base text-[#888888] max-w-2xl mx-auto">
+              Access our curated collection of expert solutions, diagnostics, and repairs.
             </p>
           </motion.div>
         </div>
@@ -98,16 +98,16 @@ export function VideoSolutions() {
       {/* Categories and Videos */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
         {/* Category Tabs */}
-        <div className="flex space-x-4 mb-8 overflow-x-auto pb-4">
+        <div className="flex space-x-2 mb-8 overflow-x-auto pb-4">
           {categories.map((category) => (
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
               className={clsx(
-                'px-6 py-3 rounded-full text-sm font-medium whitespace-nowrap transition-colors',
+                'px-5 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border',
                 selectedCategory === category.id
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  ? 'bg-white text-black border-white'
+                  : 'bg-transparent text-[#888888] border-white/10 hover:border-white/30 hover:text-white'
               )}
             >
               {category.title}

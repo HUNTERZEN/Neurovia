@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, MessageSquare } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, CheckCircle2 } from 'lucide-react';
 
 interface ContactFormData {
   name: string;
   email: string;
+  phone: string;
   subject: string;
   message: string;
 }
@@ -13,6 +13,7 @@ export default function Contact() {
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
+    phone: '',
     subject: '',
     message: ''
   });
@@ -32,196 +33,220 @@ export default function Contact() {
     setSending(true);
 
     // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 1200));
 
     setSending(false);
     setSent(true);
 
-    // Reset form after 3 seconds
     setTimeout(() => {
       setSent(false);
       setFormData({
         name: '',
         email: '',
+        phone: '',
         subject: '',
         message: ''
       });
-    }, 3000);
+    }, 4000);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 py-20 sm:py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background gradient orbs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -left-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-purple-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div>
-
-      <div className="max-w-7xl mx-auto relative">
-        {/* Header Section */}
-        <div className="text-center mb-10 sm:mb-12">
-          <motion.h1
-            className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 mb-4"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            Get in Touch
-          </motion.h1>
-          <motion.p
-            className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto px-4"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            Have questions or need assistance? We're here to help! Choose your preferred way to reach us.
-          </motion.p>
+    <div className="bg-[#080808] text-[#e8e8e8] min-h-screen">
+      {/* ═══ PAGE HERO ═══ */}
+      <section className="page-hero">
+        <div className="max-w-[1160px] mx-auto px-6 lg:px-8">
+          <span className="nv-section-label">Contact</span>
+          <h1 className="page-title">
+            Let's talk<br /><em>tech.</em>
+          </h1>
+          <p className="page-sub">
+            Have a question, need a quote, or just want to say hello? We usually respond within a few hours.
+          </p>
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-          {/* Contact Information */}
-          <motion.div
-            className="space-y-6"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <div className="bg-gray-800/50 backdrop-blur-lg rounded-lg p-5 sm:p-6 shadow-lg border border-purple-500/20">
-              <h2 className="text-xl sm:text-2xl font-semibold text-white mb-6">Contact Information</h2>
-              <div className="space-y-4 text-sm sm:text-base">
-                <div className="flex items-center space-x-4 text-gray-300">
-                  <Mail className="w-5 h-5 text-purple-400 shrink-0" />
-                  <span className="truncate">neurovianexusaitechnician@gmail.com</span>
+      {/* ═══ CONTACT DETAILS & FORM ═══ */}
+      <section className="py-20">
+        <div className="max-w-[1160px] mx-auto px-6 lg:px-8">
+          <div className="contact-grid">
+            {/* Left Info Column */}
+            <div className="contact-info">
+              <h2>
+                Get in<br /><em className="italic text-[#888888]">touch.</em>
+              </h2>
+
+              <div className="contact-detail">
+                <div className="cd-item">
+                  <span className="cd-label">Email</span>
+                  <a href="mailto:support@neurovia.site" className="cd-value hover:text-white transition-colors">
+                    support@neurovia.site
+                  </a>
                 </div>
-                <div className="flex items-center space-x-4 text-gray-300">
-                  <Phone className="w-5 h-5 text-purple-400 shrink-0" />
-                  <span>+91 8822096485</span>
+
+                <div className="cd-item">
+                  <span className="cd-label">Phone & WhatsApp</span>
+                  <a href="tel:+918822096485" className="cd-value hover:text-white transition-colors">
+                    +91 88220 96485
+                  </a>
                 </div>
-                <div className="flex items-start space-x-4 text-gray-300">
-                  <MapPin className="w-5 h-5 text-purple-400 shrink-0 mt-0.5" />
-                  <span>purunigudam, nagaon, assam</span>
+
+                <div className="cd-item">
+                  <span className="cd-label">Emergency Support</span>
+                  <a href="tel:+918822096485" className="cd-value hover:text-white transition-colors">
+                    +91 88220 96485
+                  </a>
                 </div>
-                <div className="flex items-center space-x-4 text-gray-300">
-                  <MessageSquare className="w-5 h-5 text-purple-400 shrink-0" />
-                  <span>Live chat available 24/7</span>
+
+                <div className="cd-item">
+                  <span className="cd-label">Office</span>
+                  <span className="text-sm text-[#888888] leading-relaxed">
+                    Guwahati, Assam<br />India — 781001
+                  </span>
+                </div>
+
+                <div className="cd-item">
+                  <span className="cd-label">Business Hours</span>
+                  <span className="text-sm text-[#888888]">
+                    Mon – Sat, 9:00 AM – 7:00 PM IST
+                  </span>
+                </div>
+              </div>
+
+              {/* Social Channels */}
+              <div className="mt-12 pt-8 border-t border-white/[0.08]">
+                <p className="text-xs uppercase tracking-widest text-[#888888] font-semibold mb-4">
+                  Follow us
+                </p>
+                <div className="flex gap-3">
+                  <a
+                    href="https://www.linkedin.com/company/neurovia-nexus-pvt-ltd/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-sm font-bold text-[#888888] hover:text-white hover:border-white/30 transition-all"
+                  >
+                    in
+                  </a>
+                  <a
+                    href="https://x.com/computech08"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-sm font-bold text-[#888888] hover:text-white hover:border-white/30 transition-all"
+                  >
+                    𝕏
+                  </a>
+                  <a
+                    href="https://www.instagram.com/neurovianexus?igsh=MXFmbnNlc2s4eDRzOQ=="
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-sm font-bold text-[#888888] hover:text-white hover:border-white/30 transition-all"
+                  >
+                    ig
+                  </a>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gray-800/50 backdrop-blur-lg rounded-lg p-5 sm:p-6 shadow-lg border border-purple-500/20">
-              <h2 className="text-xl sm:text-2xl font-semibold text-white mb-6">Business Hours</h2>
-              <div className="space-y-2 text-sm sm:text-base text-gray-300">
-                <div className="flex justify-between">
-                  <span>Monday - Friday</span>
-                  <span>9:00 AM - 6:00 PM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Saturday</span>
-                  <span>10:00 AM - 4:00 PM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Sunday</span>
-                  <span>Closed</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+            {/* Right Form Column */}
+            <div className="contact-form">
+              {!sent ? (
+                <form onSubmit={handleSubmit} id="contact-form-inner">
+                  <h3 className="font-['Syne'] text-2xl font-bold text-white mb-6">
+                    Send a message
+                  </h3>
 
-          {/* Contact Form */}
-          <motion.div
-            className="bg-gray-800/50 backdrop-blur-lg rounded-lg p-5 sm:p-6 shadow-lg border border-purple-500/20"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <h2 className="text-xl sm:text-2xl font-semibold text-white mb-6">Send us a Message</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="name" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full bg-gray-700/50 backdrop-blur-sm border border-purple-500/20 rounded-lg px-4 py-2 text-white text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="Your name"
-                  />
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="c-name">Name *</label>
+                      <input
+                        type="text"
+                        id="c-name"
+                        name="name"
+                        required
+                        className="form-input"
+                        placeholder="Your full name"
+                        value={formData.name}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="c-email">Email *</label>
+                      <input
+                        type="email"
+                        id="c-email"
+                        name="email"
+                        required
+                        className="form-input"
+                        placeholder="you@example.com"
+                        value={formData.email}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="c-phone">Phone</label>
+                    <input
+                      type="tel"
+                      id="c-phone"
+                      name="phone"
+                      className="form-input"
+                      placeholder="+91 88220 96485"
+                      value={formData.phone}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="c-subject">Subject *</label>
+                    <input
+                      type="text"
+                      id="c-subject"
+                      name="subject"
+                      required
+                      className="form-input"
+                      placeholder="How can we help?"
+                      value={formData.subject}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="c-message">Message *</label>
+                    <textarea
+                      id="c-message"
+                      name="message"
+                      required
+                      rows={5}
+                      className="form-input"
+                      placeholder="Tell us what's going on..."
+                      value={formData.message}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={sending}
+                    className="btn-primary form-submit"
+                  >
+                    {sending ? 'Sending message...' : 'Send message →'}
+                  </button>
+                </form>
+              ) : (
+                <div className="text-center py-12">
+                  <CheckCircle2 className="w-16 h-16 text-emerald-400 mx-auto mb-4" />
+                  <h3 className="font-['Syne'] text-2xl font-bold text-white mb-2">
+                    Message sent!
+                  </h3>
+                  <p className="text-sm text-[#888888] max-w-sm mx-auto">
+                    We'll get back to you within a few hours. Check your inbox for a confirmation.
+                  </p>
                 </div>
-                <div>
-                  <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full bg-gray-700/50 backdrop-blur-sm border border-purple-500/20 rounded-lg px-4 py-2 text-white text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="your@email.com"
-                  />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-1">
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                  className="w-full bg-gray-700/50 backdrop-blur-sm border border-purple-500/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  placeholder="How can we help?"
-                />
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-1">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={4}
-                  className="w-full bg-gray-700/50 backdrop-blur-sm border border-purple-500/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  placeholder="Your message..."
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={sending || sent}
-                className={`w-full flex items-center justify-center space-x-2 px-6 py-3 rounded-lg text-white font-medium transition-colors ${sent
-                    ? 'bg-green-600'
-                    : sending
-                      ? 'bg-purple-700 cursor-not-allowed'
-                      : 'bg-purple-600 hover:bg-purple-700'
-                  }`}
-              >
-                {sent ? (
-                  'Message Sent!'
-                ) : (
-                  <>
-                    <Send className="w-5 h-5" />
-                    <span>{sending ? 'Sending...' : 'Send Message'}</span>
-                  </>
-                )}
-              </button>
-            </form>
-          </motion.div>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
-} 
+}

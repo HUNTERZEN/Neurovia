@@ -3,28 +3,18 @@ import { Scale } from 'lucide-react';
 
 export function TermsOfService() {
   return (
-    <div className="min-h-screen bg-black">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-black to-black" />
-      </div>
-
-      <div className="relative max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <div className="flex justify-center mb-4">
-            <div className="relative">
-              <div className="absolute -inset-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur opacity-75" />
-              <div className="relative bg-black rounded-full p-3">
-                <Scale className="h-8 w-8 text-white" />
-              </div>
-            </div>
-          </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-4">
-            Terms of Service
+    <div className="min-h-screen bg-[#080808] text-[#e8e8e8]">
+      <section className="page-hero">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+          <span className="nv-section-label">Legal</span>
+          <h1 className="page-title !mt-2 !mb-2">
+            Terms of <em>Service.</em>
           </h1>
-          <p className="text-gray-400">Last updated: {new Date().toLocaleDateString()}</p>
+          <p className="text-sm text-[#888888]">Last updated: {new Date().toLocaleDateString()}</p>
         </div>
+      </section>
 
+      <div className="relative max-w-4xl mx-auto px-6 py-16 lg:px-8">
         <div className="prose prose-invert max-w-none">
           <div className="space-y-8">
             <section>

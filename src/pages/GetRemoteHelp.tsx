@@ -64,12 +64,7 @@ export function GetRemoteHelp() {
   const [selectedExpert, setSelectedExpert] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
-      </div>
-
+    <div className="min-h-screen bg-[#080808] text-[#e8e8e8]">
       {/* Content */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
         <motion.div
@@ -78,15 +73,18 @@ export function GetRemoteHelp() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent sm:text-5xl mb-3 sm:mb-4">
-            Get Remote Technical Support
+          <span className="nv-section-label">Instant Assistance</span>
+          <h1 className="font-['Syne'] text-3xl sm:text-5xl font-extrabold text-white mb-3">
+            Remote <em className="italic text-[#888888]">Support.</em>
           </h1>
-          <p className="text-sm sm:text-xl text-gray-400 max-w-2xl mx-auto px-4">Connect with expert technicians instantly</p>
+          <p className="text-sm sm:text-base text-[#888888] max-w-2xl mx-auto px-4">
+            Connect with expert technicians instantly over encrypted remote sessions. Fast, transparent, no fix no fee.
+          </p>
         </motion.div>
 
         {/* Support Types */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mb-12 sm:mb-16"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12 sm:mb-16"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -97,31 +95,31 @@ export function GetRemoteHelp() {
               layout
               onClick={() => setSelectedType(index)}
               className="relative"
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.01 }}
               transition={{ duration: 0.2 }}
             >
               <div className={`
-                relative bg-gray-900/50 backdrop-blur-sm rounded-xl p-5 sm:p-6 cursor-pointer border border-gray-800 h-full
-                ${selectedType === index ? 'border-purple-500 shadow-lg shadow-purple-500/20' : 'hover:border-purple-500/30'}
+                relative bg-[#141414] rounded-2xl p-5 sm:p-6 cursor-pointer border h-full transition-all
+                ${selectedType === index ? 'border-white shadow-xl bg-[#18181c]' : 'border-white/10 hover:border-white/30'}
               `}>
                 <div className="flex items-center mb-4">
-                  <div className="p-2 sm:p-3 bg-purple-500/20 rounded-lg text-purple-400">
+                  <div className="p-2 sm:p-3 bg-white/10 rounded-xl text-white">
                     {type.icon}
                   </div>
-                  <h3 className="ml-3 text-lg sm:text-xl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                  <h3 className="ml-3 text-lg sm:text-xl font-bold font-['Syne'] text-white">
                     {type.title}
                   </h3>
                 </div>
-                <p className="text-xs sm:text-sm text-gray-400 mb-6 leading-relaxed">{type.description}</p>
+                <p className="text-xs sm:text-sm text-[#888888] mb-6 leading-relaxed">{type.description}</p>
                 <div className="flex justify-between items-center mt-auto">
                   <div className="text-sm sm:text-base">
-                    <span className="text-purple-400 font-semibold">${type.price}</span>
-                    <span className="text-gray-400">/{type.duration}min</span>
+                    <span className="text-white font-bold font-['Syne']">${type.price}</span>
+                    <span className="text-[#888888] text-xs">/{type.duration}min</span>
                   </div>
                   <motion.button
                     className={`
-                      px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-sm font-medium bg-black text-white border
-                      ${selectedType === index ? 'border-purple-500' : 'border-gray-800 hover:border-purple-500/30'}
+                      px-4 py-2 rounded-full text-xs font-semibold transition-all
+                      ${selectedType === index ? 'bg-white text-black font-bold' : 'bg-transparent text-white border border-white/20 hover:border-white/40'}
                     `}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}

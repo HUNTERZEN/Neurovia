@@ -1,141 +1,207 @@
 import React from 'react';
-import { Shield, Target, Users, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function About() {
   const values = [
     {
-      icon: <Shield className="w-6 h-6 text-purple-400" />,
-      title: "Trust & Security",
-      description: "We prioritize your security and privacy in every interaction, ensuring a safe and reliable tech support experience."
+      icon: "⚡",
+      title: "Speed without sacrifice",
+      description: "Fast response doesn't mean rushed work. We respond quickly because your time matters, and we fix properly because your device matters."
     },
     {
-      icon: <Target className="w-6 h-6 text-blue-400" />,
-      title: "Expert Solutions",
-      description: "Our network of verified experts provides precise, efficient solutions tailored to your specific tech needs."
+      icon: "🔍",
+      title: "Radical transparency",
+      description: "No hidden fees. No vague diagnoses. We explain exactly what's wrong, what we're doing, and what it will cost — before we start."
     },
     {
-      icon: <Users className="w-6 h-6 text-purple-400" />,
-      title: "Community Focus",
-      description: "Building a supportive tech community where knowledge is shared and problems are solved together."
+      icon: "🛡️",
+      title: "Trust, earned",
+      description: "Every technician is verified and background-checked. We access your devices only with your explicit permission and document everything."
     },
     {
-      icon: <Zap className="w-6 h-6 text-blue-400" />,
-      title: "Innovation",
-      description: "Constantly evolving our services and solutions to stay ahead of the rapidly changing tech landscape."
+      icon: "🚀",
+      title: "Always improving",
+      description: "We're building NADT because we genuinely believe AI can make support faster and smarter. We invest in the future while delivering today."
+    }
+  ];
+
+  const teamMembers = [
+    {
+      initials: "HG",
+      name: "Himanta Goswami",
+      role: "Co-Founder & VP of Marketing",
+      bg: "linear-gradient(135deg,#1a1a3e,#2d2d60)"
+    },
+    {
+      initials: "KS",
+      name: "Kunal Singha",
+      role: "Co-Founder & VP of Engineering",
+      bg: "linear-gradient(135deg,#1e3a2e,#2d5a3d)"
+    },
+    {
+      initials: "MD",
+      name: "Manos Jyoti Deka",
+      role: "Founder Associate · AI/ML",
+      bg: "linear-gradient(135deg,#1e3a1e,#2d5a2d)"
+    },
+    {
+      initials: "MH",
+      name: "Mehtab Hoque",
+      role: "Chief Product Officer",
+      bg: "linear-gradient(135deg,#3a1e2e,#5a2d4e)"
+    },
+    {
+      initials: "PK",
+      name: "Prantik Kalita",
+      role: "Chief AI Architect",
+      bg: "linear-gradient(135deg,#2e2a1e,#4e462e)"
+    },
+    {
+      initials: "HD",
+      name: "Himangshu Kumar Deka",
+      role: "Chief System Architect",
+      bg: "linear-gradient(135deg,#1e2e3a,#2d4e5a)"
+    },
+    {
+      initials: "FH",
+      name: "Forzina Hoque",
+      role: "Social Media Management",
+      bg: "linear-gradient(135deg,#2e1e3a,#4e2d5a)"
+    },
+    {
+      initials: "YB",
+      name: "Yuvraj Basistha",
+      role: "Business Development Associate",
+      bg: "linear-gradient(135deg,#1e3a1e,#2d5a2d)"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-black pt-16 sm:pt-20">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
-      <div className="absolute top-20 left-10 w-64 sm:w-96 h-64 sm:h-96 bg-purple-500/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-10 w-64 sm:w-96 h-64 sm:h-96 bg-blue-500/20 rounded-full blur-3xl" />
-
-      {/* Hero Section */}
-      <section className="relative py-12 sm:py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                About Neurovia
-              </span>
-            </h1>
-            <p className="text-gray-400 text-sm sm:text-lg max-w-2xl mx-auto px-2">
-              Empowering users with expert tech support and innovative solutions for a seamlessly connected digital world.
-            </p>
-          </div>
+    <div className="bg-[#080808] text-[#e8e8e8] min-h-screen">
+      {/* ═══ PAGE HERO ═══ */}
+      <section className="page-hero">
+        <div className="max-w-[1160px] mx-auto px-6 lg:px-8">
+          <span className="nv-section-label">About us</span>
+          <h1 className="page-title">
+            Built to make tech<br /><em>work for you.</em>
+          </h1>
+          <p className="page-sub">
+            We started Neurovia Nexus because we were tired of watching people lose hours to broken technology and unreliable support.
+          </p>
         </div>
       </section>
 
-      {/* Story Section */}
-      <section className="relative py-10 sm:py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="relative">
-            {/* Card Glow Effect */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-25" />
-            
-            {/* Content Card */}
-            <div className="relative bg-gray-900/80 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-gray-800">
-              <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-6">
-                Our Story
+      {/* ═══ STORY & BIG STATS ═══ */}
+      <section className="py-20 border-b border-white/[0.08]">
+        <div className="max-w-[1160px] mx-auto px-6 lg:px-8">
+          <div className="about-grid">
+            <div className="about-left">
+              <span className="nv-section-label">Our story</span>
+              <h2>
+                We're not just fixing<br /><em>computers.</em>
               </h2>
-              <div className="space-y-4 text-gray-300 text-sm sm:text-base leading-relaxed">
-                <p>
-                  Founded in 2024, Neurovia emerged from a simple yet powerful idea: making expert tech support accessible to everyone. Our founders, experienced in various aspects of technology and customer service, recognized the growing gap between increasingly complex technology and the support available to everyday users.
-                </p>
-                <p>
-                  What started as a small team of passionate tech experts has grown into a comprehensive platform connecting users with verified professionals and trusted repair shops worldwide.
-                </p>
+              <p>
+                Neurovia Nexus was founded in Assam in 2025 with one belief: technology should work for you, not against you. Every customer deserves fast, honest, transparent support — not vague timelines and unclear pricing.
+              </p>
+              <p>
+                We started with remote support, quickly expanded to onsite services, and are now building NADT — our AI-powered autonomous device technician — to be the future of IT support in India.
+              </p>
+              <p>
+                Today, we serve individuals, startups, and enterprises across Assam and beyond, with a team of certified technicians who care as much about your time as their craft.
+              </p>
+            </div>
+
+            <div className="about-right">
+              <div className="stats-block">
+                <div className="big-stat">
+                  <span className="stat-num">20</span>
+                  <span className="stat-plus">+</span>
+                  <p>devices fixed since launch</p>
+                </div>
+                <div className="big-stat mt-10 pt-10 border-t border-white/[0.08]">
+                  <span className="stat-num">10</span>
+                  <span className="stat-plus">+</span>
+                  <p>businesses trust us with their IT</p>
+                </div>
+                <div className="big-stat mt-10 pt-10 border-t border-white/[0.08]">
+                  <span className="stat-num">95</span>
+                  <span className="stat-plus">%</span>
+                  <p>customer satisfaction rate</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="relative py-10 sm:py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-10 sm:mb-12">
-            Our Core Values
+      {/* ═══ CORE VALUES ═══ */}
+      <section className="about-values">
+        <div className="max-w-[1160px] mx-auto px-6 lg:px-8">
+          <span className="nv-section-label">Core values</span>
+          <h2 className="nv-section-title">
+            What we <em>stand for.</em>
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
-            {values.map((value, index) => (
-              <div key={index} className="group relative">
-                {/* Card Glow Effect */}
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-200" />
-                
-                {/* Content */}
-                <div className="relative bg-gray-900/80 backdrop-blur-xl p-5 sm:p-6 rounded-xl border border-gray-800 h-full">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="p-2 bg-gray-800 rounded-lg shrink-0">
-                      {value.icon}
-                    </div>
-                    <h3 className="text-lg sm:text-xl font-semibold text-white">{value.title}</h3>
-                  </div>
-                  <p className="text-xs sm:text-base text-gray-400 leading-relaxed">{value.description}</p>
-                </div>
+
+          <div className="values-grid">
+            {values.map((v, i) => (
+              <div key={i} className="value-card">
+                <div className="value-icon">{v.icon}</div>
+                <h3>{v.title}</h3>
+                <p>{v.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative py-12 sm:py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="relative">
-            {/* Card Glow Effect */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-25" />
-            
-            {/* Content Card */}
-            <div className="relative bg-gray-900/80 backdrop-blur-xl p-6 sm:p-10 rounded-2xl border border-gray-800 text-center">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">Ready to Get Started?</h2>
-              <p className="text-sm sm:text-lg text-gray-400 mb-8 max-w-2xl mx-auto px-2">
-                Join our community of tech experts and users. Get the support you need or share your expertise with others.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Link
-                  to="/signup"
-                  className="relative group w-full sm:w-auto"
+      {/* ═══ THE TEAM ═══ */}
+      <section className="team-section">
+        <div className="max-w-[1160px] mx-auto px-6 lg:px-8">
+          <span className="nv-section-label">The team</span>
+          <h2 className="nv-section-title">
+            The people <em>behind every fix.</em>
+          </h2>
+
+          <div className="team-grid">
+            {teamMembers.map((member, i) => (
+              <div key={i} className="team-card">
+                <div
+                  className="team-avatar"
+                  style={{ background: member.bg, border: '1px solid rgba(255,255,255,0.15)' }}
                 >
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-200" />
-                  <button className="relative w-full px-8 py-3 bg-black rounded-lg text-white font-semibold">
-                    Join Neurovia
-                  </button>
-                </Link>
-                <Link
-                  to="/remote-help"
-                  className="w-full sm:w-auto px-8 py-3 border border-gray-700 hover:border-gray-600 rounded-lg text-gray-300 hover:text-white font-semibold transition-colors text-center"
-                >
-                  Get Help Now
-                </Link>
+                  {member.initials}
+                </div>
+                <h4>{member.name}</h4>
+                <span>{member.role}</span>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ CTA SECTION ═══ */}
+      <section className="py-24 border-t border-white/[0.08]">
+        <div className="max-w-[1160px] mx-auto px-6 lg:px-8">
+          <div className="nv-cta-box text-center">
+            <span className="nv-section-label">Get started</span>
+            <h2 className="font-['Syne'] text-3xl sm:text-5xl font-extrabold text-white mb-4">
+              Your tech problem<br />ends <em className="italic text-[#888888]">today.</em>
+            </h2>
+            <p className="text-[#888888] text-base sm:text-lg max-w-xl mx-auto mb-8">
+              Book a certified technician in minutes. Remote or onsite. No fix, no fee.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <Link to="/remote-help" className="btn-primary btn-large">
+                Book support →
+              </Link>
+              <Link to="/contact" className="btn-ghost">
+                Get in touch
+              </Link>
             </div>
           </div>
         </div>
       </section>
     </div>
   );
-} 
+}
+export default About;
