@@ -16,6 +16,7 @@ import { Members } from './components/Members';
 import { Footer } from './components/Footer';
 import { FeedbackSection } from './components/FeedbackSection';
 import { SplashScreen } from './components/SplashScreen';
+import { NeuroviaHome } from './components/NeuroviaHome';
 
 // Individual page imports
 import { About } from './pages/About';
@@ -263,7 +264,7 @@ export default function App() {
                 <Route path="/register-partner" element={<UserProtectedRoute><Navbar /><RegisterPartner /><Footer /></UserProtectedRoute>} />
                 <Route path="/partner/dashboard" element={<UserProtectedRoute><PartnerDashboard /></UserProtectedRoute>} />
                 <Route path="/profile" element={<UserProtectedRoute><Navbar /><ProfilePage user={{ name: user?.username || user?.name || 'User', email: user?.email || '' }} onUpdateProfile={handleUpdateProfile} /><Footer /></UserProtectedRoute>} />
-                <Route path="/" element={<><Navbar /><Hero /><Features /><Founders /><FeedbackSection /><Members /><Footer /></>} />
+                <Route path="/" element={<><Navbar /><NeuroviaHome /><Footer /></>} />
                 <Route path="/about" element={<><Navbar /><About /><Footer /></>} />
                 <Route path="/repair-shops" element={<><Navbar /><RepairShops /><Footer /></>} />
                 <Route path="/remote-help" element={<><Navbar /><GetRemoteHelp /><Footer /></>} />
