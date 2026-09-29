@@ -65,149 +65,133 @@ export function SignIn() {
   };
 
   return (
-    <div className="relative min-h-screen bg-black flex items-center justify-center py-20 overflow-hidden">
-      {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
-
-      {/* Glowing Orbs */}
-      <div className="absolute top-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 left-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
-
+    <div className="min-h-screen bg-[#080808] text-[#e8e8e8] flex items-center justify-center py-24 px-4">
       {/* Main Content */}
-      <div className="relative w-full max-w-md mx-auto px-6">
-        <div className="relative">
-          {/* Card Glow Effect */}
-          <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-25" />
-
-          <div className="relative bg-gray-900/80 backdrop-blur-xl p-8 rounded-2xl border border-gray-800">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
-              <p className="text-gray-400">Sign in to your account</p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-              {error && (
-                <div
-                  className="flex items-center gap-2 text-red-400 bg-red-400/10 p-3 rounded-lg border border-red-400/20"
-                  role="alert"
-                >
-                  <AlertCircle className="w-5 h-5" />
-                  <span className="text-sm">{error}</span>
-                </div>
-              )}
-
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  value={usernameOrEmail}
-                  onChange={(e) => {
-                    setUsernameOrEmail(e.target.value);
-                    setError('');
-                  }}
-                  className="w-full bg-gray-800/50 border border-gray-700 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
-                  placeholder="Username or Email"
-                  disabled={loading}
-                  required
-                  autoComplete="username"
-                />
-              </div>
-
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setError('');
-                  }}
-                  className="w-full bg-gray-800/50 border border-gray-700 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
-                  placeholder="Password"
-                  disabled={loading}
-                  required
-                  autoComplete="current-password"
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-700 bg-gray-800/50 text-purple-500 focus:ring-purple-500 focus:ring-offset-0"
-                  />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-400">
-                    Remember me
-                  </label>
-                </div>
-                <Link
-                  to="/forgot-password"
-                  className="text-sm font-medium text-purple-400 hover:text-purple-300"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="relative w-full group disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl blur opacity-60 group-hover:opacity-100 transition duration-200" />
-                <div className="relative w-full flex items-center justify-center bg-black rounded-xl px-6 py-3 text-white font-semibold">
-                  {loading ? 'Signing In...' : 'Sign In'}
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </div>
-              </button>
-            </form>
-
-            {/* Divider */}
-            <div className="relative my-8">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-700"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-gray-900/80 text-gray-400">Or continue with</span>
-              </div>
-            </div>
-
-            {/* Social Login Buttons */}
-            <div className="grid grid-cols-2 gap-4">
-              <button
-                type="button"
-                className="flex items-center justify-center gap-2 bg-gray-800/50 hover:bg-gray-800 text-white rounded-xl px-6 py-3 font-medium transition-colors"
-                onClick={() => {
-                  window.location.href = `${API_URL}/api/auth/google`;
-                }}
-              >
-                <Chrome className="w-5 h-5" />
-                Google
-              </button>
-
-              <button
-                type="button"
-                className="flex items-center justify-center gap-2 bg-gray-800/50 cursor-not-allowed text-white rounded-xl px-6 py-3 font-medium transition-colors"
-                disabled
-              >
-                <Github className="w-5 h-5" />
-                GitHub
-              </button>
-            </div>
-
-            <p className="mt-8 text-center text-gray-400">
-              Don't have an account?{' '}
-              <Link to="/signup" className="text-purple-400 hover:text-purple-300 font-medium">
-                Sign up
-              </Link>
-            </p>
+      <div className="w-full max-w-md mx-auto">
+        <div className="bg-[#121214] border border-white/[0.08] rounded-3xl p-8 sm:p-10 shadow-2xl">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <span className="nv-section-label">Account</span>
+            <h2 className="font-['Syne'] text-3xl font-bold text-white mb-2">Welcome Back</h2>
+            <p className="text-sm text-[#888888]">Sign in to your Neurovia account</p>
           </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+            {error && (
+              <div
+                className="flex items-center gap-2 text-red-400 bg-red-400/10 p-3 rounded-xl border border-red-400/20"
+                role="alert"
+              >
+                <AlertCircle className="w-5 h-5 shrink-0" />
+                <span className="text-xs">{error}</span>
+              </div>
+            )}
+
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Mail className="h-4 w-4 text-[#888888]" />
+              </div>
+              <input
+                type="text"
+                value={usernameOrEmail}
+                onChange={(e) => {
+                  setUsernameOrEmail(e.target.value);
+                  setError('');
+                }}
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white text-sm placeholder-[#555555] focus:outline-none focus:border-white/30 transition-colors"
+                placeholder="Username or Email"
+                disabled={loading}
+                required
+                autoComplete="username"
+              />
+            </div>
+
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Lock className="h-4 w-4 text-[#888888]" />
+              </div>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError('');
+                }}
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white text-sm placeholder-[#555555] focus:outline-none focus:border-white/30 transition-colors"
+                placeholder="Password"
+                disabled={loading}
+                required
+                autoComplete="current-password"
+              />
+            </div>
+
+            <div className="flex items-center justify-between text-xs">
+              <label htmlFor="remember-me" className="flex items-center text-[#888888] cursor-pointer">
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  className="h-3.5 w-3.5 rounded border-white/20 bg-white/5 text-white accent-white mr-2"
+                />
+                Remember me
+              </label>
+              <Link
+                to="/forgot-password"
+                className="text-[#888888] hover:text-white transition-colors"
+              >
+                Forgot password?
+              </Link>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary !w-full !rounded-xl !py-3.5 !text-sm flex items-center justify-center gap-2 font-bold disabled:opacity-50"
+            >
+              {loading ? 'Signing In...' : 'Sign In'}
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="relative my-7">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-white/[0.08]"></div>
+            </div>
+            <div className="relative flex justify-center text-xs">
+              <span className="px-3 bg-[#121214] text-[#666666]">Or continue with</span>
+            </div>
+          </div>
+
+          {/* Social Login Buttons */}
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              className="flex items-center justify-center gap-2 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-white rounded-xl px-4 py-2.5 text-xs font-semibold transition-colors"
+              onClick={() => {
+                window.location.href = `${API_URL}/api/auth/google`;
+              }}
+            >
+              <Chrome className="w-4 h-4" />
+              Google
+            </button>
+
+            <button
+              type="button"
+              className="flex items-center justify-center gap-2 bg-white/[0.02] border border-white/5 text-[#555555] cursor-not-allowed rounded-xl px-4 py-2.5 text-xs font-semibold"
+              disabled
+            >
+              <Github className="w-4 h-4" />
+              GitHub
+            </button>
+          </div>
+
+          <p className="mt-7 text-center text-xs text-[#888888]">
+            Don't have an account?{' '}
+            <Link to="/signup" className="text-white hover:underline font-semibold ml-1">
+              Sign up
+            </Link>
+          </p>
         </div>
       </div>
     </div>

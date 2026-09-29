@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import {
   User, Mail, Phone, MapPin, Calendar, Award, Star,
   ArrowLeft, Save, Edit3, Camera, Wrench
 } from 'lucide-react';
-import API_BASE_URL from "../../config/api"
+import API_BASE_URL from "../../config/api";
 
 interface TechnicianProfile {
   id: number;
@@ -59,7 +58,6 @@ export function TechnicianProfile() {
 
   const handleSave = async () => {
     if (!profile) return;
-    
     setSaving(true);
     try {
       const token = localStorage.getItem('technicianToken');
@@ -74,11 +72,9 @@ export function TechnicianProfile() {
 
       if (response.ok) {
         setEditing(false);
-        // Update localStorage
-        localStorage.setItem('technicianData', JSON.stringify(profile));
       }
     } catch (error) {
-      console.error('Failed to save profile:', error);
+      console.error('Failed to update profile:', error);
     } finally {
       setSaving(false);
     }
@@ -86,8 +82,8 @@ export function TechnicianProfile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white">Loading profile...</div>
+      <div className="min-h-screen bg-[#080808] flex items-center justify-center">
+        <div className="text-[#888888]">Loading profile...</div>
       </div>
     );
   }
@@ -95,43 +91,43 @@ export function TechnicianProfile() {
   if (!profile) return null;
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#080808] text-[#e8e8e8]">
       {/* Header */}
-      <header className="bg-gray-900/50 backdrop-blur-xl border-b border-gray-800">
+      <header className="bg-[#080808]/90 backdrop-blur-xl border-b border-white/[0.08] sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
               onClick={() => navigate('/technician/dashboard')}
-              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+              className="flex items-center gap-2 text-xs font-semibold text-[#888888] hover:text-white transition-colors"
             >
-              <ArrowLeft className="w-5 h-5" />
+              <ArrowLeft className="w-4 h-4" />
               Back to Dashboard
             </button>
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               {editing ? (
                 <div className="flex gap-2">
                   <button
                     onClick={() => setEditing(false)}
-                    className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
+                    className="px-4 py-2 text-xs font-semibold text-[#888888] hover:text-white transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                    className="btn-primary !px-4 !py-2 !text-xs flex items-center gap-2 font-bold disabled:opacity-50"
                   >
-                    <Save className="w-4 h-4" />
+                    <Save className="w-3.5 h-3.5" />
                     {saving ? 'Saving...' : 'Save'}
                   </button>
                 </div>
               ) : (
                 <button
                   onClick={() => setEditing(true)}
-                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+                  className="btn-primary !px-4 !py-2 !text-xs flex items-center gap-2 font-bold"
                 >
-                  <Edit3 className="w-4 h-4" />
+                  <Edit3 className="w-3.5 h-3.5" />
                   Edit Profile
                 </button>
               )}
@@ -142,16 +138,12 @@ export function TechnicianProfile() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-gray-900/50 backdrop-blur-xl rounded-xl border border-gray-800 overflow-hidden"
-        >
-          {/* Profile Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-cyan-600 p-8">
-            <div className="flex items-center gap-6">
+        <div className="bg-[#141414] rounded-3xl border border-white/[0.08] overflow-hidden">
+          {/* Profile Header Banner */}
+          <div className="bg-[#18181c] p-8 border-b border-white/[0.08]">
+            <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
               <div className="relative">
-                <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center">
+                <div className="w-24 h-24 bg-white/10 rounded-full border border-white/20 flex items-center justify-center overflow-hidden">
                   {profile.avatar ? (
                     <img src={profile.avatar} alt={profile.name} className="w-24 h-24 rounded-full object-cover" />
                   ) : (
@@ -159,8 +151,8 @@ export function TechnicianProfile() {
                   )}
                 </div>
                 {editing && (
-                  <button className="absolute bottom-0 right-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                    <Camera className="w-4 h-4 text-white" />
+                  <button className="absolute bottom-0 right-0 w-8 h-8 bg-white text-[#080808] rounded-full flex items-center justify-center hover:bg-neutral-200 transition-colors">
+                    <Camera className="w-4 h-4" />
                   </button>
                 )}
               </div>
@@ -171,30 +163,30 @@ export function TechnicianProfile() {
                     type="text"
                     value={profile.name}
                     onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                    className="text-2xl font-bold text-white bg-white/20 rounded-lg px-3 py-2 w-full"
+                    className="font-['Syne'] text-2xl font-bold text-white bg-white/[0.05] border border-white/10 rounded-xl px-3 py-2 w-full"
                   />
                 ) : (
-                  <h1 className="text-2xl font-bold text-white">{profile.name}</h1>
+                  <h1 className="font-['Syne'] text-2xl font-bold text-white">{profile.name}</h1>
                 )}
                 
-                <div className="flex items-center gap-4 mt-2">
-                  <div className="flex items-center gap-1">
-                    <Wrench className="w-4 h-4 text-blue-200" />
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 mt-2">
+                  <div className="flex items-center gap-1.5 text-xs text-[#888888]">
+                    <Wrench className="w-3.5 h-3.5 text-white" />
                     {editing ? (
                       <input
                         type="text"
                         value={profile.specialization}
                         onChange={(e) => setProfile({ ...profile, specialization: e.target.value })}
-                        className="text-blue-200 bg-white/20 rounded px-2 py-1"
+                        className="text-white bg-white/[0.05] border border-white/10 rounded px-2 py-1 text-xs"
                       />
                     ) : (
-                      <span className="text-blue-200">{profile.specialization}</span>
+                      <span className="text-white font-medium">{profile.specialization}</span>
                     )}
                   </div>
                   
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                    <span className="text-blue-200">{profile.rating.toFixed(1)}</span>
+                  <div className="flex items-center gap-1 text-xs">
+                    <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                    <span className="text-[#888888] font-semibold">{profile.rating.toFixed(1)} Rating</span>
                   </div>
                 </div>
               </div>
@@ -205,87 +197,87 @@ export function TechnicianProfile() {
           <div className="p-8 space-y-8">
             {/* Contact Information */}
             <div>
-              <h3 className="text-xl font-bold text-white mb-4">Contact Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-gray-400" />
+              <h3 className="font-['Syne'] text-lg font-bold text-white mb-4">Contact Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-center gap-3 bg-white/[0.02] border border-white/[0.06] rounded-xl p-3">
+                  <Mail className="w-4 h-4 text-[#888888] shrink-0" />
                   {editing ? (
                     <input
                       type="email"
                       value={profile.email}
                       onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                      className="flex-1 bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                      className="flex-1 bg-white/[0.05] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white"
                     />
                   ) : (
-                    <span className="text-gray-300">{profile.email}</span>
+                    <span className="text-xs text-[#888888]">{profile.email}</span>
                   )}
                 </div>
                 
-                <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-gray-400" />
+                <div className="flex items-center gap-3 bg-white/[0.02] border border-white/[0.06] rounded-xl p-3">
+                  <Phone className="w-4 h-4 text-[#888888] shrink-0" />
                   {editing ? (
                     <input
                       type="tel"
                       value={profile.phone}
                       onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
-                      className="flex-1 bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                      className="flex-1 bg-white/[0.05] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white"
                     />
                   ) : (
-                    <span className="text-gray-300">{profile.phone}</span>
+                    <span className="text-xs text-[#888888]">{profile.phone}</span>
                   )}
                 </div>
                 
-                <div className="flex items-center gap-3">
-                  <MapPin className="w-5 h-5 text-gray-400" />
+                <div className="flex items-center gap-3 bg-white/[0.02] border border-white/[0.06] rounded-xl p-3">
+                  <MapPin className="w-4 h-4 text-[#888888] shrink-0" />
                   {editing ? (
                     <input
                       type="text"
                       value={profile.location}
                       onChange={(e) => setProfile({ ...profile, location: e.target.value })}
-                      className="flex-1 bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                      className="flex-1 bg-white/[0.05] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white"
                     />
                   ) : (
-                    <span className="text-gray-300">{profile.location}</span>
+                    <span className="text-xs text-[#888888]">{profile.location}</span>
                   )}
                 </div>
                 
-                <div className="flex items-center gap-3">
-                  <Calendar className="w-5 h-5 text-gray-400" />
-                  <span className="text-gray-300">{profile.experience} years experience</span>
+                <div className="flex items-center gap-3 bg-white/[0.02] border border-white/[0.06] rounded-xl p-3">
+                  <Calendar className="w-4 h-4 text-[#888888] shrink-0" />
+                  <span className="text-xs text-[#888888]">{profile.experience} years experience</span>
                 </div>
               </div>
             </div>
 
             {/* Bio */}
             <div>
-              <h3 className="text-xl font-bold text-white mb-4">About</h3>
+              <h3 className="font-['Syne'] text-lg font-bold text-white mb-4">About</h3>
               {editing ? (
                 <textarea
                   value={profile.bio}
                   onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
                   rows={4}
-                  className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2 text-white resize-none"
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl p-3 text-xs text-white resize-none focus:outline-none focus:border-white/20"
                   placeholder="Tell us about yourself..."
                 />
               ) : (
-                <p className="text-gray-300 leading-relaxed">{profile.bio}</p>
+                <p className="text-sm text-[#888888] leading-relaxed">{profile.bio}</p>
               )}
             </div>
 
             {/* Certifications */}
             <div>
-              <h3 className="text-xl font-bold text-white mb-4">Certifications</h3>
-              <div className="flex flex-wrap gap-3">
+              <h3 className="font-['Syne'] text-lg font-bold text-white mb-4">Certifications</h3>
+              <div className="flex flex-wrap gap-2.5">
                 {profile.certifications.map((cert, index) => (
-                  <div key={index} className="flex items-center gap-2 bg-blue-500/20 text-blue-400 px-3 py-2 rounded-lg">
-                    <Award className="w-4 h-4" />
+                  <div key={index} className="flex items-center gap-2 bg-white/[0.04] border border-white/10 text-white px-3 py-1.5 rounded-lg text-xs font-medium">
+                    <Award className="w-3.5 h-3.5 text-white" />
                     <span>{cert}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </main>
     </div>
   );

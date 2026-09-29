@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Lock, User } from 'lucide-react';
+import { Lock, User, ArrowRight, AlertCircle } from 'lucide-react';
 
 export function AdminLogin() {
   const [username, setUsername] = useState('');
@@ -12,7 +11,6 @@ export function AdminLogin() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (username === 'admin' && password === 'admin') {
-      // Store auth state in localStorage
       localStorage.setItem('isAdminAuthenticated', 'true');
       navigate('/admin');
     } else {
@@ -21,109 +19,76 @@ export function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
-      </div>
+    <div className="min-h-screen bg-[#080808] text-[#e8e8e8] flex items-center justify-center py-20 px-4">
+      <div className="w-full max-w-md mx-auto">
+        <div className="bg-[#121214] border border-white/[0.08] rounded-3xl p-8 sm:p-10 shadow-2xl">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-white/5 border border-white/10 rounded-2xl mb-4">
+              <Lock className="w-6 h-6 text-white" />
+            </div>
+            <div><span className="nv-section-label">Restricted Area</span></div>
+            <h2 className="font-['Syne'] text-3xl font-bold text-white mb-2">Admin Portal</h2>
+            <p className="text-sm text-[#888888]">Enter your credentials to access the admin console</p>
+          </div>
 
-      {/* Login Form */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative w-full max-w-md"
-      >
-        <div className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-200" />
-          <div className="relative p-8 bg-gray-900/80 backdrop-blur-xl rounded-xl border border-gray-800">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <div className="flex justify-center mb-4">
-                <div className="relative">
-                  <div className="absolute -inset-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur opacity-60" />
-                  <div className="relative bg-black p-3 rounded-full">
-                    <Lock className="h-8 w-8 text-white" />
-                  </div>
-                </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="flex items-center gap-2 text-red-400 bg-red-400/10 p-3 rounded-xl border border-red-400/20">
+                <AlertCircle className="w-5 h-5 shrink-0" />
+                <span className="text-xs">{error}</span>
               </div>
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                Admin Login
-              </h2>
-              <p className="text-gray-400 mt-2">Enter your credentials to access the admin panel</p>
+            )}
+
+            <div className="space-y-1.5">
+              <label className="text-xs text-[#888888] font-medium block" htmlFor="username">
+                Username
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <User className="h-4 w-4 text-[#888888]" />
+                </span>
+                <input
+                  type="text"
+                  id="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all"
+                  placeholder="Enter admin username"
+                  required
+                />
+              </div>
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center"
-                >
-                  {error}
-                </motion.div>
-              )}
-
-              <div className="space-y-2">
-                <label className="text-gray-400 text-sm" htmlFor="username">
-                  Username
-                </label>
-                <div className="relative group">
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-200" />
-                  <div className="relative flex items-center">
-                    <span className="absolute left-3">
-                      <User className="h-5 w-5 text-gray-500" />
-                    </span>
-                    <input
-                      type="text"
-                      id="username"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="w-full bg-gray-900/80 backdrop-blur-xl text-white pl-10 pr-4 py-3 rounded-lg border border-gray-800 focus:outline-none focus:border-purple-500 transition-colors"
-                      placeholder="Enter username"
-                    />
-                  </div>
-                </div>
+            <div className="space-y-1.5">
+              <label className="text-xs text-[#888888] font-medium block" htmlFor="password">
+                Password
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Lock className="h-4 w-4 text-[#888888]" />
+                </span>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all"
+                  placeholder="Enter admin password"
+                  required
+                />
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <label className="text-gray-400 text-sm" htmlFor="password">
-                  Password
-                </label>
-                <div className="relative group">
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-200" />
-                  <div className="relative flex items-center">
-                    <span className="absolute left-3">
-                      <Lock className="h-5 w-5 text-gray-500" />
-                    </span>
-                    <input
-                      type="password"
-                      id="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full bg-gray-900/80 backdrop-blur-xl text-white pl-10 pr-4 py-3 rounded-lg border border-gray-800 focus:outline-none focus:border-purple-500 transition-colors"
-                      placeholder="Enter password"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full relative group"
-              >
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-200" />
-                <div className="relative px-6 py-3 bg-black rounded-lg text-white font-semibold">
-                  Login to Admin Panel
-                </div>
-              </button>
-            </form>
-          </div>
+            <button
+              type="submit"
+              className="btn-primary !w-full !rounded-xl !py-3.5 !text-sm flex items-center justify-center gap-2 font-bold mt-2"
+            >
+              Access Admin Panel
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
-} 
+}

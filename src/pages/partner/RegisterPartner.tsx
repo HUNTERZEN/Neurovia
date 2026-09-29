@@ -274,42 +274,26 @@ export function RegisterPartner() {
 
   if (isSuccess) {
     return (
-      <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
-        {/* Theme background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-gray-950" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent" />
-        <div className="absolute left-1/4 top-1/4 w-64 h-64 rounded-full bg-purple-500/20 blur-3xl" />
-        <div className="absolute right-1/4 top-1/3 w-64 h-64 rounded-full bg-blue-500/20 blur-3xl" />
-
+      <div className="relative min-h-screen flex items-center justify-center px-4 bg-[#080808] text-[#e8e8e8]">
         <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
+          initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="text-center relative z-10"
+          className="text-center relative z-10 bg-[#121214] border border-white/[0.08] rounded-3xl p-10 max-w-md w-full shadow-2xl"
         >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: 'spring' }}
-            className="w-24 h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6"
-          >
-            <CheckCircle className="w-12 h-12 text-white" />
-          </motion.div>
-          <h2 className="text-3xl font-bold text-white mb-3">Registration Successful!</h2>
-          <p className="text-gray-400 mb-2">Welcome to Neurovia Partner Network</p>
-          <p className="text-gray-500 text-sm">Redirecting to your dashboard...</p>
+          <div className="w-16 h-16 bg-white/10 border border-white/20 rounded-full flex items-center justify-center mx-auto mb-6 text-white">
+            <CheckCircle className="w-8 h-8" />
+          </div>
+          <span className="nv-section-label">Success</span>
+          <h2 className="font-['Syne'] text-2xl font-bold text-white mb-2">Registration Submitted</h2>
+          <p className="text-xs text-[#888888] mb-4">Welcome to the Neurovia Partner Network</p>
+          <p className="text-xs text-[#666666]">Redirecting to your partner portal...</p>
         </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="relative min-h-screen pt-24 pb-16 px-4 overflow-hidden">
-      {/* Theme background — matches website hero */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-gray-950" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent" />
-      <div className="absolute left-1/4 top-1/4 w-64 h-64 rounded-full bg-purple-500/20 blur-3xl animate-pulse" />
-      <div className="absolute right-1/4 top-1/3 w-64 h-64 rounded-full bg-blue-500/20 blur-3xl animate-pulse" />
-
+    <div className="relative min-h-screen pt-28 sm:pt-36 pb-20 px-4 bg-[#080808] text-[#e8e8e8]">
       <div className="relative z-10 max-w-4xl mx-auto">
         {/* Header */}
         <motion.div
@@ -317,19 +301,13 @@ export function RegisterPartner() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full mb-6">
-            <Store className="w-4 h-4 text-purple-400" />
-            <span className="text-purple-400 text-sm font-medium">Partner Program</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Register as a{' '}
-            <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              Partner
-            </span>
+          <span className="nv-section-label">Partner Program</span>
+          <h1 className="font-['Syne'] text-3xl sm:text-5xl font-extrabold text-white mb-3">
+            Register as a <em className="italic text-[#888888]">Partner.</em>
           </h1>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Join our network of verified repair experts. Offer live services, video calls,
-            and grow your business with Neurovia.
+          <p className="text-sm sm:text-base text-[#888888] max-w-2xl mx-auto">
+            Join our network of verified repair experts and local shops. Offer live diagnostics, onsite repair,
+            and grow your tech business with Neurovia.
           </p>
         </motion.div>
 
@@ -345,11 +323,13 @@ export function RegisterPartner() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="bg-gray-900/40 backdrop-blur-sm border border-gray-800/50 rounded-xl p-5 text-center"
+              className="bg-[#141414] border border-white/[0.08] rounded-2xl p-5 text-center"
             >
-              <benefit.icon className="w-8 h-8 text-purple-400 mx-auto mb-3" />
-              <h3 className="text-white font-semibold mb-1">{benefit.title}</h3>
-              <p className="text-gray-500 text-sm">{benefit.desc}</p>
+              <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-3 text-white">
+                <benefit.icon className="w-5 h-5" />
+              </div>
+              <h3 className="font-['Syne'] text-white font-bold text-base mb-1">{benefit.title}</h3>
+              <p className="text-[#888888] text-xs">{benefit.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -364,22 +344,22 @@ export function RegisterPartner() {
             <div key={s.num} className="flex items-center">
               <div className="flex flex-col items-center">
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+                  className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
                     s.num < step
-                      ? 'bg-green-500 text-white'
+                      ? 'bg-white text-black'
                       : s.num === step
-                      ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg shadow-purple-500/25'
-                      : 'bg-gray-800/80 text-gray-500'
+                      ? 'bg-white text-black ring-4 ring-white/20'
+                      : 'bg-[#18181c] border border-white/10 text-[#666666]'
                   }`}
                 >
-                  {s.num < step ? <CheckCircle className="w-5 h-5" /> : s.num}
+                  {s.num < step ? <CheckCircle className="w-4 h-4" /> : s.num}
                 </div>
-                <span className={`text-xs mt-1 ${s.num <= step ? 'text-purple-400' : 'text-gray-600'}`}>
+                <span className={`text-[11px] mt-1 font-semibold ${s.num <= step ? 'text-white' : 'text-[#666666]'}`}>
                   {s.label}
                 </span>
               </div>
               {s.num < 3 && (
-                <div className={`w-16 md:w-24 h-1 mx-2 rounded ${s.num < step ? 'bg-green-500' : 'bg-gray-800'}`} />
+                <div className={`w-12 md:w-20 h-0.5 mx-2 rounded ${s.num < step ? 'bg-white' : 'bg-white/10'}`} />
               )}
             </div>
           ))}
@@ -390,10 +370,10 @@ export function RegisterPartner() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 bg-red-500/10 border border-red-500/20 rounded-xl px-5 py-3 flex items-center gap-3"
+            className="mb-6 bg-rose-500/10 border border-rose-500/20 rounded-xl px-4 py-3 flex items-center gap-3"
           >
-            <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
-            <p className="text-red-400 text-sm">Please fill in all required fields before proceeding.</p>
+            <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+            <p className="text-rose-400 text-xs font-medium">Please fill in all required fields before proceeding.</p>
           </motion.div>
         )}
 
@@ -403,26 +383,26 @@ export function RegisterPartner() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
-          className="bg-gray-900/40 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6 md:p-8"
+          className="bg-[#141414] border border-white/[0.08] rounded-3xl p-6 md:p-8 shadow-2xl"
         >
           {/* Step 1: Basic Info */}
           {step === 1 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                <User className="w-6 h-6 text-purple-400" />
+              <h2 className="font-['Syne'] text-2xl font-bold text-white flex items-center gap-3">
+                <User className="w-5 h-5 text-white" />
                 Basic Information
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">Shop / Business Name <span className="text-red-400">*</span></label>
+                  <label className="block text-xs font-medium text-[#888888] mb-2">Shop / Business Name <span className="text-rose-400">*</span></label>
                   <div className="relative">
-                    <Store className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
+                    <Store className="absolute left-3.5 top-3.5 w-4 h-4 text-[#666666]" />
                     <input
                       type="text"
                       value={formData.shopName}
                       onChange={e => handleChange('shopName', e.target.value)}
-                      className={`w-full bg-gray-800/50 border ${errors.shopName ? 'border-red-500/50' : 'border-gray-700/50'} rounded-lg pl-11 pr-4 py-3 text-white placeholder-gray-500 focus:border-purple-500/50 focus:outline-none transition-colors`}
+                      className={`w-full bg-white/[0.03] border ${errors.shopName ? 'border-rose-500/50' : 'border-white/10'} rounded-xl pl-10 pr-4 py-3 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all`}
                       placeholder="Your shop name"
                     />
                   </div>
@@ -430,14 +410,14 @@ export function RegisterPartner() {
                 </div>
 
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">Owner Name <span className="text-red-400">*</span></label>
+                  <label className="block text-xs font-medium text-[#888888] mb-2">Owner Name <span className="text-rose-400">*</span></label>
                   <div className="relative">
-                    <User className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
+                    <User className="absolute left-3.5 top-3.5 w-4 h-4 text-[#666666]" />
                     <input
                       type="text"
                       value={formData.ownerName}
                       onChange={e => handleChange('ownerName', e.target.value)}
-                      className={`w-full bg-gray-800/50 border ${errors.ownerName ? 'border-red-500/50' : 'border-gray-700/50'} rounded-lg pl-11 pr-4 py-3 text-white placeholder-gray-500 focus:border-purple-500/50 focus:outline-none transition-colors`}
+                      className={`w-full bg-white/[0.03] border ${errors.ownerName ? 'border-rose-500/50' : 'border-white/10'} rounded-xl pl-10 pr-4 py-3 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all`}
                       placeholder="Full name"
                     />
                   </div>
@@ -445,14 +425,14 @@ export function RegisterPartner() {
                 </div>
 
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">Email <span className="text-red-400">*</span></label>
+                  <label className="block text-xs font-medium text-[#888888] mb-2">Email <span className="text-rose-400">*</span></label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
+                    <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-[#666666]" />
                     <input
                       type="email"
                       value={formData.email}
                       onChange={e => handleChange('email', e.target.value)}
-                      className={`w-full bg-gray-800/50 border ${errors.email ? 'border-red-500/50' : 'border-gray-700/50'} rounded-lg pl-11 pr-4 py-3 text-white placeholder-gray-500 focus:border-purple-500/50 focus:outline-none transition-colors`}
+                      className={`w-full bg-white/[0.03] border ${errors.email ? 'border-rose-500/50' : 'border-white/10'} rounded-xl pl-10 pr-4 py-3 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all`}
                       placeholder="your@email.com"
                     />
                   </div>
@@ -460,21 +440,21 @@ export function RegisterPartner() {
                 </div>
 
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">Phone <span className="text-red-400">*</span></label>
+                  <label className="block text-xs font-medium text-[#888888] mb-2">Phone <span className="text-rose-400">*</span></label>
                   <div className="flex gap-2">
                     <select
                       value={formData.countryCode}
                       onChange={e => handleChange('countryCode', e.target.value)}
-                      className="bg-gray-800/50 border border-gray-700/50 rounded-lg px-2 py-3 text-white focus:border-purple-500/50 focus:outline-none transition-colors appearance-none text-sm min-w-[110px]"
+                      className="bg-white/[0.03] border border-white/10 rounded-xl px-2.5 py-3 text-white text-xs focus:outline-none focus:border-white/30 transition-all appearance-none min-w-[100px]"
                     >
                       {COUNTRY_CODES.map(c => (
-                        <option key={c.code} value={c.code} className="bg-gray-900">
+                        <option key={c.code} value={c.code} className="bg-[#121214]">
                           {c.flag} {c.code}
                         </option>
                       ))}
                     </select>
                     <div className="relative flex-1">
-                      <Phone className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
+                      <Phone className="absolute left-3.5 top-3.5 w-4 h-4 text-[#666666]" />
                       <input
                         type="tel"
                         value={formData.phone}
@@ -483,13 +463,13 @@ export function RegisterPartner() {
                           handleChange('phone', val);
                         }}
                         maxLength={10}
-                        className={`w-full bg-gray-800/50 border ${errors.phone ? 'border-red-500/50' : 'border-gray-700/50'} rounded-lg pl-11 pr-4 py-3 text-white placeholder-gray-500 focus:border-purple-500/50 focus:outline-none transition-colors`}
+                        className={`w-full bg-white/[0.03] border ${errors.phone ? 'border-rose-500/50' : 'border-white/10'} rounded-xl pl-10 pr-4 py-3 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all`}
                         placeholder="1234567890"
                       />
                     </div>
                   </div>
                   {formData.phone && (
-                    <p className={`text-xs mt-1 ${formData.phone.length === 10 ? 'text-green-400' : 'text-gray-500'}`}>
+                    <p className={`text-[11px] mt-1 ${formData.phone.length === 10 ? 'text-emerald-400' : 'text-[#666666]'}`}>
                       {formData.phone.length}/10 digits
                     </p>
                   )}
@@ -497,14 +477,14 @@ export function RegisterPartner() {
                 </div>
 
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">Profession <span className="text-red-400">*</span></label>
+                  <label className="block text-xs font-medium text-[#888888] mb-2">Profession <span className="text-rose-400">*</span></label>
                   <div className="relative">
-                    <Briefcase className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
+                    <Briefcase className="absolute left-3.5 top-3.5 w-4 h-4 text-[#666666]" />
                     <input
                       type="text"
                       value={formData.profession}
                       onChange={e => handleChange('profession', e.target.value)}
-                      className={`w-full bg-gray-800/50 border ${errors.profession ? 'border-red-500/50' : 'border-gray-700/50'} rounded-lg pl-11 pr-4 py-3 text-white placeholder-gray-500 focus:border-purple-500/50 focus:outline-none transition-colors`}
+                      className={`w-full bg-white/[0.03] border ${errors.profession ? 'border-rose-500/50' : 'border-white/10'} rounded-xl pl-10 pr-4 py-3 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all`}
                       placeholder="e.g. Electronics Technician"
                     />
                   </div>
@@ -512,17 +492,17 @@ export function RegisterPartner() {
                 </div>
 
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">Experience <span className="text-red-400">*</span></label>
+                  <label className="block text-xs font-medium text-[#888888] mb-2">Experience <span className="text-rose-400">*</span></label>
                   <div className="relative">
-                    <Clock className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
+                    <Clock className="absolute left-3.5 top-3.5 w-4 h-4 text-[#666666]" />
                     <select
                       value={formData.experience}
                       onChange={e => handleChange('experience', e.target.value)}
-                      className={`w-full bg-gray-800/50 border ${errors.experience ? 'border-red-500/50' : 'border-gray-700/50'} rounded-lg pl-11 pr-4 py-3 text-white focus:border-purple-500/50 focus:outline-none transition-colors appearance-none`}
+                      className={`w-full bg-white/[0.03] border ${errors.experience ? 'border-rose-500/50' : 'border-white/10'} rounded-xl pl-10 pr-4 py-3 text-white text-sm focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all appearance-none`}
                     >
-                      <option value="" className="bg-gray-900">Select experience</option>
+                      <option value="" className="bg-[#121214]">Select experience</option>
                       {EXPERIENCE_OPTIONS.map(opt => (
-                        <option key={opt} value={opt} className="bg-gray-900">{opt}</option>
+                        <option key={opt} value={opt} className="bg-[#121214]">{opt}</option>
                       ))}
                     </select>
                   </div>
@@ -531,14 +511,14 @@ export function RegisterPartner() {
               </div>
 
               <div>
-                <label className="block text-sm text-gray-400 mb-2">Address <span className="text-red-400">*</span></label>
+                <label className="block text-xs font-medium text-[#888888] mb-2">Address <span className="text-rose-400">*</span></label>
                 <div className="relative">
-                  <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
+                  <MapPin className="absolute left-3.5 top-3.5 w-4 h-4 text-[#666666]" />
                   <input
                     type="text"
                     value={formData.address}
                     onChange={e => handleChange('address', e.target.value)}
-                    className={`w-full bg-gray-800/50 border ${errors.address ? 'border-red-500/50' : 'border-gray-700/50'} rounded-lg pl-11 pr-4 py-3 text-white placeholder-gray-500 focus:border-purple-500/50 focus:outline-none transition-colors`}
+                    className={`w-full bg-white/[0.03] border ${errors.address ? 'border-rose-500/50' : 'border-white/10'} rounded-xl pl-10 pr-4 py-3 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all`}
                     placeholder="Shop/Office address"
                   />
                 </div>
@@ -547,34 +527,34 @@ export function RegisterPartner() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">City <span className="text-red-400">*</span></label>
+                  <label className="block text-xs font-medium text-[#888888] mb-2">City <span className="text-rose-400">*</span></label>
                   <input
                     type="text"
                     value={formData.city}
                     onChange={e => handleChange('city', e.target.value)}
-                    className={`w-full bg-gray-800/50 border ${errors.city ? 'border-red-500/50' : 'border-gray-700/50'} rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-purple-500/50 focus:outline-none transition-colors`}
+                    className={`w-full bg-white/[0.03] border ${errors.city ? 'border-rose-500/50' : 'border-white/10'} rounded-xl px-4 py-3 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all`}
                     placeholder="City"
                   />
                   <FieldError field="city" />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">State <span className="text-red-400">*</span></label>
+                  <label className="block text-xs font-medium text-[#888888] mb-2">State <span className="text-rose-400">*</span></label>
                   <input
                     type="text"
                     value={formData.state}
                     onChange={e => handleChange('state', e.target.value)}
-                    className={`w-full bg-gray-800/50 border ${errors.state ? 'border-red-500/50' : 'border-gray-700/50'} rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-purple-500/50 focus:outline-none transition-colors`}
+                    className={`w-full bg-white/[0.03] border ${errors.state ? 'border-rose-500/50' : 'border-white/10'} rounded-xl px-4 py-3 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all`}
                     placeholder="State"
                   />
                   <FieldError field="state" />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">ZIP Code</label>
+                  <label className="block text-xs font-medium text-[#888888] mb-2">ZIP Code</label>
                   <input
                     type="text"
                     value={formData.zipCode}
                     onChange={e => handleChange('zipCode', e.target.value)}
-                    className="w-full bg-gray-800/50 border border-gray-700/50 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-purple-500/50 focus:outline-none transition-colors"
+                    className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all"
                     placeholder="ZIP Code"
                   />
                 </div>
@@ -585,101 +565,103 @@ export function RegisterPartner() {
           {/* Step 2: Specializations & Services */}
           {step === 2 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                <Wrench className="w-6 h-6 text-purple-400" />
+              <h2 className="font-['Syne'] text-2xl font-bold text-white flex items-center gap-3">
+                <Wrench className="w-5 h-5 text-white" />
                 Specializations & Services
               </h2>
 
               <div>
-                <label className="block text-sm text-gray-400 mb-3">
-                  Select your specializations <span className="text-red-400">*</span>
-                  <span className="text-gray-600 ml-2">({formData.specializations.length} selected)</span>
+                <label className="block text-xs font-medium text-[#888888] mb-3">
+                  Select your specializations <span className="text-rose-400">*</span>
+                  <span className="text-[#666666] ml-2">({formData.specializations.length} selected)</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
-                  {SPECIALIZATIONS.map(spec => (
-                    <button
-                      key={spec}
-                      type="button"
-                      onClick={() => toggleSpecialization(spec)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                        formData.specializations.includes(spec)
-                          ? 'bg-purple-500/20 border border-purple-500/50 text-purple-300'
-                          : 'bg-gray-800/50 border border-gray-700/50 text-gray-400 hover:border-gray-600'
-                      }`}
-                    >
-                      {formData.specializations.includes(spec) && (
-                        <CheckCircle className="w-3 h-3 inline mr-1" />
-                      )}
-                      {spec}
-                    </button>
-                  ))}
+                  {SPECIALIZATIONS.map(spec => {
+                    const isSelected = formData.specializations.includes(spec);
+                    return (
+                      <button
+                        key={spec}
+                        type="button"
+                        onClick={() => toggleSpecialization(spec)}
+                        className={`px-4 py-2 rounded-full text-xs font-semibold transition-all border ${
+                          isSelected
+                            ? 'bg-white text-black border-white'
+                            : 'bg-white/[0.03] border-white/10 text-[#888888] hover:text-white hover:border-white/30'
+                        }`}
+                      >
+                        {isSelected && <CheckCircle className="w-3.5 h-3.5 inline mr-1.5" />}
+                        {spec}
+                      </button>
+                    );
+                  })}
                 </div>
                 <FieldError field="specializations" />
               </div>
 
               <div>
-                <label className="block text-sm text-gray-400 mb-3">
-                  Services you offer <span className="text-red-400">*</span>
-                  <span className="text-gray-600 ml-2">({formData.servicesOffered.length} selected)</span>
+                <label className="block text-xs font-medium text-[#888888] mb-3">
+                  Services you offer <span className="text-rose-400">*</span>
+                  <span className="text-[#666666] ml-2">({formData.servicesOffered.length} selected)</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
-                  {SERVICES.map(service => (
-                    <button
-                      key={service}
-                      type="button"
-                      onClick={() => toggleService(service)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                        formData.servicesOffered.includes(service)
-                          ? 'bg-blue-500/20 border border-blue-500/50 text-blue-300'
-                          : 'bg-gray-800/50 border border-gray-700/50 text-gray-400 hover:border-gray-600'
-                      }`}
-                    >
-                      {formData.servicesOffered.includes(service) && (
-                        <CheckCircle className="w-3 h-3 inline mr-1" />
-                      )}
-                      {service}
-                    </button>
-                  ))}
+                  {SERVICES.map(service => {
+                    const isSelected = formData.servicesOffered.includes(service);
+                    return (
+                      <button
+                        key={service}
+                        type="button"
+                        onClick={() => toggleService(service)}
+                        className={`px-4 py-2 rounded-full text-xs font-semibold transition-all border ${
+                          isSelected
+                            ? 'bg-white text-black border-white'
+                            : 'bg-white/[0.03] border-white/10 text-[#888888] hover:text-white hover:border-white/30'
+                        }`}
+                      >
+                        {isSelected && <CheckCircle className="w-3.5 h-3.5 inline mr-1.5" />}
+                        {service}
+                      </button>
+                    );
+                  })}
                 </div>
                 <FieldError field="servicesOffered" />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className="flex items-center justify-between bg-gray-800/30 rounded-lg px-5 py-4 border border-gray-700/30">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-center justify-between bg-white/[0.02] rounded-2xl px-5 py-4 border border-white/[0.06]">
                   <div>
-                    <p className="text-white font-medium">Available for Live Video Calls</p>
-                    <p className="text-gray-500 text-sm">Customers can book video sessions with you</p>
+                    <p className="text-white font-medium text-xs">Available for Live Video Calls</p>
+                    <p className="text-[#888888] text-[11px]">Customers can book video sessions with you</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleChange('availableForCalls', !formData.availableForCalls)}
-                    className={`w-12 h-7 rounded-full transition-all relative shrink-0 ${
-                      formData.availableForCalls ? 'bg-purple-500' : 'bg-gray-700'
+                    className={`w-11 h-6 rounded-full transition-all relative shrink-0 ${
+                      formData.availableForCalls ? 'bg-white' : 'bg-white/10'
                     }`}
                   >
                     <div
-                      className={`w-5 h-5 bg-white rounded-full absolute top-1 transition-transform ${
-                        formData.availableForCalls ? 'translate-x-6' : 'translate-x-1'
+                      className={`w-4 h-4 rounded-full absolute top-1 transition-transform ${
+                        formData.availableForCalls ? 'bg-black translate-x-6' : 'bg-white/40 translate-x-1'
                       }`}
                     />
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between bg-gray-800/30 rounded-lg px-5 py-4 border border-gray-700/30">
+                <div className="flex items-center justify-between bg-white/[0.02] rounded-2xl px-5 py-4 border border-white/[0.06]">
                   <div>
-                    <p className="text-white font-medium">Available for Live Service</p>
-                    <p className="text-gray-500 text-sm">Offer real-time remote troubleshooting</p>
+                    <p className="text-white font-medium text-xs">Available for Live Service</p>
+                    <p className="text-[#888888] text-[11px]">Offer real-time remote troubleshooting</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleChange('availableForLiveService', !formData.availableForLiveService)}
-                    className={`w-12 h-7 rounded-full transition-all relative shrink-0 ${
-                      formData.availableForLiveService ? 'bg-purple-500' : 'bg-gray-700'
+                    className={`w-11 h-6 rounded-full transition-all relative shrink-0 ${
+                      formData.availableForLiveService ? 'bg-white' : 'bg-white/10'
                     }`}
                   >
                     <div
-                      className={`w-5 h-5 bg-white rounded-full absolute top-1 transition-transform ${
-                        formData.availableForLiveService ? 'translate-x-6' : 'translate-x-1'
+                      className={`w-4 h-4 rounded-full absolute top-1 transition-transform ${
+                        formData.availableForLiveService ? 'bg-black translate-x-6' : 'bg-white/40 translate-x-1'
                       }`}
                     />
                   </button>
@@ -687,14 +669,14 @@ export function RegisterPartner() {
               </div>
 
               <div>
-                <label className="block text-sm text-gray-400 mb-2">Working Hours <span className="text-red-400">*</span></label>
+                <label className="block text-xs font-medium text-[#888888] mb-2">Working Hours <span className="text-rose-400">*</span></label>
                 <div className="relative">
-                  <Clock className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
+                  <Clock className="absolute left-3.5 top-3.5 w-4 h-4 text-[#666666]" />
                   <input
                     type="text"
                     value={formData.workingHours}
                     onChange={e => handleChange('workingHours', e.target.value)}
-                    className={`w-full bg-gray-800/50 border ${errors.workingHours ? 'border-red-500/50' : 'border-gray-700/50'} rounded-lg pl-11 pr-4 py-3 text-white placeholder-gray-500 focus:border-purple-500/50 focus:outline-none transition-colors`}
+                    className={`w-full bg-white/[0.03] border ${errors.workingHours ? 'border-rose-500/50' : 'border-white/10'} rounded-xl pl-10 pr-4 py-3 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all`}
                     placeholder="e.g. 9:00 AM - 6:00 PM"
                   />
                 </div>
@@ -706,80 +688,80 @@ export function RegisterPartner() {
           {/* Step 3: About & Review */}
           {step === 3 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                <FileText className="w-6 h-6 text-purple-400" />
+              <h2 className="font-['Syne'] text-2xl font-bold text-white flex items-center gap-3">
+                <FileText className="w-5 h-5 text-white" />
                 About Your Business
               </h2>
 
               <div>
-                <label className="block text-sm text-gray-400 mb-2">Description <span className="text-red-400">*</span></label>
+                <label className="block text-xs font-medium text-[#888888] mb-2">Description <span className="text-rose-400">*</span></label>
                 <textarea
                   value={formData.description}
                   onChange={e => handleChange('description', e.target.value)}
                   rows={4}
-                  className={`w-full bg-gray-800/50 border ${errors.description ? 'border-red-500/50' : 'border-gray-700/50'} rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-purple-500/50 focus:outline-none transition-colors resize-none`}
+                  className={`w-full bg-white/[0.03] border ${errors.description ? 'border-rose-500/50' : 'border-white/10'} rounded-xl px-4 py-3 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all resize-none`}
                   placeholder="Tell customers about your expertise, services, and what makes your shop special..."
                 />
                 <FieldError field="description" />
               </div>
 
               <div>
-                <label className="block text-sm text-gray-400 mb-2">Certifications</label>
+                <label className="block text-xs font-medium text-[#888888] mb-2">Certifications</label>
                 <input
                   type="text"
                   value={formData.certifications}
                   onChange={e => handleChange('certifications', e.target.value)}
-                  className="w-full bg-gray-800/50 border border-gray-700/50 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-purple-500/50 focus:outline-none transition-colors"
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all"
                   placeholder="e.g. Apple Certified, CompTIA A+"
                 />
               </div>
 
               <div>
-                <label className="block text-sm text-gray-400 mb-2">Website (optional)</label>
+                <label className="block text-xs font-medium text-[#888888] mb-2">Website (optional)</label>
                 <input
                   type="url"
                   value={formData.website}
                   onChange={e => handleChange('website', e.target.value)}
-                  className="w-full bg-gray-800/50 border border-gray-700/50 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-purple-500/50 focus:outline-none transition-colors"
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all"
                   placeholder="https://yourwebsite.com"
                 />
               </div>
 
               {/* Review Summary */}
-              <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-700/30">
-                <h3 className="text-lg font-semibold text-white mb-4">Registration Summary</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div className="bg-white/[0.02] rounded-2xl p-6 border border-white/[0.06]">
+                <h3 className="font-['Syne'] text-base font-bold text-white mb-4">Registration Summary</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                   <div>
-                    <p className="text-gray-500">Shop Name</p>
-                    <p className="text-white">{formData.shopName || '-'}</p>
+                    <p className="text-[#888888]">Shop Name</p>
+                    <p className="text-white font-semibold">{formData.shopName || '-'}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Owner</p>
-                    <p className="text-white">{formData.ownerName || '-'}</p>
+                    <p className="text-[#888888]">Owner</p>
+                    <p className="text-white font-semibold">{formData.ownerName || '-'}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Profession</p>
-                    <p className="text-white">{formData.profession || '-'}</p>
+                    <p className="text-[#888888]">Profession</p>
+                    <p className="text-white font-semibold">{formData.profession || '-'}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Experience</p>
-                    <p className="text-white">{formData.experience || '-'}</p>
+                    <p className="text-[#888888]">Experience</p>
+                    <p className="text-white font-semibold">{formData.experience || '-'}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Location</p>
-                    <p className="text-white">{formData.city && formData.state ? `${formData.city}, ${formData.state}` : '-'}</p>
+                    <p className="text-[#888888]">Location</p>
+                    <p className="text-white font-semibold">{formData.city && formData.state ? `${formData.city}, ${formData.state}` : '-'}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Specializations</p>
-                    <p className="text-purple-400">{formData.specializations.length} selected</p>
+                    <p className="text-[#888888]">Specializations</p>
+                    <p className="text-white font-semibold">{formData.specializations.length} selected</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Services</p>
-                    <p className="text-blue-400">{formData.servicesOffered.length} selected</p>
+                    <p className="text-[#888888]">Services</p>
+                    <p className="text-white font-semibold">{formData.servicesOffered.length} selected</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Live Calls</p>
-                    <p className={formData.availableForCalls ? 'text-green-400' : 'text-gray-500'}>
+                    <p className="text-[#888888]">Live Calls</p>
+                    <p className={formData.availableForCalls ? 'text-emerald-400 font-semibold' : 'text-[#888888]'}>
                       {formData.availableForCalls ? 'Yes' : 'No'}
                     </p>
                   </div>
@@ -789,12 +771,12 @@ export function RegisterPartner() {
           )}
 
           {/* Navigation Buttons */}
-          <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-800/50">
+          <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/[0.08]">
             {step > 1 ? (
               <button
                 type="button"
                 onClick={prevStep}
-                className="px-6 py-3 text-gray-400 hover:text-white transition-colors"
+                className="px-6 py-2.5 text-xs font-semibold text-[#888888] hover:text-white transition-colors"
               >
                 ← Back
               </button>
@@ -806,7 +788,7 @@ export function RegisterPartner() {
               <button
                 type="button"
                 onClick={nextStep}
-                className="px-8 py-3 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-medium rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2"
+                className="btn-primary !px-7 !py-3 !text-xs font-bold flex items-center gap-2"
               >
                 Next <ArrowRight className="w-4 h-4" />
               </button>
@@ -815,11 +797,11 @@ export function RegisterPartner() {
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-medium rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2 disabled:opacity-50"
+                className="btn-primary !px-7 !py-3 !text-xs font-bold flex items-center gap-2 disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-3.5 h-3.5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
                     Submitting...
                   </>
                 ) : (

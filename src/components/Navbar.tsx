@@ -267,33 +267,33 @@ export function Navbar() {
             </Link>
 
             {/* Mobile Bottom Section */}
-            <div className="pt-8 border-t border-gray-800 w-full max-w-xs mx-auto">
+            <div className="pt-8 border-t border-white/[0.08] w-full max-w-xs mx-auto">
               {isAuthenticated ? (
                 <div className="flex flex-col items-center space-y-4">
                   <Link
                     to="/profile"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center space-x-3 text-gray-300"
+                    className="flex items-center space-x-3 text-white"
                   >
-                    <User className="w-5 h-5 text-purple-400" />
-                    <span className="font-medium">{user?.username || 'Profile'}</span>
+                    <User className="w-5 h-5 text-white" />
+                    <span className="font-semibold text-sm">{user?.username || 'Profile'}</span>
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center space-x-2 px-6 py-3 bg-white/5 rounded-xl text-red-400 hover:text-red-300 transition-colors w-full justify-center"
+                    className="flex items-center space-x-2 px-6 py-2.5 bg-white/5 rounded-xl text-rose-400 hover:text-rose-300 transition-colors w-full justify-center text-xs font-semibold"
                   >
-                    <LogOut className="w-5 h-5" />
+                    <LogOut className="w-4 h-4" />
                     <span>Sign Out</span>
                   </button>
                 </div>
               ) : (
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3">
                   <Link
                     to="/signup"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl text-center text-white font-semibold"
+                    className="btn-primary !w-full !py-3.5 !rounded-full !text-xs text-center font-bold"
                   >
-                    Get Started
+                    Get Started →
                   </Link>
                 </div>
               )}

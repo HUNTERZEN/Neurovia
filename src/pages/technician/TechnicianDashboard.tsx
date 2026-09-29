@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import {
-  User, Settings, LogOut, Calendar, Clock, CheckCircle, 
+  User, Settings, LogOut, Clock, CheckCircle, 
   AlertTriangle, Users, Star, MessageSquare, Phone,
   Monitor, Wrench, Award
 } from 'lucide-react';
@@ -75,8 +74,8 @@ export function TechnicianDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white">Loading dashboard...</div>
+      <div className="min-h-screen bg-[#080808] flex items-center justify-center">
+        <div className="text-[#888888]">Loading dashboard...</div>
       </div>
     );
   }
@@ -86,33 +85,34 @@ export function TechnicianDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#080808] text-[#e8e8e8]">
       {/* Header */}
-      <header className="bg-gray-900/50 backdrop-blur-xl border-b border-gray-800">
+      <header className="bg-[#080808]/90 backdrop-blur-xl border-b border-white/[0.08] sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
-                <Wrench className="w-6 h-6 text-white" />
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center">
+                <Wrench className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white">Neurovia Technician Portal</h1>
-                <p className="text-gray-400 text-sm">Welcome back, {technician.name}</p>
+                <h1 className="font-['Syne'] text-lg font-bold text-white leading-tight">Neurovia Technician Portal</h1>
+                <p className="text-[#888888] text-xs">Welcome back, {technician.name}</p>
               </div>
             </div>
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => navigate('/technician/profile')}
-                className="p-2 text-gray-400 hover:text-white transition-colors"
+                className="p-2 text-[#888888] hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                title="Profile Settings"
               >
-                <Settings className="w-5 h-5" />
+                <Settings className="w-4 h-4" />
               </button>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
+                className="flex items-center gap-2 bg-white/5 hover:bg-red-500/20 text-[#888888] hover:text-red-400 border border-white/10 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-colors"
               >
-                <LogOut className="w-4 h-4" />
+                <LogOut className="w-3.5 h-3.5" />
                 Sign Out
               </button>
             </div>
@@ -123,147 +123,122 @@ export function TechnicianDashboard() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-gray-900/50 backdrop-blur-xl rounded-xl p-6 border border-gray-800"
-          >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="bg-[#141414] rounded-2xl p-5 border border-white/[0.08]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">Total Tickets</p>
-                <p className="text-2xl font-bold text-white">{technician.totalTickets}</p>
+                <p className="text-[#888888] text-xs uppercase tracking-wider font-medium">Total Tickets</p>
+                <p className="font-['Syne'] text-3xl font-bold text-white mt-1">{technician.totalTickets}</p>
               </div>
-              <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                <Monitor className="w-6 h-6 text-blue-400" />
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-gray-900/50 backdrop-blur-xl rounded-xl p-6 border border-gray-800"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-400 text-sm">Resolved</p>
-                <p className="text-2xl font-bold text-green-400">{technician.resolvedTickets}</p>
-              </div>
-              <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
-                <CheckCircle className="w-6 h-6 text-green-400" />
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-gray-900/50 backdrop-blur-xl rounded-xl p-6 border border-gray-800"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-400 text-sm">Active</p>
-                <p className="text-2xl font-bold text-yellow-400">{technician.activeTickets}</p>
-              </div>
-              <div className="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center">
-                <Clock className="w-6 h-6 text-yellow-400" />
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-gray-900/50 backdrop-blur-xl rounded-xl p-6 border border-gray-800"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-400 text-sm">Rating</p>
-                <div className="flex items-center gap-2">
-                  <p className="text-2xl font-bold text-purple-400">{technician.rating}</p>
-                  <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                </div>
-              </div>
-              <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                <Award className="w-6 h-6 text-purple-400" />
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white p-6 rounded-xl transition-all transform hover:scale-105"
-          >
-            <Phone className="w-8 h-8 mb-4" />
-            <h3 className="text-lg font-bold mb-2">Start Remote Session</h3>
-            <p className="text-blue-100">Connect with customers instantly</p>
-          </motion.button>
-
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white p-6 rounded-xl transition-all transform hover:scale-105"
-          >
-            <Users className="w-8 h-8 mb-4" />
-            <h3 className="text-lg font-bold mb-2">View Tickets</h3>
-            <p className="text-green-100">Manage support requests</p>
-          </motion.button>
-
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            onClick={() => navigate('/technician/profile')}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white p-6 rounded-xl transition-all transform hover:scale-105"
-          >
-            <User className="w-8 h-8 mb-4" />
-            <h3 className="text-lg font-bold mb-2">My Profile</h3>
-            <p className="text-purple-100">Update profile information</p>
-          </motion.button>
-        </div>
-
-        {/* Recent Activity */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="bg-gray-900/50 backdrop-blur-xl rounded-xl p-6 border border-gray-800"
-        >
-          <h3 className="text-xl font-bold text-white mb-6">Recent Activity</h3>
-          <div className="space-y-4">
-            <div className="flex items-center gap-4 p-4 bg-gray-800/50 rounded-lg">
-              <CheckCircle className="w-5 h-5 text-green-400" />
-              <div>
-                <p className="text-white">Resolved ticket #1234</p>
-                <p className="text-gray-400 text-sm">2 hours ago</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 p-4 bg-gray-800/50 rounded-lg">
-              <MessageSquare className="w-5 h-5 text-blue-400" />
-              <div>
-                <p className="text-white">Customer feedback received</p>
-                <p className="text-gray-400 text-sm">4 hours ago</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 p-4 bg-gray-800/50 rounded-lg">
-              <AlertTriangle className="w-5 h-5 text-yellow-400" />
-              <div>
-                <p className="text-white">New urgent ticket assigned</p>
-                <p className="text-gray-400 text-sm">6 hours ago</p>
+              <div className="w-11 h-11 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center">
+                <Monitor className="w-5 h-5 text-white" />
               </div>
             </div>
           </div>
-        </motion.div>
+
+          <div className="bg-[#141414] rounded-2xl p-5 border border-white/[0.08]">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[#888888] text-xs uppercase tracking-wider font-medium">Resolved</p>
+                <p className="font-['Syne'] text-3xl font-bold text-white mt-1">{technician.resolvedTickets}</p>
+              </div>
+              <div className="w-11 h-11 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center">
+                <CheckCircle className="w-5 h-5 text-emerald-400" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-[#141414] rounded-2xl p-5 border border-white/[0.08]">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[#888888] text-xs uppercase tracking-wider font-medium">Active</p>
+                <p className="font-['Syne'] text-3xl font-bold text-white mt-1">{technician.activeTickets}</p>
+              </div>
+              <div className="w-11 h-11 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center justify-center">
+                <Clock className="w-5 h-5 text-amber-400" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-[#141414] rounded-2xl p-5 border border-white/[0.08]">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[#888888] text-xs uppercase tracking-wider font-medium">Rating</p>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <p className="font-['Syne'] text-3xl font-bold text-white">{technician.rating}</p>
+                  <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                </div>
+              </div>
+              <div className="w-11 h-11 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center">
+                <Award className="w-5 h-5 text-white" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <button
+            onClick={() => navigate('/remote-help')}
+            className="bg-[#141414] hover:bg-[#1a1a1a] border border-white/[0.08] hover:border-white/20 p-6 rounded-2xl transition-all text-left group"
+          >
+            <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center mb-4 group-hover:bg-white group-hover:text-black text-white transition-colors">
+              <Phone className="w-5 h-5" />
+            </div>
+            <h3 className="font-['Syne'] text-base font-bold text-white mb-1">Start Remote Session</h3>
+            <p className="text-xs text-[#888888]">Connect with customers for instant diagnostic sessions</p>
+          </button>
+
+          <button
+            onClick={() => navigate('/repair-shops')}
+            className="bg-[#141414] hover:bg-[#1a1a1a] border border-white/[0.08] hover:border-white/20 p-6 rounded-2xl transition-all text-left group"
+          >
+            <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center mb-4 group-hover:bg-white group-hover:text-black text-white transition-colors">
+              <Users className="w-5 h-5" />
+            </div>
+            <h3 className="font-['Syne'] text-base font-bold text-white mb-1">View Tickets</h3>
+            <p className="text-xs text-[#888888]">Manage client support and repair requests</p>
+          </button>
+
+          <button
+            onClick={() => navigate('/technician/profile')}
+            className="bg-[#141414] hover:bg-[#1a1a1a] border border-white/[0.08] hover:border-white/20 p-6 rounded-2xl transition-all text-left group"
+          >
+            <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center mb-4 group-hover:bg-white group-hover:text-black text-white transition-colors">
+              <User className="w-5 h-5" />
+            </div>
+            <h3 className="font-['Syne'] text-base font-bold text-white mb-1">My Profile</h3>
+            <p className="text-xs text-[#888888]">Update credentials, certifications, and availability</p>
+          </button>
+        </div>
+
+        {/* Recent Activity */}
+        <div className="bg-[#141414] rounded-2xl p-6 border border-white/[0.08]">
+          <h3 className="font-['Syne'] text-base font-bold text-white mb-5">Recent Activity</h3>
+          <div className="space-y-3">
+            <div className="flex items-center gap-3.5 p-3.5 bg-white/[0.02] border border-white/[0.06] rounded-xl">
+              <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+              <div>
+                <p className="text-xs font-semibold text-white">Resolved ticket #1234</p>
+                <p className="text-[11px] text-[#888888]">2 hours ago</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3.5 p-3.5 bg-white/[0.02] border border-white/[0.06] rounded-xl">
+              <MessageSquare className="w-4 h-4 text-white shrink-0" />
+              <div>
+                <p className="text-xs font-semibold text-white">Customer feedback received</p>
+                <p className="text-[11px] text-[#888888]">4 hours ago</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3.5 p-3.5 bg-white/[0.02] border border-white/[0.06] rounded-xl">
+              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+              <div>
+                <p className="text-xs font-semibold text-white">New urgent ticket assigned</p>
+                <p className="text-[11px] text-[#888888]">6 hours ago</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   );

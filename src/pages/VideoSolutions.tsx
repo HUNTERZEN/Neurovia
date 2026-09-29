@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Play, Lock, Check } from 'lucide-react';
+import { Play, Lock, Check, X } from 'lucide-react';
 import clsx from 'clsx';
 
 interface VideoCategory {
@@ -76,24 +76,17 @@ export function VideoSolutions() {
   return (
     <div className="min-h-screen bg-[#080808] text-[#e8e8e8]">
       {/* Hero Section */}
-      <div className="relative pt-24 pb-12">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
-            <span className="nv-section-label">Video Library</span>
-            <h1 className="font-['Syne'] text-3xl sm:text-5xl font-extrabold text-white mb-3">
-              Watch us <em className="italic text-[#888888]">fix it live.</em>
-            </h1>
-            <p className="text-sm sm:text-base text-[#888888] max-w-2xl mx-auto">
-              Access our curated collection of expert solutions, diagnostics, and repairs.
-            </p>
-          </motion.div>
+      <section className="page-hero">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+          <span className="nv-section-label">Video Library</span>
+          <h1 className="page-title !mt-2 !mb-3">
+            Watch us <em>fix it live.</em>
+          </h1>
+          <p className="page-subtitle max-w-2xl mx-auto">
+            Access our curated collection of expert walkthroughs, diagnostics, and repairs.
+          </p>
         </div>
-      </div>
+      </section>
 
       {/* Categories and Videos */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
@@ -125,28 +118,30 @@ export function VideoSolutions() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
-                className="bg-gray-800 rounded-lg overflow-hidden cursor-pointer group"
+                className="bg-[#141414] border border-white/[0.08] hover:border-white/20 rounded-2xl overflow-hidden cursor-pointer group transition-all"
                 onClick={() => handleVideoClick(video.isPremium)}
               >
-                <div className="relative aspect-video bg-gray-900">
+                <div className="relative aspect-video bg-[#18181c]">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    {video.isPremium ? (
-                      <Lock className="w-12 h-12 text-purple-400 opacity-70 group-hover:opacity-100 transition-opacity" />
-                    ) : (
-                      <Play className="w-12 h-12 text-purple-400 opacity-70 group-hover:opacity-100 transition-opacity" />
-                    )}
+                    <div className="w-14 h-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-white group-hover:text-[#080808] text-white transition-all">
+                      {video.isPremium ? (
+                        <Lock className="w-6 h-6" />
+                      ) : (
+                        <Play className="w-6 h-6 ml-0.5" />
+                      )}
+                    </div>
                   </div>
                 </div>
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-lg font-medium text-white">{video.title}</h3>
+                <div className="p-5">
+                  <div className="flex items-center justify-between gap-3 mb-2">
+                    <h3 className="font-['Syne'] text-base font-bold text-white line-clamp-1">{video.title}</h3>
                     {video.isPremium && (
-                      <span className="px-2 py-1 text-xs font-medium text-purple-400 bg-purple-400/10 rounded">
+                      <span className="px-2.5 py-0.5 text-[10px] font-bold text-white bg-white/10 border border-white/15 rounded-full uppercase tracking-wider">
                         Premium
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-400">{video.duration}</p>
+                  <p className="text-xs text-[#888888]">{video.duration}</p>
                 </div>
               </motion.div>
             ))}
@@ -155,39 +150,49 @@ export function VideoSolutions() {
 
       {/* Premium Modal */}
       {showPremiumModal && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-gray-800 rounded-lg p-6 max-w-md w-full"
+            className="bg-[#121214] border border-white/[0.1] rounded-3xl p-8 max-w-md w-full shadow-2xl relative"
           >
-            <h3 className="text-2xl font-bold text-white mb-4">
+            <button
+              onClick={() => setShowPremiumModal(false)}
+              className="absolute top-5 right-5 text-[#888888] hover:text-white p-1 rounded-lg hover:bg-white/5 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <span className="nv-section-label">Unlimited Access</span>
+            <h3 className="font-['Syne'] text-2xl font-bold text-white mb-2">
               Unlock Premium Content
             </h3>
-            <p className="text-gray-400 mb-6">
-              Get unlimited access to our premium video solutions and expert content.
+            <p className="text-xs text-[#888888] mb-6">
+              Get unlimited access to our entire catalog of deep-dive repair sessions and masterclass diagnostics.
             </p>
-            <div className="space-y-4 mb-6">
-              <div className="flex items-start">
-                <Check className="w-5 h-5 text-purple-400 mt-0.5 mr-3" />
-                <p className="text-gray-300">Access to all premium video solutions</p>
+
+            <div className="space-y-3 mb-6">
+              <div className="flex items-start gap-3">
+                <Check className="w-4 h-4 text-white mt-0.5 shrink-0" />
+                <p className="text-xs text-[#e8e8e8]">Access to all 100+ premium video solutions</p>
               </div>
-              <div className="flex items-start">
-                <Check className="w-5 h-5 text-purple-400 mt-0.5 mr-3" />
-                <p className="text-gray-300">Downloadable resources and guides</p>
+              <div className="flex items-start gap-3">
+                <Check className="w-4 h-4 text-white mt-0.5 shrink-0" />
+                <p className="text-xs text-[#e8e8e8]">Downloadable schematics and repair guides</p>
               </div>
-              <div className="flex items-start">
-                <Check className="w-5 h-5 text-purple-400 mt-0.5 mr-3" />
-                <p className="text-gray-300">Priority support from our experts</p>
+              <div className="flex items-start gap-3">
+                <Check className="w-4 h-4 text-white mt-0.5 shrink-0" />
+                <p className="text-xs text-[#e8e8e8]">Priority 1-on-1 technician assistance</p>
               </div>
             </div>
+
             <div className="flex flex-col space-y-3">
-              <button className="w-full py-3 px-4 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors">
-                Subscribe Now - ₹149/month
+              <button className="btn-primary !w-full !rounded-xl !py-3.5 !text-xs font-bold">
+                Subscribe Now — ₹149/month
               </button>
               <button
                 onClick={() => setShowPremiumModal(false)}
-                className="w-full py-3 px-4 bg-gray-700 text-gray-300 rounded-lg font-medium hover:bg-gray-600 transition-colors"
+                className="w-full py-2.5 text-xs text-[#888888] hover:text-white transition-colors"
               >
                 Maybe Later
               </button>
@@ -197,4 +202,4 @@ export function VideoSolutions() {
       )}
     </div>
   );
-} 
+}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import {
   Users,
   Store,
@@ -10,21 +9,11 @@ import {
   Activity
 } from 'lucide-react';
 
-// Mock data for demonstration
-type StatColor = "purple" | "blue" | "green" | "yellow";
-type Stat = {
-  name: string;
-  value: string;
-  change: string;
-  icon: React.ElementType;
-  color: StatColor;
-};
-
-const stats: Stat[] = [
-  { name: 'Total Users', value: '2,543', change: '+12.5%', icon: Users, color: 'purple' },
-  { name: 'Active Shops', value: '185', change: '+5.2%', icon: Store, color: 'blue' },
-  { name: 'Support Tickets', value: '42', change: '-8.1%', icon: MessageSquare, color: 'green' },
-  { name: 'Revenue', value: '$12,426', change: '+15.3%', icon: DollarSign, color: 'yellow' },
+const stats = [
+  { name: 'Total Users', value: '2,543', change: '+12.5%', icon: Users },
+  { name: 'Active Shops', value: '185', change: '+5.2%', icon: Store },
+  { name: 'Support Tickets', value: '42', change: '-8.1%', icon: MessageSquare },
+  { name: 'Revenue', value: '$12,426', change: '+15.3%', icon: DollarSign },
 ];
 
 const recentActivity = [
@@ -58,138 +47,92 @@ const recentActivity = [
   },
 ];
 
-// Color mapping for consistent styling
-const getColorClasses = (
-  color: 'purple' | 'blue' | 'green' | 'yellow'
-): { bg: string; text: string } => {
-  const colorMap = {
-    purple: {
-      bg: 'bg-purple-500/10',
-      text: 'text-purple-400'
-    },
-    blue: {
-      bg: 'bg-blue-500/10',
-      text: 'text-blue-400'
-    },
-    green: {
-      bg: 'bg-green-500/10',
-      text: 'text-green-400'
-    },
-    yellow: {
-      bg: 'bg-yellow-500/10',
-      text: 'text-yellow-400'
-    }
-  };
-  return colorMap[color] || colorMap.purple;
-};
-
 export function Dashboard() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 text-[#e8e8e8]">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+          <span className="nv-section-label">Management</span>
+          <h1 className="font-['Syne'] text-3xl font-bold text-white">
             Dashboard Overview
           </h1>
-          <p className="text-gray-400 mt-1">Welcome back, Admin</p>
+          <p className="text-sm text-[#888888] mt-1">Platform metrics and operational controls</p>
         </div>
-        <div className="flex items-center space-x-4">
-          <button className="px-4 py-2 bg-purple-500/10 text-purple-400 rounded-lg hover:bg-purple-500/20 transition-colors">
+        <div className="flex items-center gap-3">
+          <button className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl text-xs font-semibold transition-colors">
             Download Report
           </button>
-          <button className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">
-            View All Analytics
+          <button className="btn-primary !px-4 !py-2 !text-xs font-bold">
+            View Analytics
           </button>
         </div>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => {
-          const colorClasses = getColorClasses(stat.color);
-          return (
-            <motion.div
-              key={stat.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="relative group"
-            >
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-200" />
-              <div className="relative p-6 bg-gray-900/80 backdrop-blur-xl rounded-xl border border-gray-800">
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`p-2 ${colorClasses.bg} rounded-lg`}>
-                    <stat.icon className={`w-6 h-6 ${colorClasses.text}`} />
-                  </div>
-                  <span className={`text-sm font-medium ${stat.change.startsWith('+') ? 'text-green-400' : 'text-red-400'}`}>
-                    {stat.change}
-                  </span>
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-1">{stat.value}</h3>
-                <p className="text-gray-400">{stat.name}</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((stat) => (
+          <div
+            key={stat.name}
+            className="p-6 bg-[#141414] rounded-2xl border border-white/[0.08]"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2.5 bg-white/5 border border-white/10 rounded-xl">
+                <stat.icon className="w-5 h-5 text-white" />
               </div>
-            </motion.div>
-          );
-        })}
+              <span className={`text-xs font-semibold ${stat.change.startsWith('+') ? 'text-emerald-400' : 'text-rose-400'}`}>
+                {stat.change}
+              </span>
+            </div>
+            <h3 className="font-['Syne'] text-3xl font-bold text-white mb-1">{stat.value}</h3>
+            <p className="text-xs text-[#888888]">{stat.name}</p>
+          </div>
+        ))}
       </div>
 
       {/* Activity and Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Activity */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.4 }}
-          className="relative group h-full"
-        >
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-200" />
-          <div className="relative p-6 bg-gray-900/80 backdrop-blur-xl rounded-xl border border-gray-800 h-full flex flex-col">
-            <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-              <Activity className="w-5 h-5 text-purple-400" />
-              Recent Activity
-            </h3>
-            <div className="flex-1 space-y-4">
-              {recentActivity.map((activity) => (
-                <div key={activity.id} className="flex items-start gap-4">
-                  <div className="p-2 bg-gray-800 rounded-lg">
-                    <activity.icon className="w-4 h-4 text-purple-400" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-gray-300">{activity.message}</p>
-                    <p className="text-sm text-gray-500">{activity.time}</p>
-                  </div>
+        <div className="p-6 bg-[#141414] rounded-2xl border border-white/[0.08] flex flex-col">
+          <h3 className="font-['Syne'] text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <Activity className="w-4 h-4 text-white" />
+            Recent Activity
+          </h3>
+          <div className="flex-1 space-y-3">
+            {recentActivity.map((activity) => (
+              <div key={activity.id} className="flex items-start gap-3.5 p-3 bg-white/[0.02] border border-white/[0.05] rounded-xl">
+                <div className="p-2 bg-white/5 border border-white/10 rounded-lg shrink-0">
+                  <activity.icon className="w-4 h-4 text-white" />
                 </div>
-              ))}
-            </div>
-            <button className="w-full mt-4 py-2 text-sm text-gray-400 hover:text-white transition-colors">
-              View All Activity →
-            </button>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-medium text-white truncate">{activity.message}</p>
+                  <p className="text-[11px] text-[#888888] mt-0.5">{activity.time}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        </motion.div>
+          <button className="w-full mt-4 py-2 text-xs font-semibold text-[#888888] hover:text-white transition-colors text-center">
+            View All Activity →
+          </button>
+        </div>
 
-        {/* Performance Chart */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.5 }}
-          className="relative group h-full"
-        >
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-200" />
-          <div className="relative p-6 bg-gray-900/80 backdrop-blur-xl rounded-xl border border-gray-800 h-full flex flex-col">
-            <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-purple-400" />
-              Performance Overview
-            </h3>
-            <div className="flex-1 flex items-center justify-center text-gray-400">
-              Chart Component Will Go Here
+        {/* Performance Chart Placeholder */}
+        <div className="p-6 bg-[#141414] rounded-2xl border border-white/[0.08] flex flex-col">
+          <h3 className="font-['Syne'] text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <TrendingUp className="w-4 h-4 text-white" />
+            Performance Overview
+          </h3>
+          <div className="flex-1 flex flex-col items-center justify-center text-center p-8 bg-white/[0.02] border border-dashed border-white/10 rounded-xl">
+            <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-3">
+              <TrendingUp className="w-5 h-5 text-[#888888]" />
             </div>
+            <p className="text-xs font-semibold text-white">Live Telemetry Active</p>
+            <p className="text-[11px] text-[#888888] mt-1">Collecting real-time platform metrics and response latencies</p>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
 }
 
-// Default export if needed
 export default Dashboard;

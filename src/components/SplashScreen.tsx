@@ -6,51 +6,52 @@ interface SplashScreenProps {
 
 export function SplashScreen({ message = "Loading..." }: SplashScreenProps) {
   return (
-    <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
-      
+    <div className="fixed inset-0 bg-[#080808] z-50 flex items-center justify-center">
       {/* Main content */}
       <div className="relative text-center">
-        {/* Logo/Brand */}
+        {/* Brand */}
         <motion.div
-          initial={{ scale: 0, opacity: 0 }}
+          initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
           className="mb-8"
         >
-          <div className="text-6xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-            Neurovia
+          <div className="inline-flex items-center gap-2 mb-3">
+            <span className="w-8 h-8 rounded-lg bg-white text-[#080808] flex items-center justify-center font-['Syne'] font-black text-sm">
+              N
+            </span>
           </div>
-          <p className="text-gray-400 mt-2 text-lg">Expert Tech Support</p>
+          <div className="font-['Syne'] text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
+            Neurovia Nexus
+          </div>
+          <p className="text-xs uppercase tracking-widest text-[#888888] mt-2 font-mono">Expert Tech Support Platform</p>
         </motion.div>
 
-        {/* Apple-Style Professional Spinner */}
+        {/* Minimal White Spinner */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mb-8 flex justify-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="mb-6 flex justify-center"
         >
-          {/* Apple-style spinner */}
-          <div className="relative w-12 h-12">
+          <div className="relative w-10 h-10">
             {[...Array(12)].map((_, index) => (
               <motion.div
                 key={index}
-                className="absolute w-1 h-3 bg-gradient-to-t from-purple-500 to-blue-500 rounded-full"
+                className="absolute w-0.5 h-2.5 bg-white rounded-full"
                 style={{
                   left: '50%',
                   top: '0%',
-                  transformOrigin: '50% 24px',
+                  transformOrigin: '50% 20px',
                   transform: `rotate(${index * 30}deg) translateX(-50%)`,
                 }}
                 animate={{
-                  opacity: [0.3, 1, 0.3]
+                  opacity: [0.15, 1, 0.15]
                 }}
                 transition={{
-                  duration: 1.2,
+                  duration: 1.1,
                   repeat: Infinity,
-                  delay: index * 0.1,
+                  delay: index * 0.09,
                   ease: "easeInOut"
                 }}
               />
@@ -62,8 +63,8 @@ export function SplashScreen({ message = "Loading..." }: SplashScreenProps) {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="text-gray-300 text-lg"
+          transition={{ duration: 0.4, delay: 0.3 }}
+          className="text-xs text-[#888888] tracking-wide"
         >
           {message}
         </motion.p>

@@ -266,7 +266,7 @@ export function RepairShops() {
         return (
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 ml-2 text-purple-400 group-hover:text-white group-hover:translate-x-1 transition-all duration-300"
+            className="h-4 w-4 ml-2 text-white group-hover:translate-x-1 transition-all duration-300"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -403,12 +403,12 @@ export function RepairShops() {
               )}
 
               {/* Enhanced Map Header Overlay */}
-              <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md py-3 px-4 rounded-lg border border-purple-500/30 shadow-xl z-10 pointer-events-none">
-                <p className="text-white text-sm font-medium">San Francisco Bay Area</p>
+              <div className="absolute top-4 left-4 bg-[#121214]/90 backdrop-blur-md py-3 px-4 rounded-xl border border-white/10 shadow-xl z-10 pointer-events-none">
+                <p className="text-white text-xs font-semibold">San Francisco Bay Area</p>
                 <div className="flex items-center gap-2 mt-1">
-                  <p className="text-purple-300 text-xs">{shops.length} repair shops found</p>
-                  <div className="w-1 h-1 bg-purple-400 rounded-full"></div>
-                  <p className="text-blue-300 text-xs">Live Map</p>
+                  <p className="text-[#888888] text-[11px]">{shops.length} repair shops found</p>
+                  <div className="w-1 h-1 bg-white rounded-full"></div>
+                  <p className="text-white text-[11px] font-medium">Live Network</p>
                 </div>
               </div>
             </div>
@@ -416,16 +416,16 @@ export function RepairShops() {
 
           {/* Enhanced Shop List */}
           <motion.div
-            className="space-y-4 overflow-y-auto max-h-[600px] pr-2 scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-800"
+            className="space-y-4 overflow-y-auto max-h-[600px] pr-2 scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <AnimatePresence>
               {shops.length === 0 ? (
-                <div className="text-center text-gray-400 p-8">
-                  <MapPin className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                  <p>No repair shops found.</p>
+                <div className="text-center text-[#888888] p-8">
+                  <MapPin className="w-12 h-12 mx-auto mb-4 opacity-40 text-white" />
+                  <p className="text-xs">No repair shops found in this area.</p>
                 </div>
               ) : (
                 shops.map((shop) => (
@@ -439,56 +439,52 @@ export function RepairShops() {
                     className="relative"
                   >
                     <div
-                      className={`relative bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 cursor-pointer border transition-all duration-300 ${
+                      className={`relative rounded-2xl p-6 cursor-pointer border transition-all duration-300 ${
                         selectedShop === shop.id
-                          ? 'border-purple-500 shadow-lg shadow-purple-500/20 bg-gray-900/70'
-                          : 'border-gray-800 hover:border-purple-500/30 hover:bg-gray-900/60'
-                      } ${shop.isPremium ? 'ring-1 ring-purple-500/20' : ''}`}
+                          ? 'border-white bg-[#18181c] shadow-2xl'
+                          : 'border-white/[0.08] hover:border-white/20 bg-[#141414]'
+                      } ${shop.isPremium ? 'ring-1 ring-white/10' : ''}`}
                       onClick={() => handleShopClick(shop.id)}
                     >
                       {/* Shop Header with Premium Badge */}
                       <div className="flex justify-between items-start mb-4">
                         <div className="flex items-center gap-2">
-                          <h3 className="text-xl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                          <h3 className="font-['Syne'] text-lg font-bold text-white">
                             {shop.name}
                           </h3>
                           {shop.isPremium && (
-                            <motion.div
-                              className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-yellow-500/10 to-yellow-400/10 rounded-full border border-yellow-400/20"
-                              animate={{ scale: [1, 1.05, 1] }}
-                              transition={{ duration: 3, repeat: Infinity }}
-                            >
-                              <Shield className="w-3 h-3 text-yellow-400" />
-                              <span className="text-yellow-400 text-xs font-medium">Premium</span>
-                            </motion.div>
+                            <div className="flex items-center gap-1 px-2.5 py-0.5 bg-white/10 rounded-full border border-white/15">
+                              <Shield className="w-3 h-3 text-white" />
+                              <span className="text-white text-[10px] font-bold uppercase tracking-wider">Verified</span>
+                            </div>
                           )}
                         </div>
-                        <div className="flex items-center gap-1 bg-yellow-500/10 px-2 py-1 rounded-full">
-                          <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                          <span className="text-yellow-500 text-sm font-medium">{shop.rating}</span>
+                        <div className="flex items-center gap-1 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">
+                          <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                          <span className="text-amber-400 text-xs font-bold">{shop.rating}</span>
                         </div>
                       </div>
 
                       {/* Shop Details */}
-                      <div className="space-y-3 mb-4">
-                        <div className="flex items-start text-gray-300">
-                          <MapPin className="h-5 w-5 text-purple-400 mt-0.5 flex-shrink-0" />
-                          <span className="ml-2">{shop.address}</span>
+                      <div className="space-y-2.5 mb-4 text-xs">
+                        <div className="flex items-start text-[#888888]">
+                          <MapPin className="h-4 w-4 text-white mt-0.5 flex-shrink-0" />
+                          <span className="ml-2 text-[#cccccc]">{shop.address}</span>
                         </div>
 
-                        <div className="flex items-center text-gray-300">
-                          <Clock className="h-5 w-5 text-purple-400 flex-shrink-0" />
+                        <div className="flex items-center text-[#888888]">
+                          <Clock className="h-4 w-4 text-white flex-shrink-0" />
                           <span className="ml-2">{shop.hours}</span>
                         </div>
 
-                        <div className="flex items-center text-gray-300">
-                          <Phone className="h-5 w-5 text-purple-400 flex-shrink-0" />
+                        <div className="flex items-center text-[#888888]">
+                          <Phone className="h-4 w-4 text-white flex-shrink-0" />
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleCallShop(shop.phone);
                             }}
-                            className="ml-2 hover:text-purple-400 transition-colors underline decoration-dotted"
+                            className="ml-2 text-white hover:underline transition-colors font-medium"
                           >
                             {shop.phone}
                           </button>
@@ -497,12 +493,12 @@ export function RepairShops() {
 
                       {/* Services */}
                       <div className="mb-4">
-                        <h4 className="text-sm font-medium text-white mb-2">Services</h4>
-                        <div className="flex flex-wrap gap-2">
+                        <h4 className="text-xs font-semibold text-white mb-2">Services</h4>
+                        <div className="flex flex-wrap gap-1.5">
                           {shop.services.map((service) => (
                             <span
                               key={service}
-                              className="px-3 py-1 text-xs font-medium text-purple-300 bg-purple-500/10 rounded-full border border-purple-500/20"
+                              className="px-2.5 py-1 text-[11px] font-medium text-[#cccccc] bg-white/[0.04] rounded-full border border-white/[0.08]"
                             >
                               {service}
                             </span>
@@ -511,65 +507,50 @@ export function RepairShops() {
                       </div>
 
                       {/* Enhanced Action Buttons */}
-                      <div className="flex gap-3">
+                      <div className="flex gap-2.5">
                         <motion.button
                           className="flex-1"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
+                          whileHover={{ scale: 1.01 }}
+                          whileTap={{ scale: 0.99 }}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleBookAppointment(shop);
                           }}
                           disabled={shop.bookingStatus === 'busy'}
                         >
-                          <div className="relative group">
-                            <div className={`absolute -inset-0.5 rounded-lg blur transition-all duration-300 ${
-                              shop.bookingStatus === 'ready-to-pay'
-                                ? 'bg-gradient-to-r from-green-600 via-emerald-600 to-green-600 opacity-75 group-hover:opacity-100'
-                                : shop.bookingStatus === 'busy'
-                                ? 'bg-gradient-to-r from-gray-600 to-gray-700 opacity-50'
-                                : 'bg-gradient-to-r from-purple-600 to-blue-600 opacity-60 group-hover:opacity-100'
-                            }`}></div>
-                            <div className={`relative rounded-lg px-4 py-3 flex items-center justify-center transition-all duration-300 ${
-                              shop.bookingStatus === 'ready-to-pay'
-                                ? 'bg-gradient-to-r from-green-900/80 to-emerald-900/80 hover:from-green-900/90 hover:to-emerald-900/90'
-                                : shop.bookingStatus === 'busy'
-                                ? 'bg-gray-800 cursor-not-allowed'
-                                : 'bg-black hover:bg-gray-900'
-                            }`}>
-                              <span className={`font-semibold flex items-center gap-2 ${
-                                shop.bookingStatus === 'ready-to-pay'
-                                  ? 'text-green-300'
-                                  : shop.bookingStatus === 'busy'
-                                  ? 'text-gray-500'
-                                  : 'text-white'
-                              }`}>
-                                {shop.bookingStatus === 'ready-to-pay' && <Lock className="w-4 h-4" />}
-                                {shop.bookingStatus === 'ready-to-pay' && <CreditCard className="w-4 h-4" />}
-                                {getBookingButtonText(shop)}
-                              </span>
-                              {shop.bookingStatus === 'available' && getBookingButtonIcon(shop)}
-                            </div>
+                          <div className={`rounded-xl px-4 py-3 flex items-center justify-center font-bold text-xs transition-all ${
+                            shop.bookingStatus === 'ready-to-pay'
+                              ? 'bg-emerald-500 text-black hover:bg-emerald-400'
+                              : shop.bookingStatus === 'busy'
+                              ? 'bg-white/5 text-[#555555] cursor-not-allowed border border-white/5'
+                              : 'btn-primary !w-full'
+                          }`}>
+                            <span className="flex items-center gap-1.5">
+                              {shop.bookingStatus === 'ready-to-pay' && <Lock className="w-3.5 h-3.5" />}
+                              {shop.bookingStatus === 'ready-to-pay' && <CreditCard className="w-3.5 h-3.5" />}
+                              {getBookingButtonText(shop)}
+                            </span>
+                            {shop.bookingStatus === 'available' && getBookingButtonIcon(shop)}
                           </div>
                         </motion.button>
 
                         <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleCallShop(shop.phone);
                           }}
-                          className="px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors border border-gray-700 hover:border-gray-600 group"
+                          className="px-3.5 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl transition-colors border border-white/10"
                         >
-                          <Phone className="w-4 h-4 group-hover:text-green-400 transition-colors" />
+                          <Phone className="w-4 h-4" />
                         </motion.button>
                       </div>
 
-                      {/* Enhanced Selection Indicator with Theme Colors */}
+                      {/* Selection Indicator */}
                       {selectedShop === shop.id && (
                         <motion.div
-                          className="absolute -left-1 top-1/2 transform -translate-y-1/2 w-1 h-16 bg-gradient-to-b from-purple-500 via-blue-500 to-purple-600 rounded-full shadow-lg"
+                          className="absolute -left-1 top-1/2 transform -translate-y-1/2 w-1 h-12 bg-white rounded-full shadow-lg"
                           layoutId="selected-indicator"
                         />
                       )}

@@ -32,55 +32,52 @@ export function AdminLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#080808] text-[#e8e8e8]">
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full bg-gray-900/80 backdrop-blur-xl border-r border-gray-800 transition-all duration-300 z-50 
+        className={`fixed top-0 left-0 h-full bg-[#121214] border-r border-white/[0.08] transition-all duration-300 z-50 
           ${sidebarOpen ? 'w-64' : 'w-20'}`}
       >
         {/* Toggle Button */}
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="absolute -right-3 top-8 bg-purple-500 text-white p-1 rounded-full"
+          className="absolute -right-3 top-8 bg-white text-[#080808] p-1 rounded-full shadow-lg hover:bg-neutral-200 transition-colors"
         >
-          {sidebarOpen ? <ChevronLeft size={16} /> : <Menu size={16} />}
+          {sidebarOpen ? <ChevronLeft size={14} /> : <Menu size={14} />}
         </button>
 
         {/* Logo */}
         <div className="p-6">
           <Link to="/admin" className="flex items-center space-x-3">
-            <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur opacity-60" />
-              <div className="relative bg-black rounded-full p-2">
-                <LayoutDashboard className="h-6 w-6 text-white" />
-              </div>
+            <div className="w-9 h-9 bg-white text-[#080808] rounded-xl flex items-center justify-center font-['Syne'] font-black text-lg">
+              N
             </div>
             {sidebarOpen && (
-              <span className="text-lg font-medium bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                Admin Panel
+              <span className="font-['Syne'] text-base font-bold text-white tracking-tight">
+                Admin Console
               </span>
             )}
           </Link>
         </div>
 
         {/* Navigation */}
-        <nav className="mt-6 px-3">
+        <nav className="mt-4 px-3">
           {navigation.map((item) => {
             const isActive = location.pathname === item.href;
             return (
               <Link
                 key={item.name}
                 to={item.href}
-                className={`flex items-center space-x-3 px-3 py-3 my-1 rounded-xl transition-colors relative group
+                className={`flex items-center space-x-3 px-3.5 py-2.5 my-1 rounded-xl text-xs font-semibold transition-colors relative group
                   ${isActive 
-                    ? 'text-white bg-purple-500/10 border border-purple-500/20' 
-                    : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                    ? 'text-white bg-white/10 border border-white/15' 
+                    : 'text-[#888888] hover:text-white hover:bg-white/[0.04]'
                   }`}
               >
-                <item.icon className={`h-5 w-5 ${isActive ? 'text-purple-400' : ''}`} />
+                <item.icon className={`h-4 w-4 ${isActive ? 'text-white' : 'text-[#888888]'}`} />
                 {sidebarOpen && <span>{item.name}</span>}
                 {!sidebarOpen && (
-                  <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  <div className="absolute left-full ml-2 px-2.5 py-1 bg-[#18181c] border border-white/10 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
                     {item.name}
                   </div>
                 )}
@@ -90,12 +87,12 @@ export function AdminLayout() {
         </nav>
 
         {/* Logout Button */}
-        <div className="absolute bottom-0 w-full p-4">
+        <div className="absolute bottom-0 w-full p-4 border-t border-white/[0.06]">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+            className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-[#888888] hover:text-red-400 hover:bg-red-500/10 transition-colors"
           >
-            <LogOut className="h-5 w-5" />
+            <LogOut className="h-4 w-4" />
             {sidebarOpen && <span>Logout</span>}
           </button>
         </div>
@@ -109,4 +106,4 @@ export function AdminLayout() {
       </div>
     </div>
   );
-} 
+}
