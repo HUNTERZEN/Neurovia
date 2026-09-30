@@ -31,6 +31,9 @@ import { CookiePolicy } from './pages/policies/CookiePolicy';
 import { TermsOfService } from './pages/policies/TermsOfService';
 import { RefundPolicy } from './pages/policies/RefundPolicy';
 import Contact from './pages/Contact';
+import Services from './pages/Services';
+import Blog from './pages/Blog';
+import BookSupport from './pages/BookSupport';
 import { ProfilePage } from './components/ProfilePage';
 import { ProfileProvider } from './context/ProfileContext';
 
@@ -265,6 +268,9 @@ export default function App() {
                 <Route path="/partner/dashboard" element={<UserProtectedRoute><PartnerDashboard /></UserProtectedRoute>} />
                 <Route path="/profile" element={<UserProtectedRoute><Navbar /><ProfilePage user={{ name: user?.username || user?.name || 'User', email: user?.email || '' }} onUpdateProfile={handleUpdateProfile} /><Footer /></UserProtectedRoute>} />
                 <Route path="/" element={<><Navbar /><NeuroviaHome /><Footer /></>} />
+                <Route path="/services" element={<><Navbar /><Services /><Footer /></>} />
+                <Route path="/blog" element={<><Navbar /><Blog /><Footer /></>} />
+                <Route path="/book" element={<><Navbar /><BookSupport /><Footer /></>} />
                 <Route path="/about" element={<><Navbar /><About /><Footer /></>} />
                 <Route path="/repair-shops" element={<><Navbar /><RepairShops /><Footer /></>} />
                 <Route path="/remote-help" element={<><Navbar /><GetRemoteHelp /><Footer /></>} />

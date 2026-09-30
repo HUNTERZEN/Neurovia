@@ -74,10 +74,10 @@ export function Footer() {
                 Services
               </h5>
               <ul className="space-y-2.5 text-sm text-[#888888]">
+                <li><Link to="/services" className="hover:text-white transition-colors">All Services</Link></li>
                 <li><Link to="/remote-help" className="hover:text-white transition-colors">Remote Support</Link></li>
-                <li><Link to="/repair-shops" className="hover:text-white transition-colors">Onsite & Shops</Link></li>
+                <li><Link to="/repair-shops" className="hover:text-white transition-colors">Onsite &amp; Shops</Link></li>
                 <li><Link to="/video-solutions" className="hover:text-white transition-colors">Video Solutions</Link></li>
-                <li><Link to="/remote-help?tab=chat" className="hover:text-white transition-colors">Expert Chat</Link></li>
               </ul>
             </div>
 
@@ -88,9 +88,9 @@ export function Footer() {
               </h5>
               <ul className="space-y-2.5 text-sm text-[#888888]">
                 <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
-                <li><Link to="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
+                <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
                 <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-                <li><Link to="/remote-help" className="hover:text-white transition-colors">Book Support</Link></li>
+                <li><Link to="/book" className="hover:text-white transition-colors">Book Support</Link></li>
               </ul>
             </div>
 

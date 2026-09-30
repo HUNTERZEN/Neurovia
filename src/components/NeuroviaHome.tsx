@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import API_BASE_URL from '../config/api';
 
 /* ══════════════════════════════════════
    NEUROVIA NEXUS — HOME PAGE
@@ -262,6 +263,30 @@ function Marquee() {
 ══════════════════════════════════════ */
 export function NeuroviaHome() {
   useReveal();
+  const [betaEmail, setBetaEmail] = useState('');
+  const [betaSubmitted, setBetaSubmitted] = useState(false);
+  const [betaLoading, setBetaLoading] = useState(false);
+
+  const handleBetaSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!betaEmail || !betaEmail.includes('@')) {
+      alert('Please enter a valid email.');
+      return;
+    }
+    setBetaLoading(true);
+    try {
+      await fetch(`${API_BASE_URL}/api/beta-tester`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: betaEmail }),
+      });
+      setBetaSubmitted(true);
+    } catch {
+      setBetaSubmitted(true);
+    } finally {
+      setBetaLoading(false);
+    }
+  };
 
   return (
     <div className="nv-home">
@@ -441,6 +466,47 @@ export function NeuroviaHome() {
         </div>
       </section>
 
+      {/* ═══════════════════ BLOG ═══════════════════ */}
+      <section className="blog-section nv-blog-section">
+        <div className="nv-container">
+          <div className="nv-section-head">
+            <span className="nv-section-label nv-reveal">From the blog</span>
+            <h2 className="nv-section-title nv-reveal">Insights &amp;<br /><em>updates.</em></h2>
+          </div>
+
+          <div className="blog-grid nv-blog-grid">
+            <Link to="/blog" className="blog-card nv-reveal">
+              <div className="blog-img" style={{ background: 'linear-gradient(135deg,#1a1a2e,#16213e)' }}>
+                <span className="blog-category">IT Tips</span>
+              </div>
+              <div className="blog-body">
+                <h3>10 Signs Your PC Is Crying for Help (And How to Fix Them)</h3>
+                <p>From overheating to mysterious slowdowns — here's what your computer is trying to tell you.</p>
+                <div className="blog-meta"><span>5 min read</span><span>·</span><span>Jun 2025</span></div>
+              </div>
+            </Link>
+
+            <div className="blog-side">
+              <Link to="/blog" className="blog-card-small nv-reveal nv-delay-1">
+                <span className="blog-category-sm">Cybersecurity</span>
+                <h4>Why Small Businesses Are the #1 Target for Ransomware in 2025</h4>
+                <div className="blog-meta"><span>4 min</span></div>
+              </Link>
+              <Link to="/blog" className="blog-card-small nv-reveal nv-delay-2">
+                <span className="blog-category-sm">AI Research</span>
+                <h4>NADT Update: What We've Learned From 200 Diagnostic Sessions</h4>
+                <div className="blog-meta"><span>3 min</span></div>
+              </Link>
+              <Link to="/blog" className="blog-card-small nv-reveal nv-delay-3">
+                <span className="blog-category-sm">Cloud</span>
+                <h4>When to Move to the Cloud — A No-Nonsense Guide for SMEs</h4>
+                <div className="blog-meta"><span>6 min</span></div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ═══ FOUNDERS & TEAM ═══ */}
       <section className="nv-team-section-home" id="nv-team">
         <div className="nv-container">
@@ -578,6 +644,55 @@ export function NeuroviaHome() {
         </div>
       </section>
 
+      {/* ═══════════════════ CREDENTIALS ═══════════════════ */}
+      <section className="credentials-section nv-credentials-section" id="nv-credentials">
+        <div className="nv-container">
+          <div className="nv-section-head">
+            <span className="nv-section-label nv-reveal">Proof of work</span>
+            <h2 className="nv-section-title nv-reveal">Certified<br /><em>and accountable.</em></h2>
+            <p className="nv-reveal" style={{ color: 'var(--nv-muted)', fontSize: '17px', maxWidth: '480px', marginTop: '12px' }}>
+              Licenses, certifications, and credentials that back up every repair and recommendation we make.
+            </p>
+          </div>
+
+          <div className="credentials-grid nv-credentials-grid">
+            <div 
+              className="credential-card nv-credential-card nv-reveal" 
+              onClick={() => window.open('/assets/credentials/MASICER2026BL0GIYGC.pdf', '_blank')}
+            >
+              <div className="cred-thumb-wrap">
+                <img className="cred-thumb" src="/assets/credentials/MASI.png" alt="MASI Recognition" loading="lazy" />
+                <div className="cred-hover"><span>⤢ View full size</span></div>
+              </div>
+              <h4 className="cred-name">MASI Recognition</h4>
+              <span className="cred-role">Startup Certification</span>
+              <div className="cred-divider" />
+              <div className="cred-meta">
+                <div className="cred-stat"><strong>2025</strong><small>Issued</small></div>
+                <div className="cred-stat"><strong>MASI</strong><small>Issuer</small></div>
+              </div>
+            </div>
+
+            <div 
+              className="credential-card nv-credential-card nv-reveal nv-delay-1" 
+              onClick={() => window.open('/assets/credentials/SPICE.pdf', '_blank')}
+            >
+              <div className="cred-thumb-wrap">
+                <img className="cred-thumb" src="/assets/credentials/SPICE.png" alt="Certificate Of Incorporation" loading="lazy" />
+                <div className="cred-hover"><span>⤢ View full size</span></div>
+              </div>
+              <h4 className="cred-name">Certificate Of Incorporation</h4>
+              <span className="cred-role">Incorporation Certificate</span>
+              <div className="cred-divider" />
+              <div className="cred-meta">
+                <div className="cred-stat"><strong>2025</strong><small>Issued</small></div>
+                <div className="cred-stat"><strong>Ministry Of Corporate Affairs</strong><small>Issuer</small></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ═══ CTA ═══ */}
       <section className="nv-cta-section">
         <div className="nv-container">
@@ -587,8 +702,46 @@ export function NeuroviaHome() {
             <h2>Your tech problem<br />ends <em>today.</em></h2>
             <p>Book a certified technician in minutes. Remote or onsite. No fix, no fee.</p>
             <div className="nv-cta-actions">
-              <Link to="/remote-help" className="nv-btn-primary nv-btn-large">Book support →</Link>
+              <Link to="/book" className="nv-btn-primary nv-btn-large">Book support →</Link>
               <Link to="/contact" className="nv-btn-ghost">Get in touch</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ BETA TESTER SECTION ═══ */}
+      <section className="nv-cta-section" style={{ paddingTop: 0 }}>
+        <div className="nv-container">
+          <div className="nv-cta-box nv-reveal">
+            <div className="nv-cta-glow" />
+            <span className="nv-section-label">Early Access</span>
+            <h2> Become a Beta-Tester <br /><em>today.</em></h2>
+            <p>Join Our Beta-Testing Programme. Get exclusive access to new features as they are rolled out, help spot bugs and help us deliver our best with your valuable feedback for our developers.</p>
+            
+            <div className="contact-form nv-reveal" style={{ maxWidth: '480px', margin: '32px auto 0', textAlign: 'left' }}>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, color: 'var(--white)', marginBottom: '20px' }}>Register with your Email</h3>
+              {betaSubmitted ? (
+                <div style={{ color: 'var(--green)', fontSize: '15px', fontWeight: 600, padding: '12px 0' }}>
+                  ✓ Thank you! You are now registered as a Neurovia Beta Tester.
+                </div>
+              ) : (
+                <form onSubmit={handleBetaSubmit}>
+                  <div className="form-group">
+                    <label>Email *</label>
+                    <input 
+                      type="email" 
+                      className="form-input" 
+                      placeholder="you@example.com" 
+                      value={betaEmail}
+                      onChange={(e) => setBetaEmail(e.target.value)}
+                      required 
+                    />
+                  </div>
+                  <button type="submit" disabled={betaLoading} className="nv-btn-primary form-submit">
+                    {betaLoading ? 'Registering...' : 'Become a Beta Tester →'}
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </div>

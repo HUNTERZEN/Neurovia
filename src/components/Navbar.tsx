@@ -94,20 +94,17 @@ export function Navbar() {
 
           {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
-            <Link to="/" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
-              Home
+            <Link to="/services" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
+              Services
             </Link>
             <Link to="/repair-shops" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
               Repair Shops
             </Link>
-            <Link to="/remote-help" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
-              Remote Help
-            </Link>
-            <Link to="/video-solutions" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
-              Video Solutions
-            </Link>
             <Link to="/about" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
               About
+            </Link>
+            <Link to="/blog" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
+              Blog
             </Link>
             <Link to="/contact" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
               Contact
@@ -120,7 +117,7 @@ export function Navbar() {
           {/* Desktop Auth Section */}
           <div className="hidden lg:flex items-center space-x-3">
             <Link
-              to="/remote-help"
+              to="/book"
               className="nv-btn-primary !text-xs !py-2 !px-4 !font-semibold !shadow-none"
             >
               Book Support →
@@ -224,25 +221,18 @@ export function Navbar() {
               Home
             </Link>
             <Link
+              to="/services"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
+            >
+              Services
+            </Link>
+            <Link
               to="/repair-shops"
               onClick={() => setIsMobileMenuOpen(false)}
               className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
             >
               Repair Shops
-            </Link>
-            <Link
-              to="/remote-help"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
-            >
-              Remote Help
-            </Link>
-            <Link
-              to="/video-solutions"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
-            >
-              Video Solutions
             </Link>
             <Link
               to="/about"
@@ -252,6 +242,13 @@ export function Navbar() {
               About
             </Link>
             <Link
+              to="/blog"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
+            >
+              Blog
+            </Link>
+            <Link
               to="/contact"
               onClick={() => setIsMobileMenuOpen(false)}
               className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
@@ -259,11 +256,11 @@ export function Navbar() {
               Contact
             </Link>
             <Link
-              to="/faq"
+              to="/book"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
+              className="text-xl font-semibold text-white transition-colors"
             >
-              FAQ
+              Book Support →
             </Link>
 
             {/* Mobile Bottom Section */}
