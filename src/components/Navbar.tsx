@@ -19,6 +19,21 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Lock background scroll while the mobile menu is open, close on Escape / resize to desktop
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    document.body.classList.add('nv-scroll-lock');
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setIsMobileMenuOpen(false); };
+    const onResize = () => { if (window.innerWidth >= 1024) setIsMobileMenuOpen(false); };
+    document.addEventListener('keydown', onKey);
+    window.addEventListener('resize', onResize);
+    return () => {
+      document.body.classList.remove('nv-scroll-lock');
+      document.removeEventListener('keydown', onKey);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [isMobileMenuOpen]);
+
   // ✅ UPDATED handleLogout with proper async handling and debugging
   const handleLogout = async () => {
     console.log('Logout button clicked!'); // Debug line
@@ -83,6 +98,7 @@ export function Navbar() {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 text-gray-300 hover:text-white transition-colors relative z-[60]"
               aria-label="Toggle Menu"
+              aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? (
                 <X className="h-6 w-6" />
@@ -256,6 +272,13 @@ export function Navbar() {
               Contact
             </Link>
             <Link
+              to="/faq"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-xl font-medium text-gray-300 hover:text-white transition-colors"
+            >
+              FAQ
+            </Link>
+            <Link
               to="/book"
               onClick={() => setIsMobileMenuOpen(false)}
               className="text-xl font-semibold text-white transition-colors"
@@ -291,6 +314,13 @@ export function Navbar() {
                     className="btn-primary !w-full !py-3.5 !rounded-full !text-xs text-center font-bold"
                   >
                     Get Started →
+                  </Link>
+                  <Link
+                    to="/signin"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="w-full py-3 rounded-full border border-white/20 text-xs font-semibold text-white text-center hover:bg-white/5 transition-colors"
+                  >
+                    Log in
                   </Link>
                 </div>
               )}

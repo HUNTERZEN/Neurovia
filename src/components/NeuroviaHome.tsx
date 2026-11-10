@@ -7,8 +7,18 @@ import API_BASE_URL from '../config/api';
    Ported from neurovia.site static site
 ══════════════════════════════════════ */
 
+// Only show the custom cursor on devices with a real mouse (not phones / iPad)
+const hasFinePointer = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
 // ─── Custom Cursor ───
 function CustomCursor() {
+  const [enabled] = useState(hasFinePointer);
+  return enabled ? <CustomCursorInner /> : null;
+}
+
+function CustomCursorInner() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const followerRef = useRef<HTMLDivElement>(null);
 
@@ -71,12 +81,19 @@ function HeroCanvas() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let W: number, H: number;
-    const NODE_COUNT = 60;
+    let W = 0, H = 0;
+    // Fewer nodes on phones/tablets keeps scrolling buttery smooth
+    const vw = window.innerWidth;
+    const NODE_COUNT = vw < 640 ? 28 : vw < 1024 ? 42 : 60;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const resize = () => {
-      W = canvas.width = canvas.offsetWidth;
-      H = canvas.height = canvas.offsetHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = canvas.offsetWidth;
+      H = canvas.offsetHeight;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener('resize', resize);
@@ -123,20 +140,33 @@ function HeroCanvas() {
       }
     };
 
-    let animId: number;
-    const animate = () => {
+    let animId = 0;
+    let running = false;
+    const frame = () => {
       ctx!.clearRect(0, 0, W, H);
-      nodes.forEach(n => { n.update(); n.draw(); });
+      nodes.forEach(n => { if (!reduceMotion) n.update(); n.draw(); });
       for (let i = 0; i < nodes.length; i++)
         for (let j = i + 1; j < nodes.length; j++)
           connect(nodes[i], nodes[j]);
-      animId = requestAnimationFrame(animate);
     };
-    animate();
+    const animate = () => {
+      frame();
+      if (running) animId = requestAnimationFrame(animate);
+    };
+    const start = () => { if (!running && !reduceMotion) { running = true; animId = requestAnimationFrame(animate); } };
+    const stop = () => { running = false; cancelAnimationFrame(animId); };
+
+    frame();
+    // Pause the animation when the hero is scrolled out of view (saves battery / CPU)
+    const visObserver = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) start(); else stop();
+    });
+    visObserver.observe(canvas);
 
     return () => {
       window.removeEventListener('resize', resize);
-      cancelAnimationFrame(animId);
+      visObserver.disconnect();
+      stop();
     };
   }, []);
 
@@ -255,6 +285,115 @@ function Marquee() {
         </div>
       </div>
     </div>
+  );
+}
+
+/* ══════════════════════════════════════
+   CREDENTIALS
+══════════════════════════════════════ */
+interface Credential {
+  title: string;
+  role: string;
+  image: string;
+  pdf: string;
+  issued: string;
+  issuer: string;
+}
+
+const CREDENTIALS: Credential[] = [
+  {
+    title: 'MASI Recognition',
+    role: 'Startup Certification',
+    image: '/assets/credentials/MASI.png',
+    pdf: '/assets/credentials/MASICER2026BL0GIYGC.pdf',
+    issued: '2025',
+    issuer: 'MASI',
+  },
+  {
+    title: 'Certificate Of Incorporation',
+    role: 'Incorporation Certificate',
+    image: '/assets/credentials/SPICE.png',
+    pdf: '/assets/credentials/SPICE.pdf',
+    issued: '2025',
+    issuer: 'Ministry Of Corporate Affairs',
+  },
+];
+
+function CredentialLightbox({ credential, onClose }: { credential: Credential; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    document.body.classList.add('nv-scroll-lock');
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.classList.remove('nv-scroll-lock');
+    };
+  }, [onClose]);
+
+  return (
+    <div className="nv-lightbox" role="dialog" aria-modal="true" aria-label={credential.title} onClick={onClose}>
+      <div className="nv-lightbox-inner" onClick={(e) => e.stopPropagation()}>
+        <div className="nv-lightbox-bar">
+          <span className="nv-lightbox-title">{credential.title}</span>
+          <div className="nv-lightbox-actions">
+            <a href={credential.pdf} target="_blank" rel="noopener noreferrer" className="nv-btn-outline !py-2 !px-4 !text-xs">
+              Open PDF ↗
+            </a>
+            <button type="button" className="nv-lightbox-close" onClick={onClose} aria-label="Close">×</button>
+          </div>
+        </div>
+        <div className="nv-lightbox-img-wrap">
+          <img src={credential.image} alt={credential.title} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CredentialsSection() {
+  const [active, setActive] = useState<Credential | null>(null);
+  const close = useCallback(() => setActive(null), []);
+
+  return (
+    <section className="credentials-section nv-credentials-section" id="nv-credentials">
+      <div className="nv-container">
+        <div className="nv-section-head">
+          <span className="nv-section-label nv-reveal">Proof of work</span>
+          <h2 className="nv-section-title nv-reveal">Certified<br /><em>and accountable.</em></h2>
+          <p className="nv-reveal" style={{ color: 'var(--nv-muted)', fontSize: '17px', maxWidth: '480px', marginTop: '12px' }}>
+            Licenses, certifications, and credentials that back up every repair and recommendation we make.
+          </p>
+        </div>
+
+        <div className="credentials-grid nv-credentials-grid">
+          {CREDENTIALS.map((c, i) => (
+            <div
+              key={c.title}
+              role="button"
+              tabIndex={0}
+              aria-label={`View ${c.title}`}
+              className={`credential-card nv-credential-card nv-reveal${i > 0 ? ` nv-delay-${i}` : ''}`}
+              onClick={() => setActive(c)}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(c); } }}
+            >
+              <div className="cred-thumb-wrap">
+                <img className="cred-thumb" src={c.image} alt={c.title} loading="lazy" decoding="async" />
+                <div className="cred-hover"><span>⤢ View full size</span></div>
+              </div>
+              <h4 className="cred-name">{c.title}</h4>
+              <span className="cred-role">{c.role}</span>
+              <div className="cred-divider" />
+              <div className="cred-meta">
+                <div className="cred-stat"><strong>{c.issued}</strong><small>Issued</small></div>
+                <div className="cred-stat"><strong>{c.issuer}</strong><small>Issuer</small></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {active && <CredentialLightbox credential={active} onClose={close} />}
+    </section>
   );
 }
 
@@ -644,54 +783,8 @@ export function NeuroviaHome() {
         </div>
       </section>
 
-      {/* ═══════════════════ CREDENTIALS ═══════════════════ */}
-      <section className="credentials-section nv-credentials-section" id="nv-credentials">
-        <div className="nv-container">
-          <div className="nv-section-head">
-            <span className="nv-section-label nv-reveal">Proof of work</span>
-            <h2 className="nv-section-title nv-reveal">Certified<br /><em>and accountable.</em></h2>
-            <p className="nv-reveal" style={{ color: 'var(--nv-muted)', fontSize: '17px', maxWidth: '480px', marginTop: '12px' }}>
-              Licenses, certifications, and credentials that back up every repair and recommendation we make.
-            </p>
-          </div>
-
-          <div className="credentials-grid nv-credentials-grid">
-            <div 
-              className="credential-card nv-credential-card nv-reveal" 
-              onClick={() => window.open('/assets/credentials/MASICER2026BL0GIYGC.pdf', '_blank')}
-            >
-              <div className="cred-thumb-wrap">
-                <img className="cred-thumb" src="/assets/credentials/MASI.png" alt="MASI Recognition" loading="lazy" />
-                <div className="cred-hover"><span>⤢ View full size</span></div>
-              </div>
-              <h4 className="cred-name">MASI Recognition</h4>
-              <span className="cred-role">Startup Certification</span>
-              <div className="cred-divider" />
-              <div className="cred-meta">
-                <div className="cred-stat"><strong>2025</strong><small>Issued</small></div>
-                <div className="cred-stat"><strong>MASI</strong><small>Issuer</small></div>
-              </div>
-            </div>
-
-            <div 
-              className="credential-card nv-credential-card nv-reveal nv-delay-1" 
-              onClick={() => window.open('/assets/credentials/SPICE.pdf', '_blank')}
-            >
-              <div className="cred-thumb-wrap">
-                <img className="cred-thumb" src="/assets/credentials/SPICE.png" alt="Certificate Of Incorporation" loading="lazy" />
-                <div className="cred-hover"><span>⤢ View full size</span></div>
-              </div>
-              <h4 className="cred-name">Certificate Of Incorporation</h4>
-              <span className="cred-role">Incorporation Certificate</span>
-              <div className="cred-divider" />
-              <div className="cred-meta">
-                <div className="cred-stat"><strong>2025</strong><small>Issued</small></div>
-                <div className="cred-stat"><strong>Ministry Of Corporate Affairs</strong><small>Issuer</small></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ═══ CREDENTIALS ═══ */}
+      <CredentialsSection />
 
       {/* ═══ CTA ═══ */}
       <section className="nv-cta-section">

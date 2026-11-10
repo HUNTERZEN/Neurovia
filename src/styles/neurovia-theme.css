@@ -2318,3 +2318,276 @@ textarea.form-input { resize: vertical; min-height: 120px; }
   .blog-posts-grid { grid-template-columns: 1fr; }
   .support-type-grid { grid-template-columns: 1fr; }
 }
+
+
+/* ══════════════════════════════════════
+   GLOBAL POLISH — smooth feel on desktop, iPad & mobile
+══════════════════════════════════════ */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--nv-black);
+}
+
+body {
+  background: var(--nv-black);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
+}
+
+/* Prevent horizontal scroll caused by wide decorative elements */
+#root { overflow-x: clip; }
+
+img, video, iframe { max-width: 100%; }
+
+/* Visible, accessible keyboard focus */
+:focus-visible {
+  outline: 2px solid var(--nv-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Lock page scroll when the mobile menu / modals are open */
+body.nv-scroll-lock { overflow: hidden; touch-action: none; }
+
+/* Hide the custom cursor on touch devices (phones / iPad) */
+@media (hover: none), (pointer: coarse) {
+  .nv-cursor, .nv-cursor-follower { display: none !important; }
+}
+
+/* Hover lift effects only where a real mouse exists (prevents "sticky" hover on touch) */
+@media (hover: none) {
+  .nv-home-team-card:hover,
+  .blog-card:hover,
+  .blog-card-small:hover,
+  .blog-post-card:hover,
+  .credential-card:hover,
+  .nv-credential-card:hover,
+  .nv-btn-primary:hover,
+  .btn-primary:hover,
+  .nv-btn-outline:hover,
+  .btn-outline:hover { transform: none !important; }
+  .cred-hover { opacity: 1; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent 55%); align-items: flex-end; padding-bottom: 16px; }
+}
+
+/* Tap feedback on touch */
+@media (hover: none) {
+  .nv-service-card:active,
+  .nv-credential-card:active,
+  .blog-card:active,
+  .blog-card-small:active,
+  .nv-home-team-card:active { transform: scale(0.985); transition: transform 0.12s ease; }
+}
+
+/* Credential thumbnails: show top of certificate instead of cropping centre */
+.cred-thumb { object-position: top center; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); }
+.credential-card:hover .cred-thumb { transform: scale(1.03); }
+.cred-meta { flex-wrap: wrap; row-gap: 12px; }
+
+/* Use dynamic viewport height so the hero fits under mobile browser bars */
+@supports (height: 100dvh) {
+  .nv-hero { min-height: 100dvh; }
+}
+
+/* ── Tablet / iPad (portrait & landscape) ── */
+@media (max-width: 1024px) {
+  .nv-hero { padding-left: 32px; padding-right: 32px; }
+  .nv-section-head { margin-bottom: 48px; }
+  .nv-services-section,
+  .nv-how-section,
+  .nv-testimonials-section,
+  .nv-team-section-home,
+  .nv-video-section,
+  .nv-future-section,
+  .credentials-section,
+  .nv-credentials-section,
+  .blog-section,
+  .nv-blog-section { padding-top: 96px; padding-bottom: 96px; }
+  .nv-founder-card { gap: 40px; padding: 40px; grid-template-columns: 200px 1fr; }
+  .nv-founder-initials { width: 150px; height: 150px; font-size: 44px; }
+  .nv-founder-glow-ring { width: 170px; height: 170px; }
+  .nv-cta-box { padding: 64px 40px; }
+}
+
+/* ── Large phones / small tablets ── */
+@media (max-width: 768px) {
+  .nv-hero-title { font-size: clamp(40px, 11vw, 72px); line-height: 1; }
+  .nv-hero-sub { font-size: 16px; }
+  .nv-hero-actions { gap: 12px; }
+  .nv-hero-stats { margin-top: 56px; padding-top: 32px; }
+  .nv-stat-num { font-size: 36px; }
+  .nv-section-title { font-size: clamp(32px, 8.5vw, 48px); }
+  .nv-section-head { margin-bottom: 40px; }
+  .nv-services-section,
+  .nv-how-section,
+  .nv-testimonials-section,
+  .nv-team-section-home,
+  .nv-video-section,
+  .nv-future-section,
+  .credentials-section,
+  .nv-credentials-section,
+  .blog-section,
+  .nv-blog-section { padding-top: 72px; padding-bottom: 72px; }
+  .nv-step { gap: 20px; padding: 24px 0; }
+  .nv-step-body h3 { font-size: 19px; }
+  .nv-tcard { padding: 28px 24px; }
+  .nv-founder-card { grid-template-columns: 1fr; gap: 24px; padding: 28px 22px; margin-bottom: 40px; border-radius: 22px; }
+  .nv-founder-photo { justify-content: flex-start; }
+  .nv-founder-initials { width: 96px; height: 96px; font-size: 30px; }
+  .nv-founder-glow-ring { width: 112px; height: 112px; left: -8px; }
+  .nv-founder-name { font-size: 28px; }
+  .nv-founder-bio { font-size: 15px; }
+  .nv-founder-stats { flex-wrap: wrap; gap: 20px 28px; }
+  .nv-fstat span { font-size: 22px; }
+  .nv-countdown-block { padding: 36px 20px; }
+  .nv-cd-unit { min-width: 0; }
+  .nv-cd-sep { font-size: 32px; padding-bottom: 18px; }
+  .nv-cta-section { padding: 56px 0 80px; }
+  .nv-cta-box { padding: 48px 22px; border-radius: 22px; }
+  .nv-cta-box h2 { font-size: clamp(32px, 9vw, 52px); }
+  .nv-cta-actions { gap: 12px; }
+  .credential-card, .nv-credential-card { padding: 22px; }
+  .credentials-grid, .nv-credentials-grid { grid-template-columns: 1fr; }
+  .blog-grid, .nv-blog-grid { grid-template-columns: 1fr; }
+  .blog-img { height: 180px; }
+  .blog-body { padding: 22px; }
+}
+
+/* ── Small phones ── */
+@media (max-width: 420px) {
+  .nv-container { padding: 0 16px; }
+  .nv-hero { padding-left: 16px; padding-right: 16px; }
+  .nv-hero-actions > a { width: 100%; }
+  .nv-stat { width: 100%; }
+  .nv-countdown-timer { gap: 4px; }
+  .nv-cd-unit span { font-size: 30px; }
+  .nv-cd-sep { font-size: 24px; }
+  .nv-cta-actions > a { width: 100%; }
+}
+
+/* ══════════════════════════════════════
+   CREDENTIAL LIGHTBOX
+══════════════════════════════════════ */
+.nv-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: nv-fade-in 0.25s ease both;
+}
+
+.nv-lightbox-inner {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: nv-zoom-in 0.35s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.nv-lightbox-img-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  border-radius: 16px;
+  border: 1px solid var(--nv-border-bright);
+  background: #050506;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nv-lightbox-img-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.nv-lightbox-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.nv-lightbox-title {
+  font-family: var(--nv-font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--nv-white);
+}
+
+.nv-lightbox-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.nv-lightbox-close {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--nv-border-bright);
+  background: rgba(255,255,255,0.06);
+  color: var(--nv-white);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.nv-lightbox-close:hover { background: rgba(255,255,255,0.14); }
+
+@media (max-width: 768px) {
+  .nv-lightbox { padding: 12px; }
+  .nv-lightbox-title { font-size: 16px; }
+}
+
+@keyframes nv-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes nv-zoom-in { from { opacity: 0; transform: scale(0.96) translateY(12px); } to { opacity: 1; transform: none; } }
+
+/* ══════════════════════════════════════
+   404 / NOT FOUND
+══════════════════════════════════════ */
+.nv-notfound {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: calc(var(--nv-nav-h) + 40px) 20px 80px;
+  gap: 16px;
+  color: var(--nv-muted);
+  font-family: var(--nv-font-body);
+}
+.nv-notfound h1 {
+  font-family: var(--nv-font-display);
+  font-size: clamp(72px, 18vw, 160px);
+  font-weight: 800;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+}
+
+/* Route change fade-in for a smoother page transition */
+.nv-page-enter { animation: nv-fade-in 0.35s ease backwards; }
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .nv-reveal, .nv-reveal-line { opacity: 1 !important; transform: none !important; }
+}

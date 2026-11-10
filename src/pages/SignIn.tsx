@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock, ArrowRight, Github, Chrome, AlertCircle } from 'lucide-react';
 import { useAuth } from '../App'; // Import useAuth
 
 export function SignIn() {
   const navigate = useNavigate();
+  const location = useLocation();
+  // Page the user tried to open before being asked to sign in (e.g. /profile)
+  const redirectTo =
+    (location.state as { from?: string } | null)?.from ||
+    sessionStorage.getItem('postLoginRedirect') ||
+    '/';
   const { login } = useAuth(); // Get login function from context
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -52,7 +58,7 @@ export function SignIn() {
         
         setUsernameOrEmail('');
         setPassword('');
-        navigate('/'); // Redirect to homepage
+        navigate(redirectTo, { replace: true }); // Back to the page they wanted (or home)
       } else {
         setError(result.error || 'Invalid username or password');
       }
@@ -169,6 +175,8 @@ export function SignIn() {
               type="button"
               className="flex items-center justify-center gap-2 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-white rounded-xl px-4 py-2.5 text-xs font-semibold transition-colors"
               onClick={() => {
+                // Remember destination so we return there after Google sign-in
+                sessionStorage.setItem('postLoginRedirect', redirectTo);
                 window.location.href = `${API_URL}/api/auth/google`;
               }}
             >

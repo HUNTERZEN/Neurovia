@@ -11,6 +11,13 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      workbox: {
+        // Don't let the SPA fallback swallow real files (certificates PDFs/images) or API calls
+        navigateFallbackDenylist: [/^\/assets\//, /^\/images\//, /^\/api\//, /\.(pdf|png|jpe?g|webp|svg)$/i],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+      },
       manifest: {
         name: 'Neurovia',
         short_name: 'Neurovia',
@@ -59,7 +66,7 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    strictPort: true,
+    strictPort: false,
     host: true,
     allowedHosts: true,
     hmr: {

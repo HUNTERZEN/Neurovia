@@ -5,7 +5,7 @@ import {
   createContext,
   useContext
 } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
 
 // Individual component imports
 import { Navbar } from './components/Navbar';
@@ -83,14 +83,38 @@ export const useAuth = () => {
 
 /* ----------  Protected Route Components ---------- */
 
+// Pages that must only be visible to signed-in users (email/password or Google)
+const PRIVATE_PATH_PREFIXES = ['/profile', '/partner', '/register-partner'];
+const isPrivatePath = (path: string) =>
+  PRIVATE_PATH_PREFIXES.some(p => path === p || path.startsWith(p + '/'));
+
+const POST_LOGIN_REDIRECT_KEY = 'postLoginRedirect';
+
 interface UserProtectedRouteProps {
   children: React.ReactNode;
 }
 
 function UserProtectedRoute({ children }: UserProtectedRouteProps) {
   const { isAuthenticated, loading } = useAuth();
+  const location = useLocation();
   if (loading) return <SplashScreen message="Checking authentication..." />;
-  if (!isAuthenticated) return <Navigate to="/signin" replace />;
+  if (!isAuthenticated) {
+    // Remember where the user wanted to go so we can send them back after sign-in
+    const from = location.pathname + location.search;
+    sessionStorage.setItem(POST_LOGIN_REDIRECT_KEY, from);
+    return <Navigate to="/signin" replace state={{ from }} />;
+  }
+  return <>{children}</>;
+}
+
+// Sign in / sign up pages: if already signed in, send the user to where they were headed
+function GuestOnlyRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+  if (isAuthenticated) {
+    const from = (location.state as { from?: string } | null)?.from || '/';
+    return <Navigate to={from} replace />;
+  }
   return <>{children}</>;
 }
 
@@ -107,6 +131,22 @@ function TechnicianProtectedRoute({ children }: TechnicianProtectedRouteProps) {
 function ScrollToTop() {
   useScrollToTop();
   return null;
+}
+
+function NotFound() {
+  return (
+    <div className="nv-notfound">
+      <h1>404</h1>
+      <p>This page doesn't exist or has moved.</p>
+      <Link to="/" className="nv-btn-primary">Back to home →</Link>
+    </div>
+  );
+}
+
+// Gentle fade between pages for a smoother feel
+function PageTransition({ children }: { children: React.ReactNode }) {
+  const { pathname } = useLocation();
+  return <div key={pathname} className="nv-page-enter">{children}</div>;
 }
 
 /* ----------  Main App Component ---------- */
@@ -142,7 +182,7 @@ export default function App() {
         setIsAuthenticated(true);
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('userData', JSON.stringify(data.user));
-        showSplashScreen(`Welcome back, ${data.user.username || data.user.name || 'User'}!`, 2500);
+        showSplashScreen(`Welcome back, ${data.user.username || data.user.name || 'User'}!`, 1200);
       } catch (err) {
         console.error('Profile fetch failed:', err);
         localStorage.removeItem('authToken');
@@ -158,6 +198,16 @@ export default function App() {
   /* ----- auth check ----- */
   const checkAuthStatus = useCallback(async (): Promise<void> => {
     try {
+      // Google OAuth: backend redirects back with ?token=... — capture it first
+      const params = new URLSearchParams(window.location.search);
+      const urlToken = params.get('token');
+      if (urlToken) {
+        localStorage.setItem('authToken', urlToken);
+        const redirectTo = sessionStorage.getItem(POST_LOGIN_REDIRECT_KEY) || window.location.pathname;
+        sessionStorage.removeItem(POST_LOGIN_REDIRECT_KEY);
+        window.history.replaceState({}, document.title, redirectTo);
+      }
+
       const stored = localStorage.getItem('authToken');
       if (stored) {
         await fetchUserProfile(stored);
@@ -170,7 +220,7 @@ export default function App() {
             setIsAuthenticated(true);
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('userData', JSON.stringify(data.user));
-            showSplashScreen(`Welcome back, ${data.user.username || data.user.name || 'User'}!`, 2500);
+            showSplashScreen(`Welcome back, ${data.user.username || data.user.name || 'User'}!`, 1200);
           } else {
             localStorage.setItem('isAuthenticated', 'false');
           }
@@ -187,36 +237,29 @@ export default function App() {
     checkAuthStatus(); 
   }, [checkAuthStatus]);
 
-  /* ----- Google OAuth Token Capture ----- */
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const tk = params.get('token');
-    if (tk) {
-      localStorage.setItem('authToken', tk);
-      window.history.replaceState({}, document.title, window.location.pathname);
-      fetchUserProfile(tk);
-    }
-  }, [fetchUserProfile]);
-
   const login = (token: string, userData: User) => {
     localStorage.setItem('authToken', token);
     localStorage.setItem('isAuthenticated', 'true');
     localStorage.setItem('userData', JSON.stringify(userData));
+    sessionStorage.removeItem(POST_LOGIN_REDIRECT_KEY);
     setUser(userData);
     setIsAuthenticated(true);
-    showSplashScreen(`Welcome, ${userData.username || userData.name || 'User'}!`, 3000);
+    showSplashScreen(`Welcome, ${userData.username || userData.name || 'User'}!`, 1500);
   };
 
   const logout = useCallback(async () => {
-    showSplashScreen('Signing you out...', 2000);
+    showSplashScreen('Signing you out...', 1200);
     localStorage.removeItem('authToken');
     localStorage.setItem('isAuthenticated', 'false');
     localStorage.removeItem('userData');
-    
-    setTimeout(() => {
-      setUser(null);
-      setIsAuthenticated(false);
-    }, 1000);
+
+    // Leaving a private page? Send the user home instead of the sign-in screen
+    if (isPrivatePath(window.location.pathname)) {
+      window.history.replaceState({}, document.title, '/');
+    }
+
+    setUser(null);
+    setIsAuthenticated(false);
     
     try {
       await fetch(`${API_URL}/api/logout`, {
@@ -249,6 +292,7 @@ export default function App() {
           <Router>
             <ScrollToTop />
             <div className="min-h-screen bg-black">
+              <PageTransition>
               <Routes>
                 <Route path="/technician/signin" element={<TechnicianSignIn />} />
                 <Route path="/technician/dashboard" element={<TechnicianProtectedRoute><TechnicianDashboard /></TechnicianProtectedRoute>} />
@@ -262,10 +306,11 @@ export default function App() {
                   <Route path="analytics" element={<div className="text-white p-8">Analytics Page</div>} />
                   <Route path="settings" element={<div className="text-white p-8">Settings Page</div>} />
                 </Route>
-                <Route path="/signin" element={isAuthenticated ? <Navigate to="/" replace /> : <SignIn />} />
-                <Route path="/signup" element={isAuthenticated ? <Navigate to="/" replace /> : <SignUp />} />
+                <Route path="/signin" element={<GuestOnlyRoute><SignIn /></GuestOnlyRoute>} />
+                <Route path="/signup" element={<GuestOnlyRoute><SignUp /></GuestOnlyRoute>} />
                 <Route path="/register-partner" element={<UserProtectedRoute><Navbar /><RegisterPartner /><Footer /></UserProtectedRoute>} />
                 <Route path="/partner/dashboard" element={<UserProtectedRoute><PartnerDashboard /></UserProtectedRoute>} />
+                <Route path="/partner/*" element={<UserProtectedRoute><Navigate to="/partner/dashboard" replace /></UserProtectedRoute>} />
                 <Route path="/profile" element={<UserProtectedRoute><Navbar /><ProfilePage user={{ name: user?.username || user?.name || 'User', email: user?.email || '' }} onUpdateProfile={handleUpdateProfile} /><Footer /></UserProtectedRoute>} />
                 <Route path="/" element={<><Navbar /><NeuroviaHome /><Footer /></>} />
                 <Route path="/services" element={<><Navbar /><Services /><Footer /></>} />
@@ -281,7 +326,9 @@ export default function App() {
                 <Route path="/cookies" element={<><Navbar /><CookiePolicy /><Footer /></>} />
                 <Route path="/terms" element={<><Navbar /><TermsOfService /><Footer /></>} />
                 <Route path="/refund" element={<><Navbar /><RefundPolicy /><Footer /></>} />
+                <Route path="*" element={<><Navbar /><NotFound /><Footer /></>} />
               </Routes>
+              </PageTransition>
               <IntegratedChat />
             </div>
           </Router>
