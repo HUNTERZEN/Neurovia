@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Mail, Lock, ArrowRight, Chrome, Github, AlertCircle } from 'lucide-react';
 import API_BASE_URL from '../config/api';
+import { useAuth } from '../App';
 
 export function SignUp() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -58,6 +60,8 @@ export function SignUp() {
       const result = await response.json();
 
       if (response.ok) {
+        const createdName = formData.fullName || formData.username;
+        const createdEmail = formData.email;
         setError('');
         setFormData({
           fullName: '',
@@ -66,7 +70,21 @@ export function SignUp() {
           password: '',
           confirmPassword: ''
         });
-        navigate('/signin');
+        if (result.token) {
+          login(
+            result.token,
+            result.user || {
+              id: 0,
+              username: formData.username,
+              email: createdEmail,
+              name: createdName,
+            },
+            { isNewUser: true }
+          );
+          navigate('/', { replace: true });
+        } else {
+          navigate('/signin');
+        }
       } else {
         setError(result.error || 'Registration failed');
       }

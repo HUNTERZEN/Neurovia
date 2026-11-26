@@ -17,6 +17,7 @@ import { Footer } from './components/Footer';
 import { FeedbackSection } from './components/FeedbackSection';
 import { SplashScreen } from './components/SplashScreen';
 import { NeuroviaHome } from './components/NeuroviaHome';
+import { WelcomeToast, WelcomeToastData } from './components/WelcomeToast';
 
 // Individual page imports
 import { About } from './pages/About';
@@ -62,7 +63,7 @@ import { IntegratedChat } from './components/chat/IntegratedChat';
 /* ----------  Auth Context ---------- */
 
 interface User {
-  id: number;
+  id: number | string;
   username: string;
   email: string;
   name?: string; 
@@ -71,7 +72,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (token: string, userData: User) => void;
+  login: (token: string, userData: User, options?: { isNewUser?: boolean }) => void;
   logout: () => void;
   loading: boolean;
   showSplash: boolean; 
@@ -159,34 +160,49 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [showSplash, setShowSplash] = useState(false); 
-  const [splashMessage, setSplashMessage] = useState('Loading...');
+  const [showSplash] = useState(false);
+  const [welcomeToast, setWelcomeToast] = useState<WelcomeToastData | null>(null);
 
   // ✅ Centralized API URL resolver (handles local dev, Vercel rewrites, and Render)
   const API_URL = API_BASE_URL;
 
-  const showSplashScreen = (message: string, duration: number = 2000) => {
-    setSplashMessage(message);
-    setShowSplash(true);
+  const triggerWelcomeToast = useCallback((toastData: WelcomeToastData, duration = 6500) => {
+    setWelcomeToast(toastData);
     setTimeout(() => {
-      setShowSplash(false);
+      setWelcomeToast((current) => (current === toastData ? null : current));
     }, duration);
-  };
+  }, []);
 
   /* ----- fetch profile ----- */
   const fetchUserProfile = useCallback(
-    async (token: string): Promise<void> => {
+    async (token: string, welcomeMode?: 'new' | 'back' | null): Promise<void> => {
       try {
         const res = await fetch(`${API_URL}/api/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (!res.ok) throw new Error('Bad token');
         const data = await res.json();
-        setUser(data.user);
+        const displayName = data.user.fullName || data.user.username || data.user.name || 'Member';
+        setUser({ ...data.user, name: displayName });
         setIsAuthenticated(true);
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('userData', JSON.stringify(data.user));
-        showSplashScreen(`Welcome back, ${data.user.username || data.user.name || 'User'}!`, 1200);
+
+        if (welcomeMode) {
+          sessionStorage.setItem('nvWelcomedSession', 'true');
+          triggerWelcomeToast({
+            kind: welcomeMode,
+            name: displayName,
+            email: data.user.email,
+          });
+        } else if (!sessionStorage.getItem('nvWelcomedSession')) {
+          sessionStorage.setItem('nvWelcomedSession', 'true');
+          triggerWelcomeToast({
+            kind: 'back',
+            name: displayName,
+            email: data.user.email,
+          });
+        }
       } catch (err) {
         console.error('Profile fetch failed:', err);
         localStorage.removeItem('authToken');
@@ -196,17 +212,21 @@ export default function App() {
         setIsAuthenticated(false);
       }
     },
-    [API_URL]
+    [API_URL, triggerWelcomeToast]
   );
 
   /* ----- auth check ----- */
   const checkAuthStatus = useCallback(async (): Promise<void> => {
     try {
-      // Google OAuth: backend redirects back with ?token=... — capture it first
+      // Google OAuth: backend redirects back with ?token=...&welcome=new|back
       const params = new URLSearchParams(window.location.search);
       const urlToken = params.get('token');
+      const welcomeParam = params.get('welcome');
+      let oauthWelcomeMode: 'new' | 'back' | null = null;
+
       if (urlToken) {
         localStorage.setItem('authToken', urlToken);
+        oauthWelcomeMode = welcomeParam === 'new' ? 'new' : 'back';
         const redirectTo = sessionStorage.getItem(POST_LOGIN_REDIRECT_KEY) || window.location.pathname;
         sessionStorage.removeItem(POST_LOGIN_REDIRECT_KEY);
         window.history.replaceState({}, document.title, redirectTo);
@@ -214,17 +234,25 @@ export default function App() {
 
       const stored = localStorage.getItem('authToken');
       if (stored) {
-        await fetchUserProfile(stored);
+        await fetchUserProfile(stored, oauthWelcomeMode);
       } else {
         const res = await fetch(`${API_URL}/api/auth/check`, { credentials: 'include' });
         if (res.ok) {
           const data = await res.json();
           if (data.authenticated) {
+            const displayName = data.user.name || data.user.username || 'Member';
             setUser(data.user);
             setIsAuthenticated(true);
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('userData', JSON.stringify(data.user));
-            showSplashScreen(`Welcome back, ${data.user.username || data.user.name || 'User'}!`, 1200);
+            if (!sessionStorage.getItem('nvWelcomedSession')) {
+              sessionStorage.setItem('nvWelcomedSession', 'true');
+              triggerWelcomeToast({
+                kind: 'back',
+                name: displayName,
+                email: data.user.email,
+              });
+            }
           } else {
             localStorage.setItem('isAuthenticated', 'false');
           }
@@ -235,27 +263,34 @@ export default function App() {
     } finally {
       setLoading(false);
     }
-  }, [API_URL, fetchUserProfile]);
+  }, [API_URL, fetchUserProfile, triggerWelcomeToast]);
 
   useEffect(() => { 
     checkAuthStatus(); 
   }, [checkAuthStatus]);
 
-  const login = (token: string, userData: User) => {
+  const login = (token: string, userData: User, options?: { isNewUser?: boolean }) => {
     localStorage.setItem('authToken', token);
     localStorage.setItem('isAuthenticated', 'true');
     localStorage.setItem('userData', JSON.stringify(userData));
     sessionStorage.removeItem(POST_LOGIN_REDIRECT_KEY);
+    sessionStorage.setItem('nvWelcomedSession', 'true');
     setUser(userData);
     setIsAuthenticated(true);
-    showSplashScreen(`Welcome, ${userData.username || userData.name || 'User'}!`, 1500);
+
+    const displayName = userData.name || userData.username || 'Member';
+    triggerWelcomeToast({
+      kind: options?.isNewUser ? 'new' : 'back',
+      name: displayName,
+      email: userData.email,
+    });
   };
 
   const logout = useCallback(async () => {
-    showSplashScreen('Signing you out...', 1200);
     localStorage.removeItem('authToken');
     localStorage.setItem('isAuthenticated', 'false');
     localStorage.removeItem('userData');
+    sessionStorage.removeItem('nvWelcomedSession');
 
     // Leaving a private page? Send the user home instead of the sign-in screen
     if (isPrivatePath(window.location.pathname)) {
@@ -264,6 +299,14 @@ export default function App() {
 
     setUser(null);
     setIsAuthenticated(false);
+    triggerWelcomeToast(
+      {
+        kind: 'signout',
+        name: 'Signed out',
+        subtitle: 'You have been signed out of your Neurovia account.',
+      },
+      3500
+    );
     
     try {
       await fetch(`${API_URL}/api/logout`, {
@@ -273,21 +316,27 @@ export default function App() {
     } catch (error) {
       console.error('Server logout error:', error);
     }
-  }, [API_URL]);
+  }, [API_URL, triggerWelcomeToast]);
 
   const handleUpdateProfile = useCallback((updatedData: Partial<User>) => {
-    if (user && typeof user.id === 'number') {
+    if (user) {
       const updatedUser: User = { ...user, ...updatedData, id: user.id };
       setUser(updatedUser);
       localStorage.setItem('userData', JSON.stringify(updatedUser));
-      showSplashScreen('Profile updated successfully!', 2000);
+      triggerWelcomeToast(
+        {
+          kind: 'info',
+          name: 'Profile updated!',
+          subtitle: 'Your account details have been saved.',
+        },
+        3500
+      );
     }
-  }, [user]);
+  }, [user, triggerWelcomeToast]);
 
   const value: AuthContextType = { user, isAuthenticated, login, logout, loading, showSplash };
 
   if (loading) return <SplashScreen message="Initializing Neurovia..." />;
-  if (showSplash) return <SplashScreen message={splashMessage} />;
 
   return (
     <AuthContext.Provider value={value}>
@@ -295,6 +344,7 @@ export default function App() {
         <ChatProvider>
           <Router>
             <ScrollToTop />
+            <WelcomeToast toast={welcomeToast} onDismiss={() => setWelcomeToast(null)} />
             <div className="min-h-screen bg-black">
               <PageTransition>
               <Routes>
