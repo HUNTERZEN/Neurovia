@@ -1,181 +1,137 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Search, 
-  UserPlus, 
-  MoreVertical, 
-  Edit2, 
-  Trash2, 
-  CheckCircle, 
-  XCircle,
-  User
-} from 'lucide-react';
-import type { User } from '../../types/user';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Search, User as UserIcon, RefreshCw } from 'lucide-react';
+import API_BASE_URL from '../../config/api';
 
-// Mock data - this will be replaced with actual data from localStorage
-const mockUsers: User[] = [
-  {
-    id: '1',
-    email: 'john@example.com',
-    username: 'johndoe',
-    fullName: 'John Doe',
-    createdAt: '2024-03-15',
-    role: 'user',
-    status: 'active',
-    lastLogin: '2024-03-20'
-  },
-  // Add more mock users as needed
-];
+interface DbUser {
+  _id: string;
+  username: string;
+  fullName?: string;
+  email: string;
+  role?: string;
+  google_id?: string;
+  createdAt?: string;
+}
 
 export function Users() {
-  const [users, setUsers] = useState<User[]>(() => {
-    // Get users from localStorage or use mock data
-    const storedUsers = localStorage.getItem('users');
-    return storedUsers ? JSON.parse(storedUsers) : mockUsers;
-  });
+  const navigate = useNavigate();
+  const [users, setUsers] = useState<DbUser[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
 
-  const filteredUsers = users.filter(user => 
-    user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.fullName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const handleStatusToggle = (userId: string) => {
-    const updatedUsers = users.map(user => {
-      if (user.id === userId) {
-        const newStatus = user.status === 'active' ? 'inactive' : 'active';
-        return { ...user, status: newStatus };
+  const loadUsers = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('adminToken') || '';
+      const res = await fetch(`${API_BASE_URL}/api/admin/users`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.status === 401 || res.status === 403) {
+        localStorage.removeItem('adminToken');
+        navigate('/admin/login', { replace: true });
+        return;
       }
-      return user;
-    });
-    setUsers(updatedUsers);
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
+      if (res.ok) {
+        const data = await res.json();
+        setUsers(data.users || []);
+      }
+    } catch (err) {
+      console.error('Failed to fetch users:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDeleteUser = (userId: string) => {
-    const updatedUsers = users.filter(user => user.id !== userId);
-    setUsers(updatedUsers);
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
-  };
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  const filteredUsers = users.filter((u) => {
+    const q = searchQuery.toLowerCase();
+    return (
+      (u.username || '').toLowerCase().includes(q) ||
+      (u.email || '').toLowerCase().includes(q) ||
+      (u.fullName || '').toLowerCase().includes(q)
+    );
+  });
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
+    <div className="space-y-6 text-[#e8e8e8]">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-            User Management
-          </h1>
-          <p className="text-gray-400 mt-1">Manage and monitor user accounts</p>
+          <span className="nv-section-label">Directory</span>
+          <h1 className="font-['Syne'] text-3xl font-bold text-white">Registered Users ({users.length})</h1>
+          <p className="text-sm text-[#888888] mt-1">Accounts created via Email or Google Sign-In</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">
-          <UserPlus className="w-5 h-5" />
-          Add New User
+        <button
+          type="button"
+          onClick={loadUsers}
+          className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-semibold flex items-center gap-2 text-white"
+        >
+          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+          Refresh
         </button>
       </div>
 
-      {/* Search and Filters */}
       <div className="relative">
-        <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-          <Search className="w-5 h-5 text-gray-500" />
-        </div>
+        <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-[#888888]" />
         <input
           type="text"
           placeholder="Search users by name, email, or username..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-800 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
+          className="w-full pl-10 pr-4 py-3 bg-[#141414] border border-white/10 rounded-xl text-sm text-white placeholder-[#666666] focus:outline-none focus:border-white/30"
         />
       </div>
 
-      {/* Users Table */}
-      <div className="relative group">
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-200" />
-        <div className="relative bg-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-800 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-800">
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-400">User</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-400">Role</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-400">Status</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-400">Joined</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-400">Last Login</th>
-                  <th className="px-6 py-4 text-right text-sm font-semibold text-gray-400">Actions</th>
+      <div className="bg-[#141414] rounded-2xl border border-white/[0.08] overflow-x-auto">
+        <table className="w-full text-left text-xs">
+          <thead className="border-b border-white/10 text-[#888888] uppercase">
+            <tr>
+              <th className="px-6 py-4">User</th>
+              <th className="px-6 py-4">Auth Method</th>
+              <th className="px-6 py-4">Role</th>
+              <th className="px-6 py-4">Joined</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/[0.06]">
+            {filteredUsers.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="px-6 py-10 text-center text-[#888888]">
+                  {loading ? 'Loading users...' : 'No matching users found.'}
+                </td>
+              </tr>
+            ) : (
+              filteredUsers.map((u) => (
+                <tr key={u._id} className="hover:bg-white/[0.02]">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center">
+                        <UserIcon className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-white">{u.fullName || u.username}</div>
+                        <div className="text-[#888888]">{u.email}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-[#cccccc]">
+                    {u.google_id ? 'Google OAuth' : 'Email & Password'}
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="px-2.5 py-0.5 rounded-full bg-[#4f7fff]/15 text-[#8bb4ff] font-semibold uppercase text-[10px]">
+                      {u.role || 'user'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-[#888888]">
+                    {u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-IN') : '—'}
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-800">
-                {filteredUsers.map((user) => (
-                  <motion.tr
-                    key={user.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="group/row hover:bg-gray-800/50 transition-colors"
-                  >
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
-                          <User className="w-5 h-5 text-gray-400" />
-                        </div>
-                        <div>
-                          <div className="font-medium text-white">{user.fullName}</div>
-                          <div className="text-sm text-gray-400">{user.email}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20">
-                        {user.role}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <button
-                        onClick={() => handleStatusToggle(user.id)}
-                        className={`flex items-center gap-1.5 px-2 py-1 text-xs font-medium rounded-full ${
-                          user.status === 'active'
-                            ? 'bg-green-500/10 text-green-400 border border-green-500/20'
-                            : 'bg-red-500/10 text-red-400 border border-red-500/20'
-                        }`}
-                      >
-                        {user.status === 'active' ? (
-                          <CheckCircle className="w-3 h-3" />
-                        ) : (
-                          <XCircle className="w-3 h-3" />
-                        )}
-                        {user.status}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-400">
-                      {new Date(user.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-400">
-                      {user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Never'}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center justify-end gap-2">
-                        <button className="p-1 text-gray-400 hover:text-white transition-colors">
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-                        <button 
-                          onClick={() => handleDeleteUser(user.id)}
-                          className="p-1 text-gray-400 hover:text-red-400 transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                        <button className="p-1 text-gray-400 hover:text-white transition-colors">
-                          <MoreVertical className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );
-} 
+}

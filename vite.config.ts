@@ -75,8 +75,7 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        // This only works locally. On Vercel, you must use vercel.json for rewrites
-        target: 'https://neurovia-backend.onrender.com',
+        target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false
       }

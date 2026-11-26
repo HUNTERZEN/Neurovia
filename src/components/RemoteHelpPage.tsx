@@ -13,6 +13,7 @@ import {
   Star
 } from 'lucide-react';
 import { CommunicationService } from '../services/communicationService';
+import API_BASE_URL from '../config/api';
 
 interface Expert {
   id: string;
@@ -103,11 +104,15 @@ export function GetRemoteHelp() {
     }
   ];
 
-  // Get access token from your backend
+  // Get access token from your backend (authenticated)
   const getAccessToken = async (identity: string, roomName: string) => {
-    const response = await fetch('/api/twilio/token', {
+    const token = localStorage.getItem('authToken') || '';
+    const response = await fetch(`${API_BASE_URL}/api/twilio/token`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       body: JSON.stringify({ identity, roomName })
     });
     const data = await response.json();

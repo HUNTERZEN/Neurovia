@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock, ArrowRight, Github, Chrome, AlertCircle } from 'lucide-react';
 import { useAuth } from '../App'; // Import useAuth
+import API_BASE_URL from '../config/api';
 
 export function SignIn() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export function SignIn() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'https://neurovia-backend.onrender.com';
+  const API_URL = API_BASE_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

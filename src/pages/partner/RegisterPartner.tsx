@@ -18,6 +18,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { useAuth } from '../../App';
+import API_BASE_URL from '../../config/api';
 
 const COUNTRY_CODES = [
   { code: '+91', country: 'India', flag: '🇮🇳' },
@@ -135,7 +136,7 @@ export function RegisterPartner() {
     website: ''
   });
 
-  const API_URL = import.meta.env.VITE_API_URL ?? 'https://neurovia-backend.onrender.com';
+  const API_URL = API_BASE_URL;
 
   const handleChange = (field: keyof PartnerFormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));

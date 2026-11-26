@@ -67,6 +67,7 @@ export default function Blog() {
   const [activeCat, setActiveCat] = useState('all');
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [subError, setSubError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const filteredPosts = activeCat === 'all' 
@@ -75,8 +76,9 @@ export default function Blog() {
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubError('');
     if (!email || !email.includes('@')) {
-      alert('Please enter a valid email address.');
+      setSubError('Please enter a valid email address.');
       return;
     }
 
@@ -87,14 +89,14 @@ export default function Blog() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       });
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
         setSubscribed(true);
       } else {
-        // Fallback simulate success
-        setSubscribed(true);
+        setSubError(data?.error || 'Could not subscribe right now. Please try again.');
       }
     } catch {
-      setSubscribed(true);
+      setSubError('Unable to reach server. Please check your connection and retry.');
     } finally {
       setLoading(false);
     }
@@ -224,28 +226,33 @@ export default function Blog() {
             </p>
 
             {!subscribed ? (
-              <form onSubmit={handleSubscribe} style={{ display: 'flex', gap: '10px', maxWidth: '420px', margin: '0 auto' }}>
-                <input
-                  type="email"
-                  className="form-input"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  style={{ flex: 1 }}
-                  required
-                />
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="nv-btn-primary"
-                  style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
-                >
-                  {loading ? 'Subscribing...' : 'Subscribe →'}
-                </button>
-              </form>
+              <>
+                <form onSubmit={handleSubscribe} style={{ display: 'flex', gap: '10px', maxWidth: '420px', margin: '0 auto', flexWrap: 'wrap' }}>
+                  <input
+                    type="email"
+                    className="form-input"
+                    placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value); setSubError(''); }}
+                    style={{ flex: 1, minWidth: '200px' }}
+                    required
+                  />
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="nv-btn-primary"
+                    style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+                  >
+                    {loading ? 'Subscribing...' : 'Subscribe →'}
+                  </button>
+                </form>
+                {subError && (
+                  <p style={{ color: '#f87171', fontSize: '13px', marginTop: '10px' }}>{subError}</p>
+                )}
+              </>
             ) : (
               <div style={{ color: 'var(--green)', fontSize: '16px', fontWeight: 600, marginTop: '12px' }}>
-                ✓ You're subscribed! Welcome to the loop.
+                ✓ You're subscribed! Check your inbox for our welcome note.
               </div>
             )}
           </div>

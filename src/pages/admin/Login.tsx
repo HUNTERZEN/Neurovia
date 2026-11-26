@@ -1,20 +1,44 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Lock, User, ArrowRight, AlertCircle } from 'lucide-react';
+import API_BASE_URL from '../../config/api';
 
 export function AdminLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === 'admin' && password === 'admin') {
-      localStorage.setItem('isAdminAuthenticated', 'true');
-      navigate('/admin');
-    } else {
-      setError('Invalid credentials');
+    setError('');
+
+    if (!username.trim() || !password) {
+      setError('Admin username/email and password are required');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/admin/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username.trim(), password }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.token) {
+        localStorage.setItem('adminToken', data.token);
+        localStorage.setItem('adminInfo', JSON.stringify(data.admin || {}));
+        navigate('/admin', { replace: true });
+      } else {
+        setError(data?.error || 'Invalid admin credentials');
+      }
+    } catch {
+      setError('Unable to reach server. Ensure server123 is running.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -27,66 +51,59 @@ export function AdminLogin() {
               <Lock className="w-6 h-6 text-white" />
             </div>
             <div><span className="nv-section-label">Restricted Area</span></div>
-            <h2 className="font-['Syne'] text-3xl font-bold text-white mb-2">Admin Portal</h2>
-            <p className="text-sm text-[#888888]">Enter your credentials to access the admin console</p>
+            <h2 className="font-['Syne'] text-3xl font-bold text-white mb-2">Company Admin</h2>
+            <p className="text-sm text-[#888888]">Sign in with your verified Neurovia Admin credentials</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="flex items-center gap-2 text-red-400 bg-red-400/10 p-3 rounded-xl border border-red-400/20">
-                <AlertCircle className="w-5 h-5 shrink-0" />
-                <span className="text-xs">{error}</span>
+              <div className="flex items-start gap-2 text-red-400 bg-red-400/10 p-3 rounded-xl border border-red-400/20 text-xs">
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                <span>{error}</span>
               </div>
             )}
 
-            <div className="space-y-1.5">
-              <label className="text-xs text-[#888888] font-medium block" htmlFor="username">
-                Username
-              </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <User className="h-4 w-4 text-[#888888]" />
-                </span>
-                <input
-                  type="text"
-                  id="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all"
-                  placeholder="Enter admin username"
-                  required
-                />
-              </div>
+            <div className="relative">
+              <User className="absolute left-4 top-3.5 h-4 w-4 text-[#888888]" />
+              <input
+                type="text"
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                disabled={loading}
+                placeholder="Admin Username or Email"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white text-sm placeholder-[#555555] focus:outline-none focus:border-white/30"
+              />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs text-[#888888] font-medium block" htmlFor="password">
-                Password
-              </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-4 w-4 text-[#888888]" />
-                </span>
-                <input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white text-sm placeholder-[#666666] focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all"
-                  placeholder="Enter admin password"
-                  required
-                />
-              </div>
+            <div className="relative">
+              <Lock className="absolute left-4 top-3.5 h-4 w-4 text-[#888888]" />
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
+                placeholder="Admin Password"
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white text-sm placeholder-[#555555] focus:outline-none focus:border-white/30"
+              />
             </div>
 
             <button
               type="submit"
-              className="btn-primary !w-full !rounded-xl !py-3.5 !text-sm flex items-center justify-center gap-2 font-bold mt-2"
+              disabled={loading}
+              className="btn-primary !w-full !rounded-xl !py-3.5 !text-sm flex items-center justify-center gap-2 font-bold disabled:opacity-50"
             >
-              Access Admin Panel
+              {loading ? 'Verifying...' : 'Sign In to Console'}
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
+
+          <p className="mt-6 text-center text-xs text-[#666666]">
+            <Link to="/" className="hover:text-white transition-colors">
+              ← Back to Main Website
+            </Link>
+          </p>
         </div>
       </div>
     </div>

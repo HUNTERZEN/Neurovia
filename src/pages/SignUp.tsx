@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Mail, Lock, ArrowRight, Chrome, Github, AlertCircle } from 'lucide-react';
+import API_BASE_URL from '../config/api';
 
 export function SignUp() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export function SignUp() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'https://neurovia-backend.onrender.com';
+  const API_URL = API_BASE_URL;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -47,6 +48,7 @@ export function SignUp() {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
+          fullName: formData.fullName,
           username: formData.username,
           email: formData.email,
           password: formData.password,

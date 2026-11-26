@@ -400,28 +400,58 @@ function CredentialsSection() {
 /* ══════════════════════════════════════
    MAIN HOME PAGE COMPONENT
 ══════════════════════════════════════ */
+function FounderAvatar({ initials, photo, name }: { initials: string; photo?: string; name: string }) {
+  const [failed, setFailed] = useState(false);
+  return (
+    <div className="nv-founder-initials" style={{ overflow: 'hidden' }}>
+      {photo && !failed ? (
+        <img
+          src={photo}
+          alt={name}
+          onError={() => setFailed(true)}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        />
+      ) : (
+        initials
+      )}
+    </div>
+  );
+}
+
 export function NeuroviaHome() {
   useReveal();
   const [betaEmail, setBetaEmail] = useState('');
   const [betaSubmitted, setBetaSubmitted] = useState(false);
+  const [betaMessage, setBetaMessage] = useState('');
+  const [betaError, setBetaError] = useState('');
   const [betaLoading, setBetaLoading] = useState(false);
 
   const handleBetaSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!betaEmail || !betaEmail.includes('@')) {
-      alert('Please enter a valid email.');
+    setBetaError('');
+    if (!betaEmail.trim() || !betaEmail.includes('@')) {
+      setBetaError('Please enter a valid email address.');
       return;
     }
     setBetaLoading(true);
     try {
-      await fetch(`${API_BASE_URL}/api/beta-tester`, {
+      const res = await fetch(`${API_BASE_URL}/api/beta-tester`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: betaEmail }),
+        body: JSON.stringify({ email: betaEmail.trim() }),
       });
-      setBetaSubmitted(true);
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        setBetaMessage(
+          data?.message ||
+            'Thank you! You are registered as a Neurovia Beta Tester. Check your inbox for confirmation.'
+        );
+        setBetaSubmitted(true);
+      } else {
+        setBetaError(data?.error || 'Could not complete registration. Please try again.');
+      }
     } catch {
-      setBetaSubmitted(true);
+      setBetaError('Unable to connect to server right now. Please try again shortly.');
     } finally {
       setBetaLoading(false);
     }
@@ -455,8 +485,8 @@ export function NeuroviaHome() {
           </p>
 
           <div className="nv-hero-actions nv-reveal nv-delay-4">
-            <Link to="/remote-help" className="nv-btn-primary">Book a technician →</Link>
-            <Link to="/repair-shops" className="nv-btn-ghost">Explore services</Link>
+            <Link to="/book" className="nv-btn-primary">Book a technician →</Link>
+            <Link to="/services" className="nv-btn-ghost">Explore services</Link>
           </div>
         </div>
 
@@ -656,14 +686,14 @@ export function NeuroviaHome() {
 
           {/* Founders */}
           {[
-            { initials: 'MB', badge: 'Founder & Director', name: 'Madhurjya Bordoloi', role: 'Engineer · Visionary · Builder', bio: '"I started Neurovia because I watched too many people lose hours — sometimes entire days — to tech problems that should\'ve been fixed in minutes. We\'re building the team and the technology to make that the norm, not the exception."', stats: [{ val: '2+', label: 'Years in IT' }, { val: 'BS', label: 'Education' }, { val: 'System Design', label: 'Specialization' }], linkedin: 'https://www.linkedin.com/in/madhurjya-bordoloi-computech44' },
-            { initials: 'SK', badge: 'Co-Founder & Director', name: 'Subhankar Kashyap', role: 'CyberSecurity Engineer · Builder', bio: '"I co-founded this company after seeing too many teams spend their time recovering from preventable security incidents instead of building what matters. We\'re creating the technology and the expertise to make cybersecurity proactive, not reactive."', stats: [{ val: '2+', label: 'Years in IT' }, { val: 'BCA', label: 'Education' }, { val: 'CyberSecurity', label: 'Specialization' }] },
-            { initials: 'HG', badge: 'Co-Founder & Director', name: 'Himanta Goswami', role: 'Marketing · Industry Research', bio: '"As a market researcher, I spent years uncovering patterns in customer behavior and market gaps. Those insights eventually led me to co-found this company. Our goal is simple: turn research into action."', stats: [{ val: '2+', label: 'Years in Market Research' }, { val: 'BBA', label: 'Education' }, { val: 'Market Research', label: 'Specialization' }], linkedin: 'https://www.linkedin.com/in/himanta-goswami-4004aa345' },
-            { initials: 'KS', badge: 'Co-Founder & VP of Engineering', name: 'Kunal Singha', role: 'Software Engineer · Web Developer', bio: '"I co-founded this company after spending years turning complex problems into simple, reliable software. We\'re building products that people enjoy using and engineering systems that businesses can depend on."', stats: [{ val: '3+', label: 'Years in IT' }, { val: 'BCA', label: 'Education' }, { val: 'Web Development', label: 'Specialization' }], linkedin: 'https://www.linkedin.com/in/kunal-singha-9b74b234a/' },
+            { initials: 'MB', photo: '/images/founders/madhurjya.jpg', badge: 'Founder & Director', name: 'Madhurjya Bordoloi', role: 'Engineer · Visionary · Builder', bio: '"I started Neurovia because I watched too many people lose hours — sometimes entire days — to tech problems that should\'ve been fixed in minutes. We\'re building the team and the technology to make that the norm, not the exception."', stats: [{ val: '2+', label: 'Years in IT' }, { val: 'BS', label: 'Education' }, { val: 'System Design', label: 'Specialization' }], linkedin: 'https://www.linkedin.com/in/madhurjya-bordoloi-computech44' },
+            { initials: 'SK', photo: '/images/founders/subhankar.jpg', badge: 'Co-Founder & Director', name: 'Subhankar Kashyap', role: 'CyberSecurity Engineer · Builder', bio: '"I co-founded this company after seeing too many teams spend their time recovering from preventable security incidents instead of building what matters. We\'re creating the technology and the expertise to make cybersecurity proactive, not reactive."', stats: [{ val: '2+', label: 'Years in IT' }, { val: 'BCA', label: 'Education' }, { val: 'CyberSecurity', label: 'Specialization' }] },
+            { initials: 'HG', photo: '/images/founders/himanta.jpg', badge: 'Co-Founder & Director', name: 'Himanta Goswami', role: 'Marketing · Industry Research', bio: '"As a market researcher, I spent years uncovering patterns in customer behavior and market gaps. Those insights eventually led me to co-found this company. Our goal is simple: turn research into action."', stats: [{ val: '2+', label: 'Years in Market Research' }, { val: 'BBA', label: 'Education' }, { val: 'Market Research', label: 'Specialization' }], linkedin: 'https://www.linkedin.com/in/himanta-goswami-4004aa345' },
+            { initials: 'KS', photo: '/images/founders/kunal.jpg', badge: 'Co-Founder & VP of Engineering', name: 'Kunal Singha', role: 'Software Engineer · Web Developer', bio: '"I co-founded this company after spending years turning complex problems into simple, reliable software. We\'re building products that people enjoy using and engineering systems that businesses can depend on."', stats: [{ val: '3+', label: 'Years in IT' }, { val: 'BCA', label: 'Education' }, { val: 'Web Development', label: 'Specialization' }], linkedin: 'https://www.linkedin.com/in/kunal-singha-9b74b234a/' },
           ].map((f) => (
             <div className="nv-founder-card nv-reveal" key={f.initials}>
               <div className="nv-founder-photo">
-                <div className="nv-founder-initials">{f.initials}</div>
+                <FounderAvatar initials={f.initials} photo={f.photo} name={f.name} />
                 <div className="nv-founder-glow-ring" />
               </div>
               <div className="nv-founder-content">
@@ -814,11 +844,16 @@ export function NeuroviaHome() {
             <div className="contact-form nv-reveal" style={{ maxWidth: '480px', margin: '32px auto 0', textAlign: 'left' }}>
               <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, color: 'var(--white)', marginBottom: '20px' }}>Register with your Email</h3>
               {betaSubmitted ? (
-                <div style={{ color: 'var(--green)', fontSize: '15px', fontWeight: 600, padding: '12px 0' }}>
-                  ✓ Thank you! You are now registered as a Neurovia Beta Tester.
+                <div style={{ color: 'var(--green)', fontSize: '15px', fontWeight: 600, padding: '12px 0', lineHeight: 1.6 }}>
+                  ✓ {betaMessage}
                 </div>
               ) : (
                 <form onSubmit={handleBetaSubmit}>
+                  {betaError && (
+                    <div style={{ color: '#f87171', fontSize: '13px', marginBottom: '12px', padding: '10px 12px', borderRadius: '10px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)' }}>
+                      {betaError}
+                    </div>
+                  )}
                   <div className="form-group">
                     <label>Email *</label>
                     <input 
@@ -826,7 +861,7 @@ export function NeuroviaHome() {
                       className="form-input" 
                       placeholder="you@example.com" 
                       value={betaEmail}
-                      onChange={(e) => setBetaEmail(e.target.value)}
+                      onChange={(e) => { setBetaEmail(e.target.value); setBetaError(''); }}
                       required 
                     />
                   </div>

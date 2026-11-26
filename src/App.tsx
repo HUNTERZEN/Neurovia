@@ -22,6 +22,8 @@ import { NeuroviaHome } from './components/NeuroviaHome';
 import { About } from './pages/About';
 import { SignIn } from './pages/SignIn';
 import { SignUp } from './pages/SignUp';
+import { ForgotPassword } from './pages/ForgotPassword';
+import API_BASE_URL from './config/api';
 import { RepairShops } from './pages/RepairShops';
 import { GetRemoteHelp } from './pages/GetRemoteHelp';
 import { FAQ } from './pages/FAQ';
@@ -51,6 +53,8 @@ import { useScrollToTop } from './hooks/useScrollToTop';
 import { AdminLayout } from './components/admin/AdminLayout';
 import { AdminLogin } from './pages/admin/Login';
 import { Dashboard } from './pages/admin/Dashboard';
+import { Users as AdminUsers } from './pages/admin/Users';
+import { AdminOperationsPage } from './pages/admin/Tickets';
 import { ProtectedRoute as AdminProtectedRoute } from './components/admin/ProtectedRoute';
 import { ChatProvider } from './context/ChatContext';
 import { IntegratedChat } from './components/chat/IntegratedChat';
@@ -158,8 +162,8 @@ export default function App() {
   const [showSplash, setShowSplash] = useState(false); 
   const [splashMessage, setSplashMessage] = useState('Loading...');
 
-  // ✅ DYNAMIC API URL: Prioritizes Vercel Env Var, falls back to Render URL
-  const API_URL = import.meta.env.VITE_API_URL || 'https://neurovia-backend.onrender.com';
+  // ✅ Centralized API URL resolver (handles local dev, Vercel rewrites, and Render)
+  const API_URL = API_BASE_URL;
 
   const showSplashScreen = (message: string, duration: number = 2000) => {
     setSplashMessage(message);
@@ -300,14 +304,16 @@ export default function App() {
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/admin/*" element={<AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>}>
                   <Route index element={<Dashboard />} />
-                  <Route path="users" element={<div className="text-white p-8">Users Page</div>} />
-                  <Route path="shops" element={<div className="text-white p-8">Shops Page</div>} />
-                  <Route path="tickets" element={<div className="text-white p-8">Tickets Page</div>} />
-                  <Route path="analytics" element={<div className="text-white p-8">Analytics Page</div>} />
-                  <Route path="settings" element={<div className="text-white p-8">Settings Page</div>} />
+                  <Route path="users" element={<AdminUsers />} />
+                  <Route path="shops" element={<AdminOperationsPage mode="shops" />} />
+                  <Route path="tickets" element={<AdminOperationsPage mode="tickets" />} />
+                  <Route path="analytics" element={<AdminOperationsPage mode="payments" />} />
+                  <Route path="settings" element={<AdminOperationsPage mode="beta" />} />
                 </Route>
                 <Route path="/signin" element={<GuestOnlyRoute><SignIn /></GuestOnlyRoute>} />
                 <Route path="/signup" element={<GuestOnlyRoute><SignUp /></GuestOnlyRoute>} />
+                <Route path="/forgot-password" element={<><Navbar /><ForgotPassword /><Footer /></>} />
+                <Route path="/reset-password" element={<><Navbar /><ForgotPassword /><Footer /></>} />
                 <Route path="/register-partner" element={<UserProtectedRoute><Navbar /><RegisterPartner /><Footer /></UserProtectedRoute>} />
                 <Route path="/partner/dashboard" element={<UserProtectedRoute><PartnerDashboard /></UserProtectedRoute>} />
                 <Route path="/partner/*" element={<UserProtectedRoute><Navigate to="/partner/dashboard" replace /></UserProtectedRoute>} />

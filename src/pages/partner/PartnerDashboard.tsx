@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Navbar } from '../../components/Navbar';
 import { Footer } from '../../components/Footer';
+import API_BASE_URL from '../../config/api';
 
 interface PartnerData {
   shopName: string;
@@ -50,7 +51,7 @@ export function PartnerDashboard() {
           return;
         }
 
-        const API_URL = import.meta.env.VITE_API_URL ?? 'https://neurovia-backend.onrender.com';
+        const API_URL = API_BASE_URL;
         const res = await fetch(`${API_URL}/api/partner/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });

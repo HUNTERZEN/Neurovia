@@ -7,11 +7,11 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const location = useLocation();
-  const isAuthenticated = localStorage.getItem('isAdminAuthenticated') === 'true';
+  const token = localStorage.getItem('adminToken');
 
-  if (!isAuthenticated) {
+  if (!token) {
     return <Navigate to="/admin/login" state={{ from: location }} replace />;
   }
 
   return <>{children}</>;
-} 
+}

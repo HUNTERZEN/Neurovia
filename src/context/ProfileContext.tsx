@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import API_BASE_URL from '../config/api';
 
 interface ProfileData {
   fullName: string;
@@ -42,7 +43,7 @@ const DEFAULT_PROFILE: ProfileData = {
   profileImage: '/api/placeholder/150/150'
 };
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://neurovia-backend.onrender.com';
+const API_URL = API_BASE_URL;
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profileData, setProfileData] = useState<ProfileData>(DEFAULT_PROFILE);
